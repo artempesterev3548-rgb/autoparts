@@ -4,10 +4,12 @@ import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { getCart } from '@/lib/cart'
 
-const IconGear = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="3"/>
-    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+const QPartIcon = ({ size = 36 }: { size?: number }) => (
+  <svg viewBox="0 0 40 40" width={size} height={size} xmlns="http://www.w3.org/2000/svg">
+    <path fill="#FF6B00" d="M17.66,6.71 L18.07,1.60 L21.93,1.60 L22.34,6.71 L27.74,8.94 L31.64,5.62 L34.38,8.36 L31.06,12.26 L33.30,17.66 L38.40,18.07 L38.40,21.93 L33.30,22.34 L31.06,27.74 L34.38,31.64 L31.64,34.38 L27.74,31.06 L22.34,33.30 L21.93,38.40 L18.07,38.40 L17.66,33.30 L12.26,31.06 L8.36,34.38 L5.62,31.64 L8.94,27.74 L6.70,22.34 L1.60,21.93 L1.60,18.07 L6.70,17.66 L8.94,12.26 L5.62,8.36 L8.36,5.62 L12.26,8.94 Z"/>
+    <circle cx="20" cy="20" r="11.5" fill="#0F2744"/>
+    <circle cx="18" cy="18" r="6.5" stroke="#FF6B00" strokeWidth="2.5" fill="none"/>
+    <line x1="23" y1="23" x2="27.5" y2="27.5" stroke="#FF6B00" strokeWidth="2.5" strokeLinecap="round"/>
   </svg>
 )
 
@@ -86,9 +88,11 @@ export default function Header() {
       <div style={{ background: '#0F2744', boxShadow: '0 2px 20px rgba(0,0,0,0.35)' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 64 }}>
           {/* Логотип */}
-          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', fontSize: 20, fontWeight: 800, color: 'white', letterSpacing: '-0.5px', flexShrink: 0 }}>
-            <IconGear />
-            <span><span style={{ color: '#FF6B00' }}>Авто</span>Запчасти</span>
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', flexShrink: 0 }}>
+            <QPartIcon size={36} />
+            <span style={{ fontSize: 22, fontWeight: 800, letterSpacing: '-0.5px', fontStyle: 'italic' }}>
+              <span style={{ color: '#FF6B00' }}>Q</span><span style={{ color: 'white' }}>Part</span>
+            </span>
           </Link>
 
           {/* Навигация */}

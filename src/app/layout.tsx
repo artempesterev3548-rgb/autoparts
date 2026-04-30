@@ -4,7 +4,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
 export const metadata: Metadata = {
-  title: 'АвтоЗапчасти — легковые авто и спецтехника',
+  title: 'QPart — запчасти для легковых авто и спецтехники',
   description: 'Запчасти для легковых автомобилей, грузовиков и спецтехники. КамАЗ, МАЗ, Урал, Toyota, Lada и другие.',
 }
 

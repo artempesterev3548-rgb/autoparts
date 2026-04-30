@@ -1,4 +1,4 @@
-export const metadata = { title: 'Согласие на обработку персональных данных — АвтоЗапчасти' }
+export const metadata = { title: 'Согласие на обработку персональных данных — QPart' }
 
 const S = {
   h2: { fontSize: 15, fontWeight: 700, color: '#0F2744', marginTop: 28, marginBottom: 8 } as const,
@@ -14,12 +14,12 @@ export default function PersonalDataPage() {
         <div style={{ background: '#0F2744', borderRadius: '20px 20px 0 0', padding: '32px 40px 24px' }}>
           <div style={{ fontSize: 11, color: '#FF6B00', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 8 }}>Документы</div>
           <h1 style={{ fontSize: 26, fontWeight: 800, color: 'white', letterSpacing: -0.5 }}>Согласие на обработку персональных данных</h1>
-          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', marginTop: 8 }}>При оформлении заказа на сайте · ООО «АвтоЗапчасти»</p>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', marginTop: 8 }}>При оформлении заказа на сайте · ООО «QPart»</p>
         </div>
 
         <div style={{ background: 'white', borderRadius: '0 0 20px 20px', padding: '32px 40px 40px', boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
 
-          <p style={S.p}>Настоящим, нажимая кнопку «Оформить заказ», «Отправить заявку» или «Зарегистрироваться» (далее — «Акцепт»), я выражаю своё <strong>добровольное, конкретное, осознанное и однозначное согласие</strong> ООО «АвтоЗапчасти», ОГРН 0000000000000, ИНН 0000000000, адрес: г. Москва (далее — «Оператор») на обработку моих персональных данных.</p>
+          <p style={S.p}>Настоящим, нажимая кнопку «Оформить заказ», «Отправить заявку» или «Зарегистрироваться» (далее — «Акцепт»), я выражаю своё <strong>добровольное, конкретное, осознанное и однозначное согласие</strong> ООО «QPart», ОГРН 0000000000000, ИНН 0000000000, адрес: г. Москва (далее — «Оператор») на обработку моих персональных данных.</p>
 
           <h2 style={S.h2}>Состав персональных данных</h2>
           <ul style={S.ul}>
@@ -64,7 +64,7 @@ export default function PersonalDataPage() {
           </p>
 
           <h2 style={S.h2}>Реквизиты Оператора</h2>
-          <p style={S.p}>ООО «АвтоЗапчасти» · ОГРН 0000000000000 · ИНН 0000000000<br />
+          <p style={S.p}>ООО «QPart» · ОГРН 0000000000000 · ИНН 0000000000<br />
           Email: <a href="mailto:info@example.ru" style={{ color: '#FF6B00' }}>info@example.ru</a> · Тел.: <a href="tel:+70000000000" style={{ color: '#FF6B00' }}>+7 (000) 000-00-00</a></p>
 
         </div>
