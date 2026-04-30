@@ -152,34 +152,44 @@ def get_product_photo(slug, token):
         return None
 
 def get_prices(artid, token):
-    """Получаем цены и наличие"""
-    try:
-        body = {
-            "query": "VZ",
-            "artId": artid,
-            "page": 1,
-            "cacheKey": "",
-            "userInfo": {"VKORG": "4000", "VSTELS_LIST": ["ME86"]},
-            "isServer": False
-        }
-        resp = http_post(
-            f"{ARMTEK_BASE}/search-microservice/v1/search/by-related",
-            body,
-            {"Authorization": f"Bearer {token}"}
-        )
-        articles = resp.get("data", {}).get("articlesData", [])
-        if not articles: return None, False, None
-        best = articles[0]
-        suggestions = best.get("SUGGESTIONS", [best])
-        if not suggestions: return None, False, None
-        s = suggestions[0]
-        price = float(s.get("PRICES1") or s.get("PRICEP") or 0)
-        in_stock_val = int(s.get("NUMZAK") or 0)
-        delivery_raw = s.get("DLVDT") or ""
-        return price if price > 0 else None, in_stock_val > 0, delivery_raw
-    except Exception as e:
-        print(f"  ⚠️  prices error for artid={artid}: {e}")
-        return None, False, None
+    """Получаем цены и наличие — с retry при 429"""
+    body = {
+        "query": "VZ",
+        "artId": artid,
+        "page": 1,
+        "cacheKey": "",
+        "userInfo": {"VKORG": "4000", "VSTELS_LIST": ["ME86"]},
+        "isServer": False
+    }
+    for attempt in range(3):
+        try:
+            resp = http_post(
+                f"{ARMTEK_BASE}/search-microservice/v1/search/by-related",
+                body,
+                {"Authorization": f"Bearer {token}"}
+            )
+            articles = resp.get("data", {}).get("articlesData", [])
+            if not articles: return None, False, None
+            best = articles[0]
+            suggestions = best.get("SUGGESTIONS", [best])
+            if not suggestions: return None, False, None
+            s = suggestions[0]
+            price = float(s.get("PRICES1") or s.get("PRICEP") or 0)
+            in_stock_val = int(s.get("NUMZAK") or 0)
+            delivery_raw = s.get("DLVDT") or ""
+            return price if price > 0 else None, in_stock_val > 0, delivery_raw
+        except urllib.error.HTTPError as e:
+            if e.code == 429:
+                wait = (attempt + 1) * 3  # 3с, 6с, 9с
+                time.sleep(wait)
+                continue
+            print(f"  ⚠️  prices error for artid={artid}: {e}")
+            return None, False, None
+        except Exception as e:
+            print(f"  ⚠️  prices error for artid={artid}: {e}")
+            return None, False, None
+    # Все попытки исчерпаны — пропускаем цену, товар всё равно вставим
+    return None, False, None
 
 # ── Sitemap → slugs ──────────────────────────────────────────────────────────
 def get_slugs_from_sitemap(n):
