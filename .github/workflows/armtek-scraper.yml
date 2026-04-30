@@ -8,19 +8,19 @@ on:
   workflow_dispatch:
     inputs:
       sitemap_start:
-        description: 'Начальный номер sitemap (по умолчанию 1)'
-        default: '1'
+        description: 'Начальный номер sitemap (по умолчанию авто)'
+        default: ''
       sitemap_end:
-        description: 'Конечный номер sitemap (по умолчанию 5)'
-        default: '5'
+        description: 'Конечный номер sitemap (по умолчанию авто)'
+        default: ''
       batch:
         description: 'Кол-во товаров за запуск'
-        default: '200'
+        default: '25000'
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    timeout-minutes: 55
+    timeout-minutes: 350  # ~6 часов — максимум GitHub Actions
 
     steps:
       - name: Checkout
@@ -34,7 +34,6 @@ jobs:
       - name: Get scraper state (sitemap progress)
         id: state
         run: |
-          # Читаем прогресс из файла в репозитории (или начинаем с 1)
           if [ -f scripts/scraper_state.json ]; then
             SITEMAP_N=$(python3 -c "import json; d=json.load(open('scripts/scraper_state.json')); print(d.get('next_sitemap', 1))")
           else
@@ -49,9 +48,21 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: |
           SITEMAP_N=${{ steps.state.outputs.sitemap_n }}
-          SITEMAP_START="${{ github.event.inputs.sitemap_start || env.SITEMAP_N }}"
-          SITEMAP_END=$(( SITEMAP_START + 4 ))
-          BATCH="${{ github.event.inputs.batch || '200' }}"
+
+          # Ручной запуск может переопределить start/end
+          if [ -n "${{ github.event.inputs.sitemap_start }}" ]; then
+            SITEMAP_START="${{ github.event.inputs.sitemap_start }}"
+          else
+            SITEMAP_START="$SITEMAP_N"
+          fi
+
+          if [ -n "${{ github.event.inputs.sitemap_end }}" ]; then
+            SITEMAP_END="${{ github.event.inputs.sitemap_end }}"
+          else
+            SITEMAP_END=$(( SITEMAP_START + 9 ))  # 10 файлов × ~50 000 = до 500 000 товаров
+          fi
+
+          BATCH="${{ github.event.inputs.batch || '25000' }}"
 
           echo "▶ Scraping sitemap $SITEMAP_START–$SITEMAP_END, batch=$BATCH"
           python3 scripts/armtek_scraper.py \
@@ -62,8 +73,7 @@ jobs:
       - name: Update scraper state
         run: |
           SITEMAP_N=${{ steps.state.outputs.sitemap_n }}
-          NEXT=$(( SITEMAP_N + 5 ))
-          # Если дошли до конца (937 файлов) — начинаем сначала
+          NEXT=$(( SITEMAP_N + 10 ))
           if [ $NEXT -gt 937 ]; then NEXT=1; fi
           echo "{\"next_sitemap\": $NEXT, \"updated_at\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" > scripts/scraper_state.json
           echo "Следующий запуск начнётся с sitemap #$NEXT"

@@ -8,11 +8,12 @@ import os, sys, json, time, gzip, re, urllib.request, urllib.error, ssl, argpars
 from datetime import datetime, timezone
 
 # ── Конфиг ──────────────────────────────────────────────────────────────────
-SUPABASE_URL = os.getenv("NEXT_PUBLIC_SUPABASE_URL", "https://wsnbtfuurxinoonyjhxh.supabase.co")
-SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzbmJ0ZnV1cnhpbm9vbnlqaHhoIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzQ2MTc2OSwiZXhwIjoyMDkzMDM3NzY5fQ.GqiQFgHrLOaVDglbeS5986dbJg36kYp5frhpl5Ea9fU")
+# os.getenv возвращает "" если секрет не задан в GitHub → используем `or` для fallback
+SUPABASE_URL = os.getenv("NEXT_PUBLIC_SUPABASE_URL") or "https://wsnbtfuurxinoonyjhxh.supabase.co"
+SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzbmJ0ZnV1cnhpbm9vbnlqaHhoIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzQ2MTc2OSwiZXhwIjoyMDkzMDM3NzY5fQ.GqiQFgHrLOaVDglbeS5986dbJg36kYp5frhpl5Ea9fU"
 ARMTEK_BASE      = "https://armtek.ru/rest/ru"
 SITEMAP_BASE     = "https://armtek.ru/sitemap/product/product_{n}.xml.gz"
-DELAY            = 0.4   # секунд между запросами к Armtek
+DELAY            = 0.2   # секунд между запросами (0.2 = ~25 000 товаров за 6 часов)
 ARMTEK_SUPPLIER_ID = 4   # ID поставщика "Armtek" в таблице suppliers
 
 ssl_ctx = ssl.create_default_context()
