@@ -1,0 +1,77 @@
+name: Armtek Scraper
+
+on:
+  schedule:
+    # Каждые 12 часов: в 03:00 и 15:00 UTC (06:00 и 18:00 МСК)
+    - cron: '0 3 * * *'
+    - cron: '0 15 * * *'
+  workflow_dispatch:
+    inputs:
+      sitemap_start:
+        description: 'Начальный номер sitemap (по умолчанию 1)'
+        default: '1'
+      sitemap_end:
+        description: 'Конечный номер sitemap (по умолчанию 5)'
+        default: '5'
+      batch:
+        description: 'Кол-во товаров за запуск'
+        default: '200'
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Get scraper state (sitemap progress)
+        id: state
+        run: |
+          # Читаем прогресс из файла в репозитории (или начинаем с 1)
+          if [ -f scripts/scraper_state.json ]; then
+            SITEMAP_N=$(python3 -c "import json; d=json.load(open('scripts/scraper_state.json')); print(d.get('next_sitemap', 1))")
+          else
+            SITEMAP_N=1
+          fi
+          echo "sitemap_n=$SITEMAP_N" >> $GITHUB_OUTPUT
+          echo "Следующий sitemap: #$SITEMAP_N"
+
+      - name: Run Armtek scraper
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          SITEMAP_N=${{ steps.state.outputs.sitemap_n }}
+          SITEMAP_START="${{ github.event.inputs.sitemap_start || env.SITEMAP_N }}"
+          SITEMAP_END=$(( SITEMAP_START + 4 ))
+          BATCH="${{ github.event.inputs.batch || '200' }}"
+
+          echo "▶ Scraping sitemap $SITEMAP_START–$SITEMAP_END, batch=$BATCH"
+          python3 scripts/armtek_scraper.py \
+            --sitemap-start $SITEMAP_START \
+            --sitemap-end $SITEMAP_END \
+            --batch $BATCH
+
+      - name: Update scraper state
+        run: |
+          SITEMAP_N=${{ steps.state.outputs.sitemap_n }}
+          NEXT=$(( SITEMAP_N + 5 ))
+          # Если дошли до конца (937 файлов) — начинаем сначала
+          if [ $NEXT -gt 937 ]; then NEXT=1; fi
+          echo "{\"next_sitemap\": $NEXT, \"updated_at\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" > scripts/scraper_state.json
+          echo "Следующий запуск начнётся с sitemap #$NEXT"
+
+      - name: Commit state
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add scripts/scraper_state.json
+          git diff --staged --quiet || git commit -m "chore: update scraper state [skip ci]"
+          git push
