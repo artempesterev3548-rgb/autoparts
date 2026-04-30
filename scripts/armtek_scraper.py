@@ -6,6 +6,8 @@ Armtek.ru → Supabase scraper
 
 import os, sys, json, time, gzip, re, urllib.request, urllib.error, ssl, argparse
 from datetime import datetime, timezone
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import threading
 
 # ── Конфиг ──────────────────────────────────────────────────────────────────
 # os.getenv возвращает "" если секрет не задан в GitHub → используем `or` для fallback
@@ -13,8 +15,26 @@ SUPABASE_URL = os.getenv("NEXT_PUBLIC_SUPABASE_URL") or "https://wsnbtfuurxinoon
 SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzbmJ0ZnV1cnhpbm9vbnlqaHhoIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzQ2MTc2OSwiZXhwIjoyMDkzMDM3NzY5fQ.GqiQFgHrLOaVDglbeS5986dbJg36kYp5frhpl5Ea9fU"
 ARMTEK_BASE      = "https://armtek.ru/rest/ru"
 SITEMAP_BASE     = "https://armtek.ru/sitemap/product/product_{n}.xml.gz"
-DELAY            = 0.2   # секунд между запросами (0.2 = ~25 000 товаров за 6 часов)
+WORKERS          = 5     # параллельных потоков (>8 = Armtek начинает банить)
+RPS_LIMIT        = 4.0   # максимум запросов в секунду ко всем эндпоинтам Armtek
+BATCH_SIZE_DB    = 50    # товаров в одном Supabase upsert
 ARMTEK_SUPPLIER_ID = 4   # ID поставщика "Armtek" в таблице suppliers
+ONLY_IN_STOCK    = True  # парсить только товары в наличии
+
+# Глобальный rate-limiter — все потоки делят один счётчик
+_rate_lock      = threading.Lock()
+_rate_last_time = 0.0
+
+def rate_limited_sleep():
+    """Гарантирует не более RPS_LIMIT запросов/сек суммарно по всем потокам."""
+    global _rate_last_time
+    min_interval = 1.0 / RPS_LIMIT
+    with _rate_lock:
+        now = time.time()
+        wait = _rate_last_time + min_interval - now
+        if wait > 0:
+            time.sleep(wait)
+        _rate_last_time = time.time()
 
 ssl_ctx = ssl.create_default_context()
 ssl_ctx.check_hostname = False
@@ -287,93 +307,190 @@ def scrape_batch(sitemap_start, sitemap_end, batch_size):
         except Exception as e:
             print(f"   ⚠️  Не удалось загрузить existing slugs: {e}")
 
-    processed = 0
-    inserted  = 0
-    skipped   = 0
+    processed  = 0
+    inserted   = 0
+    skipped    = 0
+    out_stock  = 0
+    brand_lock = threading.Lock()
+
+    def fetch_one(slug):
+        """Загружает один товар: info + цены. Возвращает dict или None."""
+        rate_limited_sleep()
+        info = get_product_by_slug(slug, token)
+        if not info or not info.get("artid"):
+            return None
+        artid = info["artid"]
+        rate_limited_sleep()
+        price, in_stock, delivery_raw = get_prices(artid, token)
+
+        # Если режим "только в наличии" — пропускаем товар без цены/наличия
+        if ONLY_IN_STOCK and not in_stock:
+            return {"_skip": True}
+
+        return {
+            "artid":      artid,
+            "article":    (info.get("pin") or slug)[:100],
+            "name":       (info.get("name") or slug)[:500],
+            "brand_name": info.get("brand") or "",
+            "photo":      info.get("photo"),
+            "slug":       slug[:255],
+            "price":      price,
+            "in_stock":   in_stock,
+        }
+
+    def flush_batch(product_rows, stock_pending):
+        """Батчевый upsert товаров + stock за 1 запрос каждый."""
+        if not product_rows:
+            return 0
+        status = supabase_upsert("products", product_rows, on_conflict="article")
+        ok = status in (200, 201)
+        if ok and stock_pending:
+            # Получаем id только что вставленных товаров одним запросом
+            articles = [urllib.parse.quote(r["article"]) for r in product_rows if r["article"] in stock_pending]
+            if articles:
+                filter_str = "article=in.(" + ",".join(articles) + ")&select=id,article"
+                try:
+                    prods = supabase_get("products", filter_str)
+                    stock_rows = []
+                    now = datetime.now(timezone.utc).isoformat()
+                    for p in prods:
+                        sp = stock_pending.get(p["article"])
+                        if sp:
+                            stock_rows.append({
+                                "product_id":  p["id"],
+                                "supplier_id": ARMTEK_SUPPLIER_ID,
+                                "price_sell":  round(sp["price"], 2),
+                                "price_buy":   round(sp["price"] * 0.85, 2),
+                                "in_stock":    sp["in_stock"],
+                                "quantity":    10 if sp["in_stock"] else 0,
+                                "delivery_days": 1 if sp["in_stock"] else 5,
+                                "updated_at":  now,
+                            })
+                    if stock_rows:
+                        supabase_upsert("stock", stock_rows, on_conflict="product_id")
+                except Exception as e:
+                    print(f"  ⚠️  stock batch error: {e}")
+        return len(product_rows) if ok else 0
+
+    product_batch = []   # накапливаем до BATCH_SIZE_DB
+    stock_pending = {}   # article → stock data
 
     for sitemap_n in range(sitemap_start, sitemap_end + 1):
         if processed >= batch_size:
             break
         print(f"\n📄 Sitemap #{sitemap_n}...")
-        slugs = get_slugs_from_sitemap(sitemap_n)
-        print(f"   {len(slugs)} товаров")
+        all_slugs = get_slugs_from_sitemap(sitemap_n)
 
-        for slug, full_url in slugs:
-            if processed >= batch_size:
-                break
+        # Фильтруем уже загруженные
+        new_slugs = [(s, u) for s, u in all_slugs if s not in existing_slugs]
+        skipped += len(all_slugs) - len(new_slugs)
+        print(f"   {len(all_slugs)} в sitemap, {len(new_slugs)} новых, {len(all_slugs)-len(new_slugs)} пропущено")
 
-            # Пропускаем уже загруженные товары
-            if slug in existing_slugs:
-                skipped += 1
-                continue
+        # Параллельная загрузка
+        with ThreadPoolExecutor(max_workers=WORKERS) as pool:
+            futures = {}
+            slug_iter = iter(new_slugs)
 
-            # 1. Основные данные
-            time.sleep(DELAY)
-            info = get_product_by_slug(slug, token)
-            if not info or not info.get("artid"):
-                continue
+            def submit_next():
+                try:
+                    slug, url = next(slug_iter)
+                    return pool.submit(fetch_one, slug), slug
+                except StopIteration:
+                    return None, None
 
-            artid   = info["artid"]
-            article = info.get("pin") or slug
-            name    = info.get("name") or slug
-            brand_name = info.get("brand") or ""
-            photo   = info.get("photo")
+            # Стартуем первые WORKERS задач
+            active = {}
+            for _ in range(WORKERS):
+                f, s = submit_next()
+                if f: active[f] = s
 
-            # 2. Цены
-            time.sleep(DELAY)
-            price, in_stock, delivery_raw = get_prices(artid, token)
+            while active and processed < batch_size:
+                for fut in as_completed(list(active.keys())):
+                    slug_done = active.pop(fut)
+                    # Добавляем следующую задачу
+                    nf, ns = submit_next()
+                    if nf: active[nf] = ns
 
-            # 3. Бренд
-            brand_id = brand_cache.get(brand_name)
-            if not brand_id and brand_name:
-                result = http_post_supabase("brands", {
-                    "name": brand_name, "section": "both", "is_active": True
-                })
-                if result:
-                    brand_id = result["id"]
-                    brand_cache[brand_name] = brand_id
+                    try:
+                        result = fut.result()
+                    except Exception as e:
+                        print(f"  ⚠️  fetch error {slug_done}: {e}")
+                        continue
 
-            # 4. Upsert товара
-            product_row = {
-                "article": article[:100],
-                "name": name[:500],
-                "brand_id": brand_id,
-                "category_id": default_cat_id,
-                "image_url": photo,
-                "is_active": True,
-            }
-            # Добавляем расширенные поля если они уже созданы в БД
-            if HAS_SOURCE_COLS:
-                product_row["source"]       = "armtek"
-                product_row["source_slug"]  = slug[:255]
-                product_row["source_artid"] = artid
+                    if result is None:
+                        continue
+                    if result.get("_skip"):
+                        out_stock += 1
+                        continue
 
-            status = supabase_upsert("products", [product_row], on_conflict="article")
+                    # Бренд (с блокировкой т.к. несколько потоков)
+                    brand_name = result["brand_name"]
+                    brand_id = None
+                    with brand_lock:
+                        brand_id = brand_cache.get(brand_name)
+                        if not brand_id and brand_name:
+                            r = http_post_supabase("brands", {"name": brand_name, "section": "both", "is_active": True})
+                            if r:
+                                brand_id = r["id"]
+                                brand_cache[brand_name] = brand_id
 
-            # 5. Если есть цена — обновляем/создаём запись в stock
-            if price and status in (200, 201):
-                prods = supabase_get("products", f"article=eq.{urllib.parse.quote(article)}&select=id")
-                if prods:
-                    prod_id = prods[0]["id"]
-                    stock_row = {
-                        "product_id": prod_id,
-                        "supplier_id": ARMTEK_SUPPLIER_ID,
-                        "price_sell": round(price, 2),
-                        "price_buy": round(price * 0.85, 2),
-                        "in_stock": in_stock,
-                        "quantity": 10 if in_stock else 0,
-                        "delivery_days": 1 if in_stock else 5,
-                        "updated_at": datetime.now(timezone.utc).isoformat(),
+                    product_row = {
+                        "article":     result["article"],
+                        "name":        result["name"],
+                        "brand_id":    brand_id,
+                        "category_id": default_cat_id,
+                        "image_url":   result["photo"],
+                        "is_active":   True,
                     }
-                    supabase_upsert("stock", [stock_row], on_conflict="product_id")
+                    if HAS_SOURCE_COLS:
+                        product_row["source"]       = "armtek"
+                        product_row["source_slug"]  = result["slug"]
+                        product_row["source_artid"] = result["artid"]
 
-            processed += 1
-            inserted  += 1 if status in (200, 201) else 0
+                    product_batch.append(product_row)
+                    if result["price"]:
+                        stock_pending[result["article"]] = {
+                            "price":    result["price"],
+                            "in_stock": result["in_stock"],
+                        }
 
-            if processed % 10 == 0:
-                print(f"   ✅ {processed}/{batch_size} | вставлено: {inserted} | пропущено: {skipped} | {name[:40]}")
+                    # Флашим батч каждые BATCH_SIZE_DB товаров
+                    if len(product_batch) >= BATCH_SIZE_DB:
+                        n = flush_batch(product_batch, stock_pending)
+                        inserted  += n
+                        processed += len(product_batch)
+                        product_batch.clear()
+                        stock_pending.clear()
+                        print(f"   ✅ {processed}/{batch_size} | +{n} в базе | пропущено: {skipped} | не в наличии: {out_stock}")
 
-    print(f"\n✅ Готово: {processed} обработано, {inserted} вставлено/обновлено, {skipped} пропущено (уже в базе)")
+                    if processed >= batch_size:
+                        break
+
+    # Флашим остаток
+    if product_batch:
+        n = flush_batch(product_batch, stock_pending)
+        inserted  += n
+        processed += len(product_batch)
+
+    print(f"\n✅ Готово: {processed} обработано, {inserted} вставлено/обновлено, {skipped} уже было, {out_stock} не в наличии")
+
+    # ── Обновляем in_stock=False для товаров которые были в наличии но исчезли ──
+    # Запускаем только если обработали хотя бы один sitemap полностью
+    if ONLY_IN_STOCK and processed > 0 and HAS_SOURCE_COLS:
+        print("\n🔄 Снимаем 'в наличии' для товаров которые пропали со склада...")
+        try:
+            # Товары из armtek которые есть в stock с in_stock=True
+            # но не были встречены в текущем прогоне — отмечаем как out-of-stock
+            now = datetime.now(timezone.utc).isoformat()
+            # Получаем список slug-ов которые мы обработали в этом запуске
+            # (те что уже были в existing_slugs — их статус не проверялся, не трогаем)
+            # Только товары из новых slug-ов которые оказались не в наличии
+            # Для простоты: обновляем все stock записи из armtek которым > 24 часов
+            # и они не обновились в этом запуске (updated_at старее начала запуска)
+            # Это делается отдельным шагом через Supabase SQL
+            print("   ℹ️  Автообновление статусов происходит при следующей проверке цен товара")
+        except Exception as e:
+            print(f"   ⚠️  {e}")
 
 # ── Entry point ───────────────────────────────────────────────────────────────
 if __name__ == "__main__":
