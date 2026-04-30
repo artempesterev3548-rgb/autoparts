@@ -37,7 +37,7 @@ function VinChart({ vin }: { vin: string }) {
 export default function VinPage() {
   const [vin, setVin] = useState('')
   const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState<{ vehicle: Vehicle; products: Product[]; brandsFound: string[] } | null>(null)
+  const [result, setResult] = useState<{ vin: string; vehicle: Vehicle; products: Product[]; brandsFound: string[] } | null>(null)
   const [error, setError] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
 
