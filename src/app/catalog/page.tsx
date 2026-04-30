@@ -8,13 +8,11 @@ interface Props {
 }
 
 async function getFilters() {
-  const [{ data: categories }, { data: brands }, { data: makes }] = await Promise.all([
+  const [{ data: categories }, { data: brands }] = await Promise.all([
     supabaseAdmin.from('categories').select('id,name,slug,parent_id').eq('is_active', true).order('sort_order'),
     supabaseAdmin.from('brands').select('id,name').eq('is_active', true).order('name'),
-    supabaseAdmin.from('vehicles').select('make').order('make'),
   ])
-  const uniqueMakes = [...new Set((makes ?? []).map(v => v.make))].sort()
-  return { categories: categories ?? [], brands: brands ?? [], makes: uniqueMakes }
+  return { categories: categories ?? [], brands: brands ?? [] }
 }
 
 async function getProducts(params: Awaited<Props['searchParams']>) {
@@ -61,17 +59,12 @@ async function getProducts(params: Awaited<Props['searchParams']>) {
   }
 
   const { data, count } = await query.order('id').range(offset, offset + PAGE_SIZE - 1)
-  return {
-    products: data ?? [],
-    total: count ?? 0,
-    page,
-    pages: Math.ceil((count ?? 0) / PAGE_SIZE),
-  }
+  return { products: data ?? [], total: count ?? 0, page, pages: Math.ceil((count ?? 0) / PAGE_SIZE) }
 }
 
 export default async function CatalogPage({ searchParams }: Props) {
   const params = await searchParams
-  const [{ categories, brands, makes }, { products, total, page, pages }] = await Promise.all([
+  const [{ categories, brands }, { products, total, page, pages }] = await Promise.all([
     getFilters(),
     getProducts(params),
   ])
@@ -83,117 +76,150 @@ export default async function CatalogPage({ searchParams }: Props) {
   }
 
   const topCategories = categories.filter(c => !c.parent_id)
+  const activeCategory = topCategories.find(c => c.slug === params.category)
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6">
-      <div className="flex gap-6">
-        {/* Фильтры */}
-        <aside className="hidden md:block w-56 shrink-0">
-          <div className="bg-white rounded-xl shadow-sm p-4 sticky top-4 space-y-6">
-            <div>
-              <div className="font-semibold text-gray-700 mb-2 text-sm uppercase tracking-wide">Категории</div>
-              <div className="space-y-1">
-                <Link href={buildUrl({ category: undefined, page: undefined })}
-                  className={`block px-2 py-1 rounded text-sm hover:text-blue-700 ${!params.category ? 'font-semibold text-blue-700' : 'text-gray-600'}`}>
-                  Все категории
-                </Link>
-                {topCategories.map(cat => (
-                  <Link key={cat.id} href={buildUrl({ category: cat.slug, page: undefined })}
-                    className={`block px-2 py-1 rounded text-sm hover:text-blue-700 ${params.category === cat.slug ? 'font-semibold text-blue-700 bg-blue-50' : 'text-gray-600'}`}>
-                    {cat.name}
-                  </Link>
-                ))}
+    <div style={{ background: '#F0F2F5', minHeight: '100vh' }}>
+
+      {/* ── ШАПКА СТРАНИЦЫ ─────────────────────────────────────── */}
+      <div style={{ background: '#0F2744', padding: '28px 24px' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12, fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>
+            <Link href="/" style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>Главная</Link>
+            <span>/</span>
+            {activeCategory ? (
+              <>
+                <Link href="/catalog" style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>Каталог</Link>
+                <span>/</span>
+                <span style={{ color: 'rgba(255,255,255,0.75)' }}>{activeCategory.name}</span>
+              </>
+            ) : (
+              <span style={{ color: 'rgba(255,255,255,0.75)' }}>Каталог</span>
+            )}
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
+            <h1 style={{ fontSize: 24, fontWeight: 800, color: 'white', letterSpacing: -0.5 }}>
+              {activeCategory ? activeCategory.name : 'Все товары'}
+              <span style={{ fontSize: 15, fontWeight: 400, color: 'rgba(255,255,255,0.4)', marginLeft: 12 }}>
+                {total.toLocaleString('ru')} шт.
+              </span>
+            </h1>
+            {/* Поиск */}
+            <form method="GET" action="/catalog" style={{ display: 'flex', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 10, overflow: 'hidden', flexShrink: 0 }}>
+              {params.category && <input type="hidden" name="category" value={params.category} />}
+              {params.brand && <input type="hidden" name="brand" value={params.brand} />}
+              <input name="q" defaultValue={params.q} placeholder="Артикул или название..."
+                style={{ border: 'none', background: 'transparent', padding: '10px 16px', fontSize: 14, color: 'white', outline: 'none', width: 240 }} />
+              <button type="submit" style={{ background: '#FF6B00', border: 'none', padding: '10px 18px', color: 'white', fontWeight: 700, fontSize: 13, cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                Найти
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {/* ── КОНТЕНТ ────────────────────────────────────────────── */}
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '24px 24px', display: 'flex', gap: 24 }}>
+
+        {/* САЙДБАР */}
+        <aside style={{ width: 220, flexShrink: 0, display: 'none' }} className="catalog-sidebar">
+          <div style={{ background: 'white', borderRadius: 16, padding: '20px', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', position: 'sticky', top: 80 }}>
+
+            {/* Категории */}
+            <div style={{ marginBottom: 24 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '2px', color: '#FF6B00', textTransform: 'uppercase', marginBottom: 12 }}>
+                Категории
               </div>
+              <Link href={buildUrl({ category: undefined, page: undefined })}
+                style={{ display: 'block', padding: '6px 10px', borderRadius: 8, fontSize: 13, fontWeight: !params.category ? 700 : 400, color: !params.category ? '#FF6B00' : '#4B5563', textDecoration: 'none', background: !params.category ? '#FFF0E8' : 'transparent', marginBottom: 2 }}>
+                Все категории
+              </Link>
+              {topCategories.map(cat => (
+                <Link key={cat.id} href={buildUrl({ category: cat.slug, page: undefined })}
+                  style={{ display: 'block', padding: '6px 10px', borderRadius: 8, fontSize: 13, fontWeight: params.category === cat.slug ? 700 : 400, color: params.category === cat.slug ? '#FF6B00' : '#4B5563', textDecoration: 'none', background: params.category === cat.slug ? '#FFF0E8' : 'transparent', marginBottom: 2 }}>
+                  {cat.name}
+                </Link>
+              ))}
             </div>
 
-            <div>
-              <div className="font-semibold text-gray-700 mb-2 text-sm uppercase tracking-wide">Наличие</div>
+            {/* Наличие */}
+            <div style={{ marginBottom: 24, paddingTop: 16, borderTop: '1px solid #F0F2F5' }}>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '2px', color: '#FF6B00', textTransform: 'uppercase', marginBottom: 12 }}>
+                Наличие
+              </div>
               <StockFilter
                 checked={params.in_stock === '1'}
                 href={buildUrl({ in_stock: params.in_stock === '1' ? undefined : '1', page: undefined })}
               />
             </div>
 
-            <div>
-              <div className="font-semibold text-gray-700 mb-2 text-sm uppercase tracking-wide">Бренд</div>
-              <div className="space-y-1 max-h-48 overflow-y-auto">
+            {/* Бренд */}
+            <div style={{ paddingTop: 16, borderTop: '1px solid #F0F2F5' }}>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '2px', color: '#FF6B00', textTransform: 'uppercase', marginBottom: 12 }}>
+                Бренд
+              </div>
+              <div style={{ maxHeight: 220, overflowY: 'auto' }}>
                 <Link href={buildUrl({ brand: undefined, page: undefined })}
-                  className={`block px-2 py-1 rounded text-sm hover:text-blue-700 ${!params.brand ? 'font-semibold text-blue-700' : 'text-gray-600'}`}>
+                  style={{ display: 'block', padding: '5px 10px', borderRadius: 8, fontSize: 13, fontWeight: !params.brand ? 700 : 400, color: !params.brand ? '#FF6B00' : '#4B5563', textDecoration: 'none', background: !params.brand ? '#FFF0E8' : 'transparent', marginBottom: 2 }}>
                   Все бренды
                 </Link>
                 {brands.map(b => (
                   <Link key={b.id} href={buildUrl({ brand: b.name, page: undefined })}
-                    className={`block px-2 py-1 rounded text-sm hover:text-blue-700 ${params.brand === b.name ? 'font-semibold text-blue-700 bg-blue-50' : 'text-gray-600'}`}>
+                    style={{ display: 'block', padding: '5px 10px', borderRadius: 8, fontSize: 13, fontWeight: params.brand === b.name ? 700 : 400, color: params.brand === b.name ? '#FF6B00' : '#4B5563', textDecoration: 'none', background: params.brand === b.name ? '#FFF0E8' : 'transparent', marginBottom: 2 }}>
                     {b.name}
                   </Link>
                 ))}
               </div>
             </div>
 
-            <div>
-              <div className="font-semibold text-gray-700 mb-2 text-sm uppercase tracking-wide">Марка техники</div>
-              <div className="space-y-1 max-h-48 overflow-y-auto">
-                <Link href={buildUrl({ make: undefined, page: undefined })}
-                  className={`block px-2 py-1 rounded text-sm hover:text-blue-700 ${!params.make ? 'font-semibold text-blue-700' : 'text-gray-600'}`}>
-                  Все марки
-                </Link>
-                {makes.map(m => (
-                  <Link key={m} href={buildUrl({ make: m, page: undefined })}
-                    className={`block px-2 py-1 rounded text-sm hover:text-blue-700 ${params.make === m ? 'font-semibold text-blue-700 bg-blue-50' : 'text-gray-600'}`}>
-                    {m}
-                  </Link>
-                ))}
-              </div>
-            </div>
           </div>
         </aside>
 
-        {/* Товары */}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-lg font-bold text-gray-800">
-              {params.category ? categories.find(c => c.slug === params.category)?.name : 'Все товары'}
-              <span className="text-sm font-normal text-gray-500 ml-2">({total.toLocaleString('ru')} шт.)</span>
-            </h1>
-            <form method="GET" action="/catalog" className="flex gap-2">
-              <input name="q" defaultValue={params.q} placeholder="Поиск по названию..."
-                className="border rounded-lg px-3 py-1.5 text-sm w-48 focus:outline-none focus:border-blue-400" />
-              <button type="submit" className="bg-blue-700 text-white px-3 py-1.5 rounded-lg text-sm hover:bg-blue-800">
-                Найти
-              </button>
-            </form>
-          </div>
-
+        {/* ТОВАРЫ */}
+        <div style={{ flex: 1, minWidth: 0 }}>
           {products.length === 0 ? (
-            <div className="bg-white rounded-xl p-12 text-center text-gray-400">
-              <div className="text-4xl mb-3">🔍</div>
-              <div className="font-medium">Товары не найдены</div>
-              <Link href="/catalog" className="text-blue-600 text-sm mt-2 inline-block hover:underline">Сбросить фильтры</Link>
+            <div style={{ background: 'white', borderRadius: 20, padding: '64px 24px', textAlign: 'center', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto 16px', display: 'block' }}>
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <div style={{ fontSize: 16, fontWeight: 600, color: '#374151', marginBottom: 8 }}>Товары не найдены</div>
+              <div style={{ fontSize: 13, color: '#9CA3AF', marginBottom: 20 }}>Попробуйте изменить параметры поиска</div>
+              <Link href="/catalog" style={{ background: '#FF6B00', color: 'white', padding: '10px 24px', borderRadius: 10, fontSize: 14, fontWeight: 700, textDecoration: 'none' }}>
+                Сбросить фильтры
+              </Link>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 16 }}>
               {products.map((p: any) => {
                 const bestStock = (p.stock ?? []).sort((a: any, b: any) => a.price_sell - b.price_sell)[0]
                 const inStock = (p.stock ?? []).some((s: any) => s.in_stock)
                 return (
-                  <div key={p.id} className="bg-white rounded-xl shadow-sm hover:shadow-md transition p-4 flex flex-col">
+                  <div key={p.id} className="hover-product-card">
                     {p.image_url ? (
-                      <img src={p.image_url} alt={p.name} className="w-full h-36 object-contain mb-3 rounded-lg bg-gray-50" />
+                      <img src={p.image_url} alt={p.name} style={{ width: '100%', height: 140, objectFit: 'contain', marginBottom: 12, borderRadius: 10, background: '#F9FAFB' }} />
                     ) : (
-                      <div className="w-full h-36 bg-gray-100 rounded-lg mb-3 flex items-center justify-center text-4xl">🔧</div>
+                      <div style={{ width: '100%', height: 140, background: '#F0F2F5', borderRadius: 10, marginBottom: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                        </svg>
+                      </div>
                     )}
-                    <div className="text-xs text-gray-400 mb-1">{p.article} · {p.brand?.name}</div>
-                    <Link href={`/product/${p.id}`} className="text-sm font-medium text-gray-800 hover:text-blue-700 mb-2 line-clamp-2 flex-1">
+                    <div style={{ fontSize: 11, color: '#9CA3AF', marginBottom: 4 }}>
+                      {p.article}{p.brand?.name ? ` · ${p.brand.name}` : ''}
+                    </div>
+                    <Link href={`/product/${p.id}`} style={{ fontSize: 14, fontWeight: 600, color: '#111827', textDecoration: 'none', lineHeight: 1.4, marginBottom: 12, flex: 1, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const, overflow: 'hidden' }}>
                       {p.name}
                     </Link>
-                    <div className="flex items-center justify-between mt-auto pt-2 border-t border-gray-100">
+                    <div style={{ borderTop: '1px solid #F0F2F5', paddingTop: 12, display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto' }}>
                       <div>
                         {bestStock ? (
-                          <div className="text-lg font-bold text-gray-900">{bestStock.price_sell.toLocaleString('ru')} ₽</div>
+                          <div style={{ fontSize: 18, fontWeight: 800, color: '#0F2744', letterSpacing: -0.5 }}>
+                            {bestStock.price_sell.toLocaleString('ru')} ₽
+                          </div>
                         ) : (
-                          <div className="text-sm text-gray-400">Цена по запросу</div>
+                          <div style={{ fontSize: 13, color: '#9CA3AF' }}>По запросу</div>
                         )}
-                        <div className={`text-xs mt-0.5 ${inStock ? 'text-green-600' : 'text-orange-500'}`}>
+                        <div style={{ fontSize: 11, marginTop: 2, color: inStock ? '#16A34A' : '#EA580C', fontWeight: 600 }}>
                           {inStock ? '✓ В наличии' : '⏱ Под заказ'}
                         </div>
                       </div>
@@ -218,14 +244,25 @@ export default async function CatalogPage({ searchParams }: Props) {
 
           {/* Пагинация */}
           {pages > 1 && (
-            <div className="flex justify-center gap-2 mt-8">
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 40 }}>
+              {page > 1 && (
+                <Link href={buildUrl({ page: String(page - 1) })}
+                  style={{ width: 38, height: 38, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', borderRadius: 10, fontSize: 14, color: '#374151', textDecoration: 'none', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+                  ‹
+                </Link>
+              )}
               {Array.from({ length: Math.min(pages, 10) }, (_, i) => i + 1).map(p => (
                 <Link key={p} href={buildUrl({ page: String(p) })}
-                  className={`w-9 h-9 flex items-center justify-center rounded-lg text-sm font-medium transition
-                    ${p === page ? 'bg-blue-700 text-white' : 'bg-white text-gray-600 hover:bg-blue-50'}`}>
+                  style={{ width: 38, height: 38, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 10, fontSize: 14, fontWeight: p === page ? 700 : 400, textDecoration: 'none', background: p === page ? '#FF6B00' : 'white', color: p === page ? 'white' : '#374151', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
                   {p}
                 </Link>
               ))}
+              {page < pages && (
+                <Link href={buildUrl({ page: String(page + 1) })}
+                  style={{ width: 38, height: 38, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', borderRadius: 10, fontSize: 14, color: '#374151', textDecoration: 'none', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
+                  ›
+                </Link>
+              )}
             </div>
           )}
         </div>

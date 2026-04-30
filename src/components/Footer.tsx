@@ -1,69 +1,82 @@
 import Link from 'next/link'
 
+const col = {
+  heading: { color: '#FF6B00', fontSize: 11, fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase' as const, marginBottom: 14 },
+  link: { display: 'block', color: 'rgba(255,255,255,0.35)', fontSize: 13, marginBottom: 10, textDecoration: 'none' },
+}
+
 export default function Footer() {
-  const year = new Date().getFullYear()
-
   return (
-    <footer className="bg-gray-900 text-gray-400 mt-12">
-      {/* Основные колонки */}
-      <div className="max-w-7xl mx-auto px-4 py-10">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+    <footer style={{ background: '#0B1E35' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '52px 24px 24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 40, marginBottom: 40 }}>
 
-          {/* О компании */}
+          {/* Бренд */}
           <div>
-            <div className="text-orange-400 font-semibold mb-4 uppercase text-sm tracking-wide">О компании</div>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/about" className="hover:text-white transition">О нас</Link></li>
-              <li><Link href="/contacts" className="hover:text-white transition">Контакты</Link></li>
-              <li><Link href="/requisites" className="hover:text-white transition">Реквизиты</Link></li>
-            </ul>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 20, fontWeight: 800, color: 'white', marginBottom: 10 }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+              <span><span style={{ color: '#FF6B00' }}>Авто</span>Запчасти</span>
+            </div>
+            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.35)', lineHeight: 1.6, marginBottom: 20 }}>
+              Запчасти для грузовиков, спецтехники и легковых автомобилей. Более 10 000 позиций в наличии.
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <a href="tel:+70000000000" style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'rgba(255,255,255,0.55)', fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                +7 (000) 000-00-00
+              </a>
+              <a href="mailto:info@example.ru" style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'rgba(255,255,255,0.45)', fontSize: 13, textDecoration: 'none' }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                info@example.ru
+              </a>
+            </div>
           </div>
 
           {/* Покупателям */}
           <div>
-            <div className="text-orange-400 font-semibold mb-4 uppercase text-sm tracking-wide">Покупателям</div>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/how-to-order" className="hover:text-white transition">Как сделать заказ</Link></li>
-              <li><Link href="/delivery" className="hover:text-white transition">Доставка</Link></li>
-              <li><Link href="/payment" className="hover:text-white transition">Оплата</Link></li>
-              <li><Link href="/returns" className="hover:text-white transition">Возврат товара</Link></li>
-            </ul>
+            <div style={col.heading}>Покупателям</div>
+            {[['Как заказать', '/about'], ['Доставка', '/delivery'], ['Возврат', '/returns'], ['Оплата', '/about']].map(([label, href]) => (
+              <Link key={label} href={href} style={col.link}>{label}</Link>
+            ))}
           </div>
 
           {/* Каталог */}
           <div>
-            <div className="text-orange-400 font-semibold mb-4 uppercase text-sm tracking-wide">Каталог</div>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/cars" className="hover:text-white transition">Запчасти для авто</Link></li>
-              <li><Link href="/special" className="hover:text-white transition">Запчасти спецтехника</Link></li>
-              <li><Link href="/search" className="hover:text-white transition">Поиск по артикулу</Link></li>
-            </ul>
+            <div style={col.heading}>Каталог</div>
+            {[
+              ['Легковые авто', '/cars'],
+              ['Спецтехника', '/special'],
+              ['Двигатель', '/catalog?category=dvigatel'],
+              ['Трансмиссия', '/catalog?category=transmissiya'],
+              ['Подвеска', '/catalog?category=podveska-rulevoe'],
+            ].map(([label, href]) => (
+              <Link key={label} href={href} style={col.link}>{label}</Link>
+            ))}
           </div>
 
-          {/* Правовые документы */}
+          {/* Документы */}
           <div>
-            <div className="text-orange-400 font-semibold mb-4 uppercase text-sm tracking-wide">Документы</div>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/privacy" className="hover:text-white transition">Политика конфиденциальности</Link></li>
-              <li><Link href="/terms" className="hover:text-white transition">Пользовательское соглашение</Link></li>
-              <li><Link href="/personal-data" className="hover:text-white transition">Обработка персональных данных</Link></li>
-            </ul>
+            <div style={col.heading}>Документы</div>
+            {[
+              ['Политика конфиденциальности', '/privacy'],
+              ['Пользовательское соглашение', '/terms'],
+              ['Обработка персональных данных', '/personal-data'],
+              ['Условия возврата', '/returns'],
+              ['Реквизиты', '/requisites'],
+            ].map(([label, href]) => (
+              <Link key={label} href={href} style={col.link}>{label}</Link>
+            ))}
           </div>
         </div>
-      </div>
 
-      {/* Нижняя полоса — юридическая информация */}
-      <div className="border-t border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-gray-500">
-          <div>
-            © 2024–{year} ООО «АвтоЗапчасти». Все права защищены.
-          </div>
-          <div className="text-center">
-            ИНН: 0000000000 · ОГРН: 0000000000000 · Юр. адрес: г. Москва, ул. Примерная, д. 1
-          </div>
-          <div>
-            Не является публичной офертой
-          </div>
+        {/* Нижняя строка */}
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 20, display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, fontSize: 12, color: 'rgba(255,255,255,0.18)' }}>
+          <span>© 2024–2025 ООО «АвтоЗапчасти»</span>
+          <span>ИНН: 0000000000 · ОГРН: 0000000000000</span>
+          <span>Не является публичной офертой</span>
         </div>
       </div>
     </footer>
