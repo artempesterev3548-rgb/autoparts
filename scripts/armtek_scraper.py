@@ -270,8 +270,26 @@ def scrape_batch(sitemap_start, sitemap_end, batch_size):
         HAS_SOURCE_COLS = False
         print("   ⚠️  Расширенные колонки отсутствуют — работаем без них")
 
+    # Загружаем уже сохранённые source_slug чтобы пропускать дубли без API-запроса
+    existing_slugs: set = set()
+    if HAS_SOURCE_COLS:
+        try:
+            page_n, page_size = 0, 1000
+            while True:
+                rows = supabase_get("products", f"select=source_slug&source=eq.armtek&source_slug=not.is.null&limit={page_size}&offset={page_n*page_size}")
+                for r in rows:
+                    if r.get("source_slug"):
+                        existing_slugs.add(r["source_slug"])
+                if len(rows) < page_size:
+                    break
+                page_n += 1
+            print(f"   Уже в базе: {len(existing_slugs)} armtek-товаров (будут пропущены)")
+        except Exception as e:
+            print(f"   ⚠️  Не удалось загрузить existing slugs: {e}")
+
     processed = 0
     inserted  = 0
+    skipped   = 0
 
     for sitemap_n in range(sitemap_start, sitemap_end + 1):
         if processed >= batch_size:
@@ -283,6 +301,11 @@ def scrape_batch(sitemap_start, sitemap_end, batch_size):
         for slug, full_url in slugs:
             if processed >= batch_size:
                 break
+
+            # Пропускаем уже загруженные товары
+            if slug in existing_slugs:
+                skipped += 1
+                continue
 
             # 1. Основные данные
             time.sleep(DELAY)
@@ -348,9 +371,9 @@ def scrape_batch(sitemap_start, sitemap_end, batch_size):
             inserted  += 1 if status in (200, 201) else 0
 
             if processed % 10 == 0:
-                print(f"   ✅ {processed}/{batch_size} | вставлено: {inserted} | текущий: {name[:50]}")
+                print(f"   ✅ {processed}/{batch_size} | вставлено: {inserted} | пропущено: {skipped} | {name[:40]}")
 
-    print(f"\n✅ Готово: {processed} обработано, {inserted} вставлено/обновлено")
+    print(f"\n✅ Готово: {processed} обработано, {inserted} вставлено/обновлено, {skipped} пропущено (уже в базе)")
 
 # ── Entry point ───────────────────────────────────────────────────────────────
 if __name__ == "__main__":
