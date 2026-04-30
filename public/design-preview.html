@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Превью дизайна</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #111; color: white; }
+
+  .tabs { display: flex; gap: 0; position: sticky; top: 0; z-index: 100; }
+  .tab { flex: 1; padding: 14px; text-align: center; cursor: pointer; font-weight: 700; font-size: 14px; transition: all .2s; border-bottom: 3px solid transparent; }
+  .tab.a { background: #0D0D0D; color: #D4A017; }
+  .tab.a.active { border-color: #D4A017; }
+  .tab.v { background: #0F172A; color: #F59E0B; }
+  .tab.v.active { border-color: #F59E0B; }
+  .tab.g { background: #1a3a5c; color: #FF6B00; }
+  .tab.g.active { border-color: #FF6B00; }
+
+  .preview { display: none; }
+  .preview.active { display: block; }
+
+  /* ═══════════════ ВАРИАНТ А — DARK PREMIUM ═══════════════ */
+  .a-wrap { background: #0D0D0D; min-height: 100vh; }
+
+  .a-header { background: #0D0D0D; border-bottom: 1px solid #2a2a2a; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 68px; position: sticky; top: 48px; z-index: 10; }
+  .a-logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+  .a-logo span { color: #D4A017; }
+  .a-nav { display: flex; gap: 8px; }
+  .a-nav a { color: #888; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: 500; transition: all .2s; }
+  .a-nav a:hover, .a-nav a.active { color: #D4A017; background: rgba(212,160,23,0.08); }
+  .a-cart { background: #D4A017; color: #000; padding: 9px 20px; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; border: none; }
+
+  .a-hero { background: linear-gradient(135deg, #0D0D0D 0%, #1a1204 100%); padding: 80px 40px; text-align: center; position: relative; overflow: hidden; border-bottom: 1px solid #2a2a2a; }
+  .a-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(212,160,23,0.12) 0%, transparent 60%); }
+  .a-hero-tag { display: inline-block; background: rgba(212,160,23,0.15); border: 1px solid rgba(212,160,23,0.3); color: #D4A017; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 24px; }
+  .a-hero h1 { font-size: 52px; font-weight: 900; line-height: 1.1; margin-bottom: 16px; letter-spacing: -1px; }
+  .a-hero h1 em { color: #D4A017; font-style: normal; }
+  .a-hero p { color: #666; font-size: 18px; margin-bottom: 40px; }
+  .a-hero-btns { display: flex; gap: 12px; justify-content: center; }
+  .a-btn-primary { background: #D4A017; color: #000; padding: 14px 32px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; border: none; }
+  .a-btn-secondary { background: transparent; color: #D4A017; padding: 14px 32px; border-radius: 8px; font-weight: 700; font-size: 15px; border: 1px solid rgba(212,160,23,0.4); cursor: pointer; }
+  .a-search { margin-top: 40px; display: flex; max-width: 560px; margin-left: auto; margin-right: auto; margin-top: 40px; }
+  .a-search input { flex: 1; background: #1a1a1a; border: 1px solid #333; color: white; padding: 14px 20px; border-radius: 8px 0 0 8px; font-size: 15px; outline: none; }
+  .a-search input::placeholder { color: #555; }
+  .a-search button { background: #D4A017; color: #000; border: none; padding: 14px 24px; font-weight: 700; border-radius: 0 8px 8px 0; cursor: pointer; }
+
+  .a-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: #222; border-top: 1px solid #222; border-bottom: 1px solid #222; }
+  .a-stat { background: #111; padding: 24px; text-align: center; }
+  .a-stat-val { font-size: 28px; font-weight: 800; color: #D4A017; }
+  .a-stat-lbl { font-size: 12px; color: #555; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .a-section { padding: 60px 40px; }
+  .a-section-title { font-size: 13px; color: #D4A017; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .a-section-h2 { font-size: 32px; font-weight: 800; margin-bottom: 32px; }
+
+  .a-sections { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 60px; }
+  .a-section-card { background: linear-gradient(135deg, #161616, #1a1a1a); border: 1px solid #2a2a2a; border-radius: 16px; padding: 40px; cursor: pointer; transition: all .3s; }
+  .a-section-card:hover { border-color: #D4A017; transform: translateY(-2px); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+  .a-section-icon { font-size: 48px; margin-bottom: 16px; }
+  .a-section-card h3 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+  .a-section-card p { color: #666; font-size: 14px; line-height: 1.6; }
+  .a-section-link { color: #D4A017; font-size: 13px; font-weight: 600; margin-top: 20px; display: block; }
+
+  .a-cats { display: grid; grid-template-columns: repeat(5,1fr); gap: 12px; }
+  .a-cat { background: #161616; border: 1px solid #2a2a2a; border-radius: 12px; padding: 20px 12px; text-align: center; cursor: pointer; transition: all .2s; }
+  .a-cat:hover { border-color: #D4A017; background: #1a1a1a; }
+  .a-cat-icon { font-size: 28px; margin-bottom: 10px; }
+  .a-cat span { font-size: 12px; color: #888; font-weight: 500; }
+
+  .a-products { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 32px; }
+  .a-product { background: #161616; border: 1px solid #2a2a2a; border-radius: 12px; overflow: hidden; transition: all .2s; }
+  .a-product:hover { border-color: #333; transform: translateY(-2px); }
+  .a-product-img { background: #1a1a1a; height: 160px; display: flex; align-items: center; justify-content: center; font-size: 48px; border-bottom: 1px solid #222; }
+  .a-product-body { padding: 16px; }
+  .a-product-art { font-size: 11px; color: #555; font-family: monospace; margin-bottom: 4px; }
+  .a-product-name { font-size: 14px; font-weight: 500; color: #ccc; margin-bottom: 12px; line-height: 1.4; }
+  .a-product-footer { display: flex; align-items: center; justify-content: space-between; }
+  .a-product-price { font-size: 20px; font-weight: 800; color: white; }
+  .a-product-stock { font-size: 11px; color: #4ade80; }
+  .a-product-btn { background: #D4A017; color: #000; border: none; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; }
+
+  .a-footer { background: #080808; border-top: 1px solid #1f1f1f; padding: 60px 40px 30px; }
+  .a-footer-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 40px; margin-bottom: 40px; }
+  .a-footer-col h4 { color: #D4A017; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+  .a-footer-col a { display: block; color: #555; font-size: 13px; margin-bottom: 10px; text-decoration: none; }
+  .a-footer-col a:hover { color: #888; }
+  .a-footer-bottom { border-top: 1px solid #1f1f1f; padding-top: 24px; display: flex; justify-content: space-between; color: #333; font-size: 12px; }
+
+  /* ═══════════════ ВАРИАНТ Г — LIGHT PRO ═══════════════ */
+  .g-wrap { background: #F0F2F5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif; color: #111; }
+
+  .g-topbar { background: #0B1E35; padding: 8px 40px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: rgba(255,255,255,0.45); }
+  .g-topbar a { color: rgba(255,255,255,0.45); text-decoration: none; margin-left: 16px; }
+  .g-topbar a:hover { color: rgba(255,255,255,0.7); }
+
+  .g-header { background: #0F2744; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 68px; position: sticky; top: 34px; z-index: 10; box-shadow: 0 2px 20px rgba(0,0,0,0.4); }
+  .g-logo { font-size: 22px; font-weight: 800; color: white; letter-spacing: -0.5px; }
+  .g-logo span { color: #FF6B00; }
+  .g-nav { display: flex; gap: 4px; }
+  .g-nav a { color: rgba(255,255,255,0.65); text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: 500; transition: all .2s; }
+  .g-nav a:hover, .g-nav a.active { color: white; background: rgba(255,255,255,0.1); }
+  .g-header-right { display: flex; align-items: center; gap: 12px; }
+  .g-phone { color: rgba(255,255,255,0.7); font-size: 14px; font-weight: 600; }
+  .g-cart { background: #FF6B00; color: white; border: none; padding: 10px 22px; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+  .g-cart-badge { background: white; color: #FF6B00; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+
+  .g-hero { position: relative; overflow: hidden; }
+  .g-hero-bg { position: absolute; inset: 0; background-image: url('https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&w=1600&q=80'); background-size: cover; background-position: center 40%; }
+  .g-hero-overlay { position: absolute; inset: 0; background: linear-gradient(105deg, rgba(11,30,53,0.95) 0%, rgba(15,39,68,0.88) 55%, rgba(15,39,68,0.65) 100%); }
+  .g-hero-inner { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; padding: 70px 40px; gap: 32px; }
+  .g-hero-content { flex: 1; min-width: 0; max-width: 600px; }
+  .g-hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,107,0,0.2); border: 1px solid rgba(255,107,0,0.4); color: #FF8C38; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 24px; }
+  .g-hero-badge::before { content: ''; width: 6px; height: 6px; background: #FF6B00; border-radius: 50%; display: inline-block; }
+  .g-hero h1 { font-size: 52px; font-weight: 900; color: white; line-height: 1.05; margin-bottom: 18px; letter-spacing: -2px; }
+  .g-hero h1 em { color: #FF6B00; font-style: normal; }
+  .g-hero p { color: rgba(255,255,255,0.6); font-size: 16px; line-height: 1.6; margin-bottom: 32px; }
+  .g-hero-btns { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+  .g-btn-primary { background: #FF6B00; color: white; border: none; padding: 14px 28px; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; box-shadow: 0 4px 20px rgba(255,107,0,0.4); transition: all .2s; }
+  .g-btn-primary:hover { background: #e85d00; transform: translateY(-1px); }
+  .g-btn-secondary { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.25); padding: 14px 28px; border-radius: 10px; font-weight: 600; font-size: 15px; cursor: pointer; transition: all .2s; }
+  .g-btn-secondary:hover { background: rgba(255,255,255,0.18); }
+  .g-search-wrap { display: flex; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,0.3); }
+  .g-search-wrap input { flex: 1; border: none; padding: 15px 18px; font-size: 14px; outline: none; color: #111; min-width: 0; }
+  .g-search-wrap input::placeholder { color: #9CA3AF; }
+  .g-search-wrap button { background: #FF6B00; color: white; border: none; padding: 15px 24px; font-weight: 700; font-size: 14px; cursor: pointer; white-space: nowrap; }
+
+  .g-hero-side { display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; width: 220px; }
+  .g-trust-pill { background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.18); border-radius: 12px; padding: 11px 16px; color: white; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 10px; }
+  .g-trust-pill-icon { font-size: 18px; flex-shrink: 0; }
+
+  .g-stats { background: white; display: grid; grid-template-columns: repeat(4,1fr); box-shadow: 0 4px 20px rgba(0,0,0,0.08); position: relative; z-index: 5; }
+  .g-stat { padding: 22px 16px; text-align: center; border-right: 1px solid #F0F2F5; }
+  .g-stat:last-child { border-right: none; }
+  .g-stat-val { font-size: 26px; font-weight: 900; color: #0F2744; letter-spacing: -0.5px; }
+  .g-stat-lbl { font-size: 11px; color: #9CA3AF; margin-top: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .g-section { padding: 60px 40px; }
+  .g-section-label { font-size: 11px; color: #FF6B00; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+  .g-section-h2 { font-size: 30px; font-weight: 800; color: #0F2744; margin-bottom: 6px; letter-spacing: -0.5px; }
+  .g-section-sub { font-size: 15px; color: #6B7280; margin-bottom: 32px; }
+
+  .g-sections { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 56px; }
+  .g-section-card { background: white; border-radius: 20px; padding: 36px; border: 2px solid transparent; box-shadow: 0 2px 16px rgba(0,0,0,0.06); cursor: pointer; transition: all .25s; position: relative; overflow: hidden; }
+  .g-section-card::before { content: ''; position: absolute; bottom: 0; right: 0; width: 120px; height: 120px; background: radial-gradient(circle, rgba(255,107,0,0.06) 0%, transparent 70%); pointer-events: none; }
+  .g-section-card:hover { border-color: #FF6B00; box-shadow: 0 8px 32px rgba(255,107,0,0.12); transform: translateY(-2px); }
+  .g-section-icon-box { width: 64px; height: 64px; background: #FFF0E8; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 20px; }
+  .g-section-card h3 { font-size: 21px; font-weight: 700; color: #0F2744; margin-bottom: 8px; }
+  .g-section-card p { color: #6B7280; font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
+  .g-section-link { color: #FF6B00; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+
+  .g-cats { display: grid; grid-template-columns: repeat(6,1fr); gap: 12px; margin-bottom: 16px; }
+  .g-cat { background: white; border-radius: 16px; padding: 20px 10px; text-align: center; box-shadow: 0 1px 8px rgba(0,0,0,0.05); cursor: pointer; border: 2px solid transparent; transition: all .2s; }
+  .g-cat:hover { border-color: #FF6B00; box-shadow: 0 4px 16px rgba(255,107,0,0.1); transform: translateY(-1px); }
+  .g-cat-icon { width: 48px; height: 48px; background: #FFF0E8; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto 10px; }
+  .g-cat span { font-size: 12px; color: #374151; font-weight: 600; line-height: 1.3; display: block; }
+
+  .g-products-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 32px; }
+  .g-product { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); transition: all .25s; cursor: pointer; }
+  .g-product:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.12); transform: translateY(-3px); }
+  .g-product-img { background: linear-gradient(135deg, #F9FAFB, #F0F2F5); height: 160px; display: flex; align-items: center; justify-content: center; font-size: 52px; position: relative; }
+  .g-product-badge { position: absolute; top: 10px; left: 10px; background: #10B981; color: white; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.5px; }
+  .g-product-badge.order { background: #F97316; }
+  .g-product-body { padding: 16px; }
+  .g-product-art { font-size: 11px; color: #9CA3AF; font-family: 'SF Mono', 'Fira Code', monospace; margin-bottom: 5px; }
+  .g-product-name { font-size: 14px; font-weight: 500; color: #111827; margin-bottom: 14px; line-height: 1.45; min-height: 40px; }
+  .g-product-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .g-product-price { font-size: 21px; font-weight: 900; color: #0F2744; letter-spacing: -0.5px; }
+  .g-product-stock { font-size: 11px; color: #10B981; font-weight: 600; margin-top: 2px; }
+  .g-product-stock.order { color: #F97316; }
+  .g-product-btn { background: #FF6B00; color: white; border: none; padding: 9px 14px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background .2s; flex-shrink: 0; }
+  .g-product-btn:hover { background: #e85d00; }
+
+  .g-why { background: #0F2744; padding: 60px 40px; }
+  .g-why-label { font-size: 11px; color: #FF6B00; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+  .g-why-h2 { font-size: 30px; font-weight: 800; color: white; margin-bottom: 40px; }
+  .g-why-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
+  .g-why-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 28px 24px; }
+  .g-why-icon { font-size: 32px; margin-bottom: 14px; }
+  .g-why-card h4 { color: white; font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .g-why-card p { color: rgba(255,255,255,0.45); font-size: 13px; line-height: 1.6; }
+
+  .g-footer { background: #0B1E35; color: rgba(255,255,255,0.45); padding: 52px 40px 24px; }
+  .g-footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+  .g-footer-brand { }
+  .g-footer-logo { font-size: 20px; font-weight: 800; color: white; margin-bottom: 10px; }
+  .g-footer-logo span { color: #FF6B00; }
+  .g-footer-desc { font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.6; margin-bottom: 20px; }
+  .g-footer-contact a { display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.55); font-size: 14px; font-weight: 600; text-decoration: none; margin-bottom: 8px; }
+  .g-footer-col h4 { color: #FF6B00; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+  .g-footer-col a { display: block; color: rgba(255,255,255,0.35); font-size: 13px; margin-bottom: 10px; text-decoration: none; transition: color .2s; }
+  .g-footer-col a:hover { color: rgba(255,255,255,0.65); }
+  .g-footer-bottom { border-top: 1px solid rgba(255,255,255,0.07); padding-top: 20px; display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.18); }
+
+  /* ═══════════════ ВАРИАНТ В — INDUSTRIAL NAVY ═══════════════ */
+  .v-wrap { background: #060D1F; min-height: 100vh; }
+
+  .v-header { background: rgba(6,13,31,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 68px; position: sticky; top: 48px; z-index: 10; }
+  .v-logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+  .v-logo span { color: #F59E0B; }
+  .v-nav { display: flex; gap: 4px; }
+  .v-nav a { color: #64748B; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: 500; transition: all .2s; }
+  .v-nav a:hover, .v-nav a.active { color: #F8FAFC; background: rgba(255,255,255,0.06); }
+  .v-cart { background: #F59E0B; color: #000; padding: 9px 20px; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; border: none; }
+
+  .v-hero { padding: 90px 40px; text-align: center; position: relative; overflow: hidden; }
+  .v-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% -20%, rgba(245,158,11,0.15) 0%, transparent 55%), radial-gradient(ellipse at 80% 80%, rgba(59,130,246,0.1) 0%, transparent 50%); }
+  .v-hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(245,158,11,0.3), transparent); }
+  .v-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2); color: #F59E0B; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 32px; }
+  .v-badge::before { content: '●'; font-size: 8px; }
+  .v-hero h1 { font-size: 56px; font-weight: 900; line-height: 1.05; margin-bottom: 20px; letter-spacing: -2px; color: #F8FAFC; }
+  .v-hero h1 em { background: linear-gradient(135deg, #F59E0B, #FCD34D); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-style: normal; }
+  .v-hero p { color: #475569; font-size: 18px; margin-bottom: 48px; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+  .v-hero-btns { display: flex; gap: 12px; justify-content: center; margin-bottom: 48px; }
+  .v-btn-primary { background: linear-gradient(135deg, #F59E0B, #D97706); color: #000; padding: 14px 32px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; border: none; box-shadow: 0 4px 20px rgba(245,158,11,0.3); }
+  .v-btn-secondary { background: rgba(255,255,255,0.05); color: #94A3B8; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 15px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; }
+  .v-search { display: flex; max-width: 580px; margin: 0 auto; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; }
+  .v-search input { flex: 1; background: transparent; border: none; color: #F8FAFC; padding: 16px 20px; font-size: 15px; outline: none; }
+  .v-search input::placeholder { color: #334155; }
+  .v-search button { background: #F59E0B; color: #000; border: none; padding: 16px 28px; font-weight: 700; font-size: 14px; cursor: pointer; }
+
+  .v-stats { display: grid; grid-template-columns: repeat(4,1fr); border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .v-stat { padding: 28px; text-align: center; border-right: 1px solid rgba(255,255,255,0.05); }
+  .v-stat:last-child { border-right: none; }
+  .v-stat-val { font-size: 30px; font-weight: 900; background: linear-gradient(135deg, #F59E0B, #FCD34D); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .v-stat-lbl { font-size: 12px; color: #334155; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .v-section { padding: 70px 40px; }
+  .v-section-label { font-size: 12px; color: #F59E0B; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+  .v-section-h2 { font-size: 34px; font-weight: 900; color: #F8FAFC; margin-bottom: 8px; letter-spacing: -0.5px; }
+  .v-section-sub { color: #475569; font-size: 15px; margin-bottom: 40px; }
+
+  .v-sections { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 70px; }
+  .v-section-card { background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; padding: 44px; cursor: pointer; transition: all .3s; position: relative; overflow: hidden; }
+  .v-section-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(245,158,11,0.05), transparent); opacity: 0; transition: opacity .3s; }
+  .v-section-card:hover { border-color: rgba(245,158,11,0.3); transform: translateY(-3px); box-shadow: 0 24px 48px rgba(0,0,0,0.4); }
+  .v-section-card:hover::before { opacity: 1; }
+  .v-icon-wrap { width: 64px; height: 64px; background: rgba(245,158,11,0.1); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 20px; }
+  .v-section-card h3 { font-size: 24px; font-weight: 800; color: #F8FAFC; margin-bottom: 10px; }
+  .v-section-card p { color: #475569; font-size: 14px; line-height: 1.7; }
+  .v-section-link { color: #F59E0B; font-size: 13px; font-weight: 600; margin-top: 24px; display: flex; align-items: center; gap: 6px; }
+
+  .v-cats { display: grid; grid-template-columns: repeat(5,1fr); gap: 12px; }
+  .v-cat { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 22px 12px; text-align: center; cursor: pointer; transition: all .2s; }
+  .v-cat:hover { border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.04); }
+  .v-cat-icon { width: 48px; height: 48px; background: rgba(245,158,11,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 12px; }
+  .v-cat span { font-size: 12px; color: #64748B; font-weight: 500; }
+
+  .v-products { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 32px; }
+  .v-product { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; overflow: hidden; transition: all .2s; }
+  .v-product:hover { border-color: rgba(245,158,11,0.2); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,0,0,0.3); }
+  .v-product-img { background: rgba(255,255,255,0.03); height: 160px; display: flex; align-items: center; justify-content: center; font-size: 48px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .v-product-body { padding: 18px; }
+  .v-product-art { font-size: 11px; color: #334155; font-family: monospace; margin-bottom: 5px; }
+  .v-product-name { font-size: 14px; font-weight: 500; color: #94A3B8; margin-bottom: 14px; line-height: 1.4; }
+  .v-product-footer { display: flex; align-items: center; justify-content: space-between; }
+  .v-product-price { font-size: 20px; font-weight: 900; color: #F8FAFC; }
+  .v-product-stock { font-size: 11px; color: #34D399; font-weight: 500; }
+  .v-product-btn { background: rgba(245,158,11,0.15); color: #F59E0B; border: 1px solid rgba(245,158,11,0.3); padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all .2s; }
+  .v-product-btn:hover { background: #F59E0B; color: #000; }
+
+  .v-footer { background: #030810; border-top: 1px solid rgba(255,255,255,0.05); padding: 60px 40px 30px; }
+  .v-footer-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 40px; margin-bottom: 40px; }
+  .v-footer-col h4 { color: #F59E0B; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+  .v-footer-col a { display: block; color: #334155; font-size: 13px; margin-bottom: 10px; text-decoration: none; transition: color .2s; }
+  .v-footer-col a:hover { color: #64748B; }
+  .v-footer-bottom { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 24px; display: flex; justify-content: space-between; color: #1E293B; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div class="tabs" style="display:none"></div>
+
+<!-- ВАРИАНТ А -->
+<div class="preview a-wrap" id="preview-a" style="display:none!important">
+  <header class="a-header">
+    <div class="a-logo">⚙️ <span>Авто</span>Запчасти</div>
+    <nav class="a-nav">
+      <a href="#" class="active">🚗 Легковые</a>
+      <a href="#">🚛 Спецтехника</a>
+      <a href="#">🔍 Поиск</a>
+    </nav>
+    <button class="a-cart">🛒 Корзина</button>
+  </header>
+
+  <section class="a-hero">
+    <div class="a-hero-tag">✦ Профессиональный подбор запчастей</div>
+    <h1>Запчасти для<br><em>любой техники</em></h1>
+    <p>КамАЗ, МАЗ, Урал, Toyota, Komatsu и другие.<br>Более 10 000 позиций в наличии.</p>
+    <div class="a-hero-btns">
+      <button class="a-btn-primary">Перейти в каталог</button>
+      <button class="a-btn-secondary">Подобрать по VIN</button>
+    </div>
+    <div class="a-search">
+      <input type="text" placeholder="Артикул, название или кросс-номер...">
+      <button>Найти</button>
+    </div>
+  </section>
+
+  <div class="a-stats">
+    <div class="a-stat"><div class="a-stat-val">10 000+</div><div class="a-stat-lbl">Товаров</div></div>
+    <div class="a-stat"><div class="a-stat-val">200+</div><div class="a-stat-lbl">Марок техники</div></div>
+    <div class="a-stat"><div class="a-stat-val">1–7 дней</div><div class="a-stat-lbl">Доставка</div></div>
+    <div class="a-stat"><div class="a-stat-val">Пн–Сб 9–18</div><div class="a-stat-lbl">Работаем</div></div>
+  </div>
+
+  <section class="a-section">
+    <div class="a-section-title">Разделы каталога</div>
+    <div class="a-section-h2">Выберите тип техники</div>
+    <div class="a-sections">
+      <div class="a-section-card">
+        <div class="a-section-icon">🚗</div>
+        <h3>Легковые автомобили</h3>
+        <p>Toyota, Lada, Kia, Hyundai, Volkswagen, Renault и другие марки</p>
+        <span class="a-section-link">Перейти в каталог →</span>
+      </div>
+      <div class="a-section-card">
+        <div class="a-section-icon">🚛</div>
+        <h3>Спецтехника и грузовики</h3>
+        <p>КамАЗ, МАЗ, Урал, ЯМЗ, Komatsu, Hitachi, JCB и другие</p>
+        <span class="a-section-link">Перейти в каталог →</span>
+      </div>
+    </div>
+
+    <div class="a-section-title">Категории</div>
+    <div class="a-section-h2">Запчасти по категориям</div>
+    <div class="a-cats">
+      <div class="a-cat"><div class="a-cat-icon">⚙️</div><span>Двигатель</span></div>
+      <div class="a-cat"><div class="a-cat-icon">🔩</div><span>Трансмиссия</span></div>
+      <div class="a-cat"><div class="a-cat-icon">🛞</div><span>Ходовая</span></div>
+      <div class="a-cat"><div class="a-cat-icon">⚡</div><span>Электрика</span></div>
+      <div class="a-cat"><div class="a-cat-icon">⛽</div><span>Топливная</span></div>
+    </div>
+
+    <div class="a-products">
+      <div class="a-product">
+        <div class="a-product-img">🔧</div>
+        <div class="a-product-body">
+          <div class="a-product-art">740.1002010 · КАМАЗ</div>
+          <div class="a-product-name">Поршень КамАЗ-740 в сборе с пальцем</div>
+          <div class="a-product-footer">
+            <div><div class="a-product-price">1 190 ₽</div><div class="a-product-stock">✓ В наличии</div></div>
+            <button class="a-product-btn">+ В корзину</button>
+          </div>
+        </div>
+      </div>
+      <div class="a-product">
+        <div class="a-product-img">⚙️</div>
+        <div class="a-product-body">
+          <div class="a-product-art">853.1601130 · ЯМЗ</div>
+          <div class="a-product-name">Диск сцепления МАЗ ЯМЗ-536</div>
+          <div class="a-product-footer">
+            <div><div class="a-product-price">5 376 ₽</div><div class="a-product-stock">✓ В наличии</div></div>
+            <button class="a-product-btn">+ В корзину</button>
+          </div>
+        </div>
+      </div>
+      <div class="a-product">
+        <div class="a-product-img">🛞</div>
+        <div class="a-product-body">
+          <div class="a-product-art">6520-3103010 · КАМАЗ</div>
+          <div class="a-product-name">Ступица передняя КАМАЗ-6520</div>
+          <div class="a-product-footer">
+            <div><div class="a-product-price">8 900 ₽</div><div class="a-product-stock" style="color:#fb923c">⏱ 3 дня</div></div>
+            <button class="a-product-btn">+ В корзину</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="a-footer">
+    <div class="a-footer-grid">
+      <div class="a-footer-col"><h4>О компании</h4><a href="#">О нас</a><a href="#">Контакты</a><a href="#">Реквизиты</a></div>
+      <div class="a-footer-col"><h4>Покупателям</h4><a href="#">Как заказать</a><a href="#">Доставка</a><a href="#">Возврат</a></div>
+      <div class="a-footer-col"><h4>Каталог</h4><a href="#">Легковые авто</a><a href="#">Спецтехника</a><a href="#">Поиск</a></div>
+      <div class="a-footer-col"><h4>Документы</h4><a href="#">Политика конфиденциальности</a><a href="#">Пользовательское соглашение</a><a href="#">Обработка данных</a></div>
+    </div>
+    <div class="a-footer-bottom">
+      <span>© 2024–2025 ООО «АвтоЗапчасти»</span>
+      <span>ИНН: 0000000000 · ОГРН: 0000000000000</span>
+      <span>Не является публичной офертой</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ВАРИАНТ В -->
+<div class="preview v-wrap" id="preview-v" style="display:none!important">
+  <header class="v-header">
+    <div class="v-logo">⚙️ <span>Авто</span>Запчасти</div>
+    <nav class="v-nav">
+      <a href="#" class="active">🚗 Легковые</a>
+      <a href="#">🚛 Спецтехника</a>
+      <a href="#">🔍 Поиск</a>
+    </nav>
+    <button class="v-cart">🛒 Корзина</button>
+  </header>
+
+  <section class="v-hero">
+    <div class="v-badge">Профессиональный подбор запчастей</div>
+    <h1>Запчасти для<br><em>любой техники</em></h1>
+    <p>КамАЗ, МАЗ, Урал, Toyota, Komatsu и другие.<br>Более 10 000 позиций в наличии.</p>
+    <div class="v-hero-btns">
+      <button class="v-btn-primary">Перейти в каталог</button>
+      <button class="v-btn-secondary">Подобрать по VIN</button>
+    </div>
+    <div class="v-search">
+      <input type="text" placeholder="Артикул, название или кросс-номер...">
+      <button>Найти</button>
+    </div>
+  </section>
+
+  <div class="v-stats">
+    <div class="v-stat"><div class="v-stat-val">10 000+</div><div class="v-stat-lbl">Товаров</div></div>
+    <div class="v-stat"><div class="v-stat-val">200+</div><div class="v-stat-lbl">Марок техники</div></div>
+    <div class="v-stat"><div class="v-stat-val">1–7 дней</div><div class="v-stat-lbl">Доставка</div></div>
+    <div class="v-stat"><div class="v-stat-val">Пн–Сб 9–18</div><div class="v-stat-lbl">Работаем</div></div>
+  </div>
+
+  <section class="v-section">
+    <div class="v-section-label">Разделы каталога</div>
+    <div class="v-section-h2">Выберите тип техники</div>
+    <div class="v-section-sub">Широкий ассортимент запчастей для любой техники</div>
+    <div class="v-sections">
+      <div class="v-section-card">
+        <div class="v-icon-wrap">🚗</div>
+        <h3>Легковые автомобили</h3>
+        <p>Toyota, Lada, Kia, Hyundai, Volkswagen, Renault и другие марки</p>
+        <div class="v-section-link">Перейти в каталог →</div>
+      </div>
+      <div class="v-section-card">
+        <div class="v-icon-wrap">🚛</div>
+        <h3>Спецтехника и грузовики</h3>
+        <p>КамАЗ, МАЗ, Урал, ЯМЗ, Komatsu, Hitachi, JCB и другие</p>
+        <div class="v-section-link">Перейти в каталог →</div>
+      </div>
+    </div>
+
+    <div class="v-section-label">Категории</div>
+    <div class="v-section-h2">Запчасти по категориям</div>
+    <div class="v-section-sub" style="margin-bottom:24px">Найдите нужную деталь быстро</div>
+    <div class="v-cats">
+      <div class="v-cat"><div class="v-cat-icon">⚙️</div><span>Двигатель</span></div>
+      <div class="v-cat"><div class="v-cat-icon">🔩</div><span>Трансмиссия</span></div>
+      <div class="v-cat"><div class="v-cat-icon">🛞</div><span>Ходовая</span></div>
+      <div class="v-cat"><div class="v-cat-icon">⚡</div><span>Электрика</span></div>
+      <div class="v-cat"><div class="v-cat-icon">⛽</div><span>Топливная</span></div>
+    </div>
+
+    <div class="v-products">
+      <div class="v-product">
+        <div class="v-product-img">🔧</div>
+        <div class="v-product-body">
+          <div class="v-product-art">740.1002010 · КАМАЗ</div>
+          <div class="v-product-name">Поршень КамАЗ-740 в сборе с пальцем</div>
+          <div class="v-product-footer">
+            <div><div class="v-product-price">1 190 ₽</div><div class="v-product-stock">✓ В наличии</div></div>
+            <button class="v-product-btn">+ В корзину</button>
+          </div>
+        </div>
+      </div>
+      <div class="v-product">
+        <div class="v-product-img">⚙️</div>
+        <div class="v-product-body">
+          <div class="v-product-art">853.1601130 · ЯМЗ</div>
+          <div class="v-product-name">Диск сцепления МАЗ ЯМЗ-536</div>
+          <div class="v-product-footer">
+            <div><div class="v-product-price">5 376 ₽</div><div class="v-product-stock">✓ В наличии</div></div>
+            <button class="v-product-btn">+ В корзину</button>
+          </div>
+        </div>
+      </div>
+      <div class="v-product">
+        <div class="v-product-img">🛞</div>
+        <div class="v-product-body">
+          <div class="v-product-art">6520-3103010 · КАМАЗ</div>
+          <div class="v-product-name">Ступица передняя КАМАЗ-6520</div>
+          <div class="v-product-footer">
+            <div><div class="v-product-price">8 900 ₽</div><div class="v-product-stock" style="color:#fb923c">⏱ 3 дня</div></div>
+            <button class="v-product-btn">+ В корзину</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="v-footer">
+    <div class="v-footer-grid">
+      <div class="v-footer-col"><h4>О компании</h4><a href="#">О нас</a><a href="#">Контакты</a><a href="#">Реквизиты</a></div>
+      <div class="v-footer-col"><h4>Покупателям</h4><a href="#">Как заказать</a><a href="#">Доставка</a><a href="#">Возврат</a></div>
+      <div class="v-footer-col"><h4>Каталог</h4><a href="#">Легковые авто</a><a href="#">Спецтехника</a><a href="#">Поиск</a></div>
+      <div class="v-footer-col"><h4>Документы</h4><a href="#">Политика конфиденциальности</a><a href="#">Пользовательское соглашение</a><a href="#">Обработка данных</a></div>
+    </div>
+    <div class="v-footer-bottom">
+      <span>© 2024–2025 ООО «АвтоЗапчасти»</span>
+      <span>ИНН: 0000000000 · ОГРН: 0000000000000</span>
+      <span>Не является публичной офертой</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ВАРИАНТ Г -->
+<div class="preview g-wrap active" id="preview-g">
+
+  <!-- Верхняя полоска -->
+  <div class="g-topbar">
+    <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:5px"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+7 (000) 000-00-00 · Пн–Сб 9:00–18:00</span>
+    <div>
+      <a href="#">О компании</a>
+      <a href="#">Доставка</a>
+      <a href="#">Контакты</a>
+    </div>
+  </div>
+
+  <!-- Шапка -->
+  <header class="g-header">
+    <div class="g-logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Авто</span>Запчасти</div>
+    <nav class="g-nav">
+      <a href="#" class="active"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:5px"><path d="M19 17H5a2 2 0 0 1-2-2v-4l2.5-5h11L19 11v4a2 2 0 0 1-2 2z"/><circle cx="7.5" cy="17" r="2.5"/><circle cx="16.5" cy="17" r="2.5"/><line x1="3" y1="11" x2="21" y2="11"/></svg>Легковые</a>
+      <a href="#"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:5px"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Спецтехника</a>
+      <a href="#"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:5px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Поиск</a>
+    </nav>
+    <div class="g-header-right">
+      <button class="g-cart"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>Корзина <span class="g-cart-badge">3</span></button>
+    </div>
+  </header>
+
+  <!-- Hero с фото двигателя -->
+  <section class="g-hero">
+    <div class="g-hero-bg"></div>
+    <div class="g-hero-overlay"></div>
+    <div class="g-hero-inner">
+      <div class="g-hero-content">
+        <div class="g-hero-badge">Профессиональный подбор запчастей</div>
+        <h1>Запчасти для<br><em>любой техники</em></h1>
+        <p>КамАЗ, МАЗ, Урал, Toyota, Komatsu и другие.<br>Более 10 000 позиций в наличии.</p>
+        <div class="g-hero-btns">
+          <button class="g-btn-primary">Перейти в каталог</button>
+          <button class="g-btn-secondary">Подобрать по VIN</button>
+        </div>
+        <div class="g-search-wrap">
+          <input type="text" placeholder="Артикул, название или кросс-номер...">
+          <button>Найти</button>
+        </div>
+      </div>
+      <div class="g-hero-side">
+        <div class="g-trust-pill"><span class="g-trust-pill-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></span> Оригинал и аналоги</div>
+        <div class="g-trust-pill"><span class="g-trust-pill-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span> Доставка 1–7 дней</div>
+        <div class="g-trust-pill"><span class="g-trust-pill-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-5"/></svg></span> Возврат 14 дней</div>
+        <div class="g-trust-pill"><span class="g-trust-pill-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span> Менеджер поможет</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Статистика -->
+  <div class="g-stats">
+    <div class="g-stat"><div class="g-stat-val">10 000+</div><div class="g-stat-lbl">Товаров в каталоге</div></div>
+    <div class="g-stat"><div class="g-stat-val">200+</div><div class="g-stat-lbl">Марок техники</div></div>
+    <div class="g-stat"><div class="g-stat-val">1–7 дней</div><div class="g-stat-lbl">Доставка по РФ</div></div>
+    <div class="g-stat"><div class="g-stat-val">Пн–Сб 9–18</div><div class="g-stat-lbl">Режим работы</div></div>
+  </div>
+
+  <!-- Разделы и каталог -->
+  <section class="g-section">
+    <div class="g-section-label">Разделы каталога</div>
+    <div class="g-section-h2">Выберите тип техники</div>
+    <div class="g-section-sub">Широкий ассортимент для любой задачи</div>
+    <div class="g-sections">
+      <div class="g-section-card">
+        <div class="g-section-icon-box"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17H5a2 2 0 0 1-2-2v-4l2.5-5h11L19 11v4a2 2 0 0 1-2 2z"/><circle cx="7.5" cy="17" r="2.5"/><circle cx="16.5" cy="17" r="2.5"/><line x1="3" y1="11" x2="21" y2="11"/></svg></div>
+        <h3>Легковые автомобили</h3>
+        <p>Toyota, Lada, Kia, Hyundai, Volkswagen, Renault, Nissan и другие марки</p>
+        <div class="g-section-link">Перейти в каталог →</div>
+      </div>
+      <div class="g-section-card">
+        <div class="g-section-icon-box"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+        <h3>Спецтехника и грузовики</h3>
+        <p>КамАЗ, МАЗ, Урал, ЯМЗ, Komatsu, Hitachi, JCB, Volvo и другие</p>
+        <div class="g-section-link">Перейти в каталог →</div>
+      </div>
+    </div>
+
+    <!-- Категории -->
+    <div class="g-section-label">Категории</div>
+    <div class="g-section-h2">Запчасти по категориям</div>
+    <div class="g-section-sub">Найдите нужную деталь быстро</div>
+    <div class="g-cats">
+      <div class="g-cat"><div class="g-cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0F2744" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div><span>Двигатель</span></div>
+      <div class="g-cat"><div class="g-cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0F2744" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg></div><span>Трансмиссия</span></div>
+      <div class="g-cat"><div class="g-cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0F2744" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="9"/><line x1="12" y1="15" x2="12" y2="22"/><line x1="2" y1="12" x2="9" y2="12"/><line x1="15" y1="12" x2="22" y2="12"/></svg></div><span>Ходовая</span></div>
+      <div class="g-cat"><div class="g-cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0F2744" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><span>Электрика</span></div>
+      <div class="g-cat"><div class="g-cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0F2744" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></div><span>Топливная</span></div>
+      <div class="g-cat"><div class="g-cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0F2744" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg></div><span>Охлаждение</span></div>
+    </div>
+
+    <!-- Товары -->
+    <div style="margin-top:48px;">
+      <div class="g-section-label">Популярное</div>
+      <div class="g-section-h2">Хиты продаж</div>
+      <div class="g-section-sub">Самые востребованные позиции</div>
+    </div>
+    <div class="g-products-grid">
+      <div class="g-product">
+        <div class="g-product-img">🔧<span class="g-product-badge">В наличии</span></div>
+        <div class="g-product-body">
+          <div class="g-product-art">740.1002010 · КАМАЗ</div>
+          <div class="g-product-name">Поршень КамАЗ-740 в сборе с пальцем</div>
+          <div class="g-product-footer">
+            <div><div class="g-product-price">1 190 ₽</div><div class="g-product-stock">✓ В наличии</div></div>
+            <button class="g-product-btn">+ В корзину</button>
+          </div>
+        </div>
+      </div>
+      <div class="g-product">
+        <div class="g-product-img">⚙️<span class="g-product-badge">В наличии</span></div>
+        <div class="g-product-body">
+          <div class="g-product-art">853.1601130 · ЯМЗ</div>
+          <div class="g-product-name">Диск сцепления МАЗ ЯМЗ-536</div>
+          <div class="g-product-footer">
+            <div><div class="g-product-price">5 376 ₽</div><div class="g-product-stock">✓ В наличии</div></div>
+            <button class="g-product-btn">+ В корзину</button>
+          </div>
+        </div>
+      </div>
+      <div class="g-product">
+        <div class="g-product-img">🛞<span class="g-product-badge order">Под заказ</span></div>
+        <div class="g-product-body">
+          <div class="g-product-art">6520-3103010 · КАМАЗ</div>
+          <div class="g-product-name">Ступица передняя КАМАЗ-6520</div>
+          <div class="g-product-footer">
+            <div><div class="g-product-price">8 900 ₽</div><div class="g-product-stock order">⏱ 3 дня</div></div>
+            <button class="g-product-btn">+ В корзину</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Почему мы -->
+  <section class="g-why">
+    <div class="g-why-label">Наши преимущества</div>
+    <div class="g-why-h2">Почему выбирают нас</div>
+    <div class="g-why-grid">
+      <div class="g-why-card">
+        <div class="g-why-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></div>
+        <h4>Оригинал и аналоги</h4>
+        <p>Работаем с проверенными поставщиками. Гарантируем качество каждой детали.</p>
+      </div>
+      <div class="g-why-card">
+        <div class="g-why-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+        <h4>Быстрая доставка</h4>
+        <p>Отправляем в день заказа. Доставка по всей России от 1 до 7 дней.</p>
+      </div>
+      <div class="g-why-card">
+        <div class="g-why-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <h4>Менеджер поможет</h4>
+        <p>Не знаете артикул? Позвоните — подберём по марке, модели и году выпуска.</p>
+      </div>
+      <div class="g-why-card">
+        <div class="g-why-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-5"/></svg></div>
+        <h4>Возврат 14 дней</h4>
+        <p>Если деталь не подошла — вернём деньги без лишних вопросов.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Футер -->
+  <footer class="g-footer">
+    <div class="g-footer-grid">
+      <div class="g-footer-brand">
+        <div class="g-footer-logo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:5px"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Авто</span>Запчасти</div>
+        <div class="g-footer-desc">Запчасти для грузовиков, спецтехники и легковых автомобилей. Более 10 000 позиций в наличии.</div>
+        <div class="g-footer-contact">
+          <a href="#"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> +7 (000) 000-00-00</a>
+          <a href="#"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> info@example.ru</a>
+        </div>
+      </div>
+      <div class="g-footer-col">
+        <h4>Покупателям</h4>
+        <a href="#">Как заказать</a>
+        <a href="#">Доставка</a>
+        <a href="#">Возврат</a>
+        <a href="#">Оплата</a>
+      </div>
+      <div class="g-footer-col">
+        <h4>Каталог</h4>
+        <a href="#">Легковые авто</a>
+        <a href="#">Спецтехника</a>
+        <a href="#">Двигатель</a>
+        <a href="#">Трансмиссия</a>
+      </div>
+      <div class="g-footer-col">
+        <h4>Документы</h4>
+        <a href="#">Политика конфиденциальности</a>
+        <a href="#">Соглашение</a>
+        <a href="#">Обработка данных</a>
+        <a href="#">Реквизиты</a>
+      </div>
+    </div>
+    <div class="g-footer-bottom">
+      <span>© 2024–2025 ООО «АвтоЗапчасти»</span>
+      <span>ИНН: 0000000000 · ОГРН: 0000000000000</span>
+      <span>Не является публичной офертой</span>
+    </div>
+  </footer>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.preview').forEach(p => p.classList.remove('active'))
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'))
+  document.getElementById('preview-' + id).classList.add('active')
+  document.querySelector('.tab.' + id).classList.add('active')
+  window.scrollTo(0,0)
+}
+</script>
+</body>
+</html>
