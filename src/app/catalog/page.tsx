@@ -243,28 +243,61 @@ export default async function CatalogPage({ searchParams }: Props) {
           )}
 
           {/* Пагинация */}
-          {pages > 1 && (
-            <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 40 }}>
-              {page > 1 && (
-                <Link href={buildUrl({ page: String(page - 1) })}
-                  style={{ width: 38, height: 38, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', borderRadius: 10, fontSize: 14, color: '#374151', textDecoration: 'none', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
-                  ‹
-                </Link>
-              )}
-              {Array.from({ length: Math.min(pages, 10) }, (_, i) => i + 1).map(p => (
-                <Link key={p} href={buildUrl({ page: String(p) })}
-                  style={{ width: 38, height: 38, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 10, fontSize: 14, fontWeight: p === page ? 700 : 400, textDecoration: 'none', background: p === page ? '#FF6B00' : 'white', color: p === page ? 'white' : '#374151', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
-                  {p}
-                </Link>
-              ))}
-              {page < pages && (
-                <Link href={buildUrl({ page: String(page + 1) })}
-                  style={{ width: 38, height: 38, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', borderRadius: 10, fontSize: 14, color: '#374151', textDecoration: 'none', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>
-                  ›
-                </Link>
-              )}
-            </div>
-          )}
+          {pages > 1 && (() => {
+            // Строим список номеров страниц с многоточием
+            const delta = 2 // страниц вокруг текущей
+            const range: (number | '...')[] = []
+            const rangeSet = new Set<number>()
+
+            const add = (p: number) => { if (p >= 1 && p <= pages) rangeSet.add(p) }
+            add(1); add(2)
+            for (let i = page - delta; i <= page + delta; i++) add(i)
+            add(pages - 1); add(pages)
+
+            const sorted = Array.from(rangeSet).sort((a, b) => a - b)
+            sorted.forEach((p, i) => {
+              if (i > 0 && p - sorted[i - 1] > 1) range.push('...')
+              range.push(p)
+            })
+
+            const btnBase: React.CSSProperties = {
+              minWidth: 38, height: 38, display: 'flex', alignItems: 'center', justifyContent: 'center',
+              borderRadius: 10, fontSize: 14, textDecoration: 'none',
+              boxShadow: '0 1px 4px rgba(0,0,0,0.08)', fontWeight: 500, padding: '0 6px',
+            }
+            return (
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 6, marginTop: 40, flexWrap: 'wrap' }}>
+                {/* « первая */}
+                {page > 1 && (
+                  <Link href={buildUrl({ page: '1' })} style={{ ...btnBase, background: 'white', color: '#374151' }}>«</Link>
+                )}
+                {/* ‹ предыдущая */}
+                {page > 1 && (
+                  <Link href={buildUrl({ page: String(page - 1) })} style={{ ...btnBase, background: 'white', color: '#374151' }}>‹</Link>
+                )}
+
+                {range.map((p, i) =>
+                  p === '...'
+                    ? <span key={`dots-${i}`} style={{ width: 38, textAlign: 'center', color: '#9CA3AF', fontSize: 14 }}>…</span>
+                    : <Link key={p} href={buildUrl({ page: String(p) })} style={{
+                        ...btnBase,
+                        background: p === page ? '#FF6B00' : 'white',
+                        color: p === page ? 'white' : '#374151',
+                        fontWeight: p === page ? 700 : 500,
+                      }}>{p}</Link>
+                )}
+
+                {/* › следующая */}
+                {page < pages && (
+                  <Link href={buildUrl({ page: String(page + 1) })} style={{ ...btnBase, background: 'white', color: '#374151' }}>›</Link>
+                )}
+                {/* » последняя */}
+                {page < pages && (
+                  <Link href={buildUrl({ page: String(pages) })} style={{ ...btnBase, background: 'white', color: '#374151' }}>»</Link>
+                )}
+              </div>
+            )
+          })()}
         </div>
       </div>
     </div>
