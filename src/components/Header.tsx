@@ -5,11 +5,28 @@ import { usePathname } from 'next/navigation'
 import { getCart } from '@/lib/cart'
 
 const QPartIcon = ({ size = 36 }: { size?: number }) => (
-  <svg viewBox="0 0 40 40" width={size} height={size} xmlns="http://www.w3.org/2000/svg">
-    <path fill="#FF6B00" d="M17.66,6.71 L18.07,1.60 L21.93,1.60 L22.34,6.71 L27.74,8.94 L31.64,5.62 L34.38,8.36 L31.06,12.26 L33.30,17.66 L38.40,18.07 L38.40,21.93 L33.30,22.34 L31.06,27.74 L34.38,31.64 L31.64,34.38 L27.74,31.06 L22.34,33.30 L21.93,38.40 L18.07,38.40 L17.66,33.30 L12.26,31.06 L8.36,34.38 L5.62,31.64 L8.94,27.74 L6.70,22.34 L1.60,21.93 L1.60,18.07 L6.70,17.66 L8.94,12.26 L5.62,8.36 L8.36,5.62 L12.26,8.94 Z"/>
-    <circle cx="20" cy="20" r="11.5" fill="#0F2744"/>
-    <circle cx="18" cy="18" r="6.5" stroke="#FF6B00" strokeWidth="2.5" fill="none"/>
-    <line x1="23" y1="23" x2="27.5" y2="27.5" stroke="#FF6B00" strokeWidth="2.5" strokeLinecap="round"/>
+  <svg viewBox="0 0 48 46" width={size} height={size} xmlns="http://www.w3.org/2000/svg">
+    {/* 12-tooth gear centered at (20,20), outer R=19, valley r=14 */}
+    <path fill="#FF6B00" d="
+      M18.05,6.14 L18.01,1.11 L21.99,1.11 L21.95,6.14
+      L25.24,7.02 L27.73,2.64 L31.17,4.63 L28.62,8.97
+      L31.03,11.38 L35.37,8.83 L37.36,12.27 L32.98,14.76
+      L33.86,18.05 L38.90,18.01 L38.90,21.99 L33.86,21.95
+      L32.98,25.24 L37.36,27.73 L35.37,31.17 L31.03,28.62
+      L28.62,31.03 L31.17,35.37 L27.73,37.36 L25.24,32.98
+      L21.95,33.86 L21.99,38.90 L18.01,38.90 L18.05,33.86
+      L14.76,32.98 L12.27,37.36 L8.83,35.37 L11.38,31.03
+      L8.97,28.62 L4.63,31.17 L2.64,27.73 L7.02,25.24
+      L6.14,21.95 L1.10,21.99 L1.10,18.01 L6.14,18.05
+      L7.02,14.76 L2.64,12.27 L4.63,8.83 L8.97,11.38
+      L11.38,8.97 L8.83,4.63 L12.27,2.64 L14.76,7.02 Z
+    "/>
+    {/* Dark hub */}
+    <circle cx="20" cy="20" r="10" fill="#0F2744"/>
+    {/* Q ring — thick orange circle (magnifying glass lens) */}
+    <circle cx="18.5" cy="17.5" r="5.8" stroke="#FF6B00" strokeWidth="3.5" fill="none"/>
+    {/* Q handle — exits gear, forms the tail of Q */}
+    <line x1="22.8" y1="21.5" x2="44" y2="42" stroke="#FF6B00" strokeWidth="4.5" strokeLinecap="round"/>
   </svg>
 )
 
