@@ -21,10 +21,58 @@ async function sendTelegram(text: string) {
   } catch {}
 }
 
+function buildTelegramText(order_number: string, customer_type: string, data: any, items: any[], total_price: number) {
+  const itemsList = items
+    .map((i: any) => `  • ${i.name} (${i.article}) × ${i.quantity} = ${(i.price * i.quantity).toLocaleString('ru')} ₽`)
+    .join('\n')
+
+  const typeLabel = customer_type === 'company' ? '🏢 Юридическое лицо' : '👤 Физическое лицо'
+
+  let details = ''
+  if (customer_type === 'individual') {
+    details = [
+      `👤 <b>${data.name}</b>`,
+      `📞 ${data.phone}`,
+      `📦 Адрес СДЭК: ${data.address}`,
+      data.comment ? `💬 ${data.comment}` : '',
+    ].filter(Boolean).join('\n')
+  } else {
+    details = [
+      `🏢 <b>${data.company_name}</b>`,
+      data.inn        ? `ИНН: ${data.inn}` : '',
+      data.kpp        ? `КПП: ${data.kpp}` : '',
+      data.ogrn       ? `ОГРН: ${data.ogrn}` : '',
+      data.legal_address ? `Юр. адрес: ${data.legal_address}` : '',
+      '',
+      data.bank       ? `Банк: ${data.bank}` : '',
+      data.bik        ? `БИК: ${data.bik}` : '',
+      data.account    ? `Р/с: ${data.account}` : '',
+      data.corr_account ? `К/с: ${data.corr_account}` : '',
+      data.edo        ? `ЭДО: ${data.edo}` : '',
+      '',
+      `📋 Контакт: <b>${data.contact_name}</b>`,
+      data.contact_position ? `Должность: ${data.contact_position}` : '',
+      `📞 ${data.contact_phone}`,
+      `📦 Адрес СДЭК: ${data.delivery_address}`,
+      data.comment    ? `💬 ${data.comment}` : '',
+    ].filter(s => s !== undefined && s !== null).join('\n').replace(/\n{3,}/g, '\n\n')
+  }
+
+  return `🔔 <b>Новая заявка ${order_number}</b>
+${typeLabel}
+
+${details}
+
+🛒 <b>Товары:</b>
+${itemsList}
+
+💰 <b>Итого: ${total_price?.toLocaleString('ru')} ₽</b>`
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { customer_name, customer_phone, customer_comment, items, total_price } = body
+    const { customer_name, customer_phone, customer_comment, customer_type, items, total_price } = body
 
     if (!customer_name || !customer_phone || !items?.length) {
       return NextResponse.json({ error: 'Заполните обязательные поля' }, { status: 400 })
@@ -48,21 +96,10 @@ export async function POST(req: NextRequest) {
 
     if (error) throw error
 
-    // Telegram уведомление
-    const itemsList = items
-      .map((i: any) => `  • ${i.name} (${i.article}) × ${i.quantity} = ${(i.price * i.quantity).toLocaleString('ru')} ₽`)
-      .join('\n')
+    let parsedData: any = {}
+    try { parsedData = JSON.parse(customer_comment || '{}') } catch {}
 
-    const tgText = `🔔 <b>Новая заявка ${order_number}</b>
-
-👤 <b>${customer_name}</b>
-📞 ${customer_phone}
-${customer_comment ? `💬 ${customer_comment}\n` : ''}
-🛒 <b>Товары:</b>
-${itemsList}
-
-💰 <b>Итого: ${total_price?.toLocaleString('ru')} ₽</b>`
-
+    const tgText = buildTelegramText(order_number, customer_type || 'individual', parsedData, items, total_price)
     await sendTelegram(tgText)
 
     return NextResponse.json({ success: true, order_number })
