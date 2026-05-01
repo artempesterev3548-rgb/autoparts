@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
+import { createServerClient } from '@supabase/ssr'
 
 function generateOrderNumber() {
   const date = new Date()
@@ -69,6 +70,25 @@ ${itemsList}
 💰 <b>Итого: ${total_price?.toLocaleString('ru')} ₽</b>`
 }
 
+async function getUserId(req: NextRequest): Promise<string | null> {
+  try {
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() { return req.cookies.getAll() },
+          setAll() {},
+        },
+      }
+    )
+    const { data: { user } } = await supabase.auth.getUser()
+    return user?.id ?? null
+  } catch {
+    return null
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
@@ -79,6 +99,7 @@ export async function POST(req: NextRequest) {
     }
 
     const order_number = generateOrderNumber()
+    const user_id = await getUserId(req)
 
     const { data, error } = await supabaseAdmin
       .from('orders')
@@ -90,6 +111,7 @@ export async function POST(req: NextRequest) {
         items,
         total_price: total_price || 0,
         status: 'new',
+        ...(user_id ? { user_id } : {}),
       })
       .select()
       .single()

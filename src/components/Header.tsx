@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { getCart } from '@/lib/cart'
+import { getSupabaseBrowser } from '@/lib/auth'
 
 const QPartIcon = ({ size = 36 }: { size?: number }) => (
   <svg viewBox="0 0 48 46" width={size} height={size} xmlns="http://www.w3.org/2000/svg">
@@ -65,13 +66,34 @@ const IconCart = () => (
 
 export default function Header() {
   const [cartCount, setCartCount] = useState(0)
+  const [userName, setUserName] = useState<string | null>(null)
   const pathname = usePathname()
 
   useEffect(() => {
     const update = () => setCartCount(getCart().reduce((s, i) => s + i.quantity, 0))
     update()
     window.addEventListener('cart-updated', update)
-    return () => window.removeEventListener('cart-updated', update)
+
+    const supabase = getSupabaseBrowser()
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
+        const name = user.user_metadata?.name || user.email?.split('@')[0] || 'ЛК'
+        setUserName(name)
+      }
+    })
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
+      if (session?.user) {
+        const name = session.user.user_metadata?.name || session.user.email?.split('@')[0] || 'ЛК'
+        setUserName(name)
+      } else {
+        setUserName(null)
+      }
+    })
+
+    return () => {
+      window.removeEventListener('cart-updated', update)
+      subscription.unsubscribe()
+    }
   }, [])
 
   const isActive = (path: string) => pathname.startsWith(path)
@@ -128,6 +150,29 @@ export default function Header() {
               <IconSearch /> Поиск
             </Link>
           </nav>
+
+          {/* Войти / ЛК */}
+          {userName ? (
+            <Link href="/lk" style={{
+              display: 'flex', alignItems: 'center', gap: 7,
+              padding: '8px 16px', borderRadius: 10, fontSize: 14, fontWeight: 600,
+              textDecoration: 'none', color: 'rgba(255,255,255,0.85)',
+              background: 'rgba(255,255,255,0.08)', flexShrink: 0,
+            }}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              {userName.length > 14 ? userName.slice(0, 14) + '…' : userName}
+            </Link>
+          ) : (
+            <Link href="/auth/login" style={{
+              display: 'flex', alignItems: 'center', gap: 7,
+              padding: '8px 16px', borderRadius: 10, fontSize: 14, fontWeight: 600,
+              textDecoration: 'none', color: 'rgba(255,255,255,0.85)',
+              background: 'rgba(255,255,255,0.08)', flexShrink: 0,
+            }}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+              Войти
+            </Link>
+          )}
 
           {/* Корзина */}
           <Link href="/cart" style={{
