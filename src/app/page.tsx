@@ -249,6 +249,103 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ── КАК ЗАКАЗАТЬ ──────────────────────────────────────────── */}
+      <section style={{ background: 'white', padding: '56px 24px' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+          <div style={{ fontSize: 11, color: '#FF6B00', fontWeight: 700, letterSpacing: '3px', textTransform: 'uppercase', marginBottom: 6 }}>Просто и быстро</div>
+          <h2 style={{ fontSize: 30, fontWeight: 800, color: '#0F2744', marginBottom: 6, letterSpacing: -0.5 }}>Как сделать заказ</h2>
+          <p style={{ fontSize: 15, color: '#6B7280', marginBottom: 40 }}>Четыре простых шага — от поиска до получения</p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 0, position: 'relative' }}>
+            {/* Соединительная линия */}
+            <div style={{ position: 'absolute', top: 28, left: '12.5%', right: '12.5%', height: 2, background: 'linear-gradient(90deg, #FF6B00, #FF6B00)', opacity: 0.15, zIndex: 0 }} />
+
+            {[
+              {
+                num: '1',
+                icon: `<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>`,
+                title: 'Найдите запчасть',
+                text: 'Ищите по артикулу, VIN-номеру или названию. Поможем подобрать аналог, если оригинала нет в наличии.',
+                cta: { label: 'Перейти к поиску', href: '/search' },
+              },
+              {
+                num: '2',
+                icon: `<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>`,
+                title: 'Добавьте в корзину',
+                text: 'Выберите нужные позиции, укажите количество и оформите заказ. Без регистрации — одним кликом.',
+                cta: { label: 'Открыть каталог', href: '/catalog' },
+              },
+              {
+                num: '3',
+                icon: `<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>`,
+                title: 'Подтвердите заявку',
+                text: 'Менеджер перезвонит в течение 30 минут, уточнит детали и подтвердит наличие и стоимость.',
+                cta: null,
+              },
+              {
+                num: '4',
+                icon: `<rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>`,
+                title: 'Получите товар',
+                text: 'Доставляем по всей России за 1–7 дней. Самовывоз, курьер или транспортная компания — на ваш выбор.',
+                cta: { label: 'Условия доставки', href: '/delivery' },
+              },
+            ].map((step, i) => (
+              <div key={step.num} style={{
+                padding: '32px 28px', position: 'relative', zIndex: 1,
+                borderRight: i < 3 ? '1px solid #F0F2F5' : 'none',
+              }}>
+                {/* Номер-кружок */}
+                <div style={{
+                  width: 56, height: 56, borderRadius: '50%',
+                  background: '#FFF0E8', border: '2px solid #FF6B00',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  marginBottom: 20,
+                }}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{ __html: step.icon }} />
+                </div>
+                {/* Номер-бейдж */}
+                <div style={{
+                  position: 'absolute', top: 28, left: 60,
+                  width: 20, height: 20, borderRadius: '50%',
+                  background: '#FF6B00', color: 'white',
+                  fontSize: 11, fontWeight: 800,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  {step.num}
+                </div>
+                <h3 style={{ fontSize: 17, fontWeight: 700, color: '#0F2744', marginBottom: 10 }}>{step.title}</h3>
+                <p style={{ fontSize: 13, color: '#6B7280', lineHeight: 1.7, marginBottom: step.cta ? 20 : 0 }}>{step.text}</p>
+                {step.cta && (
+                  <Link href={step.cta.href} style={{ fontSize: 13, fontWeight: 700, color: '#FF6B00', textDecoration: 'none' }}>
+                    {step.cta.label} →
+                  </Link>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* CTA-полоска */}
+          <div style={{
+            marginTop: 40, padding: '20px 28px',
+            background: '#F8F9FA', borderRadius: 14,
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap',
+          }}>
+            <div>
+              <div style={{ fontSize: 15, fontWeight: 700, color: '#0F2744' }}>Не можете найти нужную деталь?</div>
+              <div style={{ fontSize: 13, color: '#6B7280', marginTop: 3 }}>Позвоните — подберём по марке, модели и году выпуска</div>
+            </div>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <a href="tel:+70000000000" style={{ background: '#FF6B00', color: 'white', padding: '11px 22px', borderRadius: 10, fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>
+                📞 +7 (000) 000-00-00
+              </a>
+              <Link href="/vin" style={{ background: 'white', color: '#0F2744', border: '1.5px solid #e5e7eb', padding: '11px 22px', borderRadius: 10, fontWeight: 600, fontSize: 14, textDecoration: 'none' }}>
+                Подбор по VIN
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── ПОЧЕМУ МЫ ─────────────────────────────────────────────── */}
       <section style={{ background: '#0F2744', padding: '56px 24px' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto' }}>
