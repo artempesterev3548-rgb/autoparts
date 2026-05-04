@@ -57,14 +57,46 @@ const SERVICES = [
 ]
 
 const EQUIPMENT = [
-  { name: 'Экскаваторы', icon: '🦾', brands: 'Komatsu, Hitachi, CAT, Hyundai, XCMG' },
-  { name: 'Бульдозеры', icon: '🚜', brands: 'Komatsu, CAT, Liebherr, ЧТЗ' },
-  { name: 'Погрузчики', icon: '🏗️', brands: 'Hyster, Toyota, Komatsu, Liebherr, XCMG' },
-  { name: 'Краны', icon: '🏚️', brands: 'Liebherr, Tadano, Zoomlion, Ивановец' },
-  { name: 'Самосвалы', icon: '🚛', brands: 'КамАЗ, МАЗ, Урал, Volvo, SHACMAN' },
-  { name: 'Тракторы', icon: '🚛', brands: 'ЧТЗ, Агромаш, John Deere, New Holland' },
-  { name: 'Автогрейдеры', icon: '🛤️', brands: 'Komatsu, CAT, ДЗ-98' },
-  { name: 'Вилочные погрузчики', icon: '📦', brands: 'Toyota, Hyster, Linde, Komatsu' },
+  {
+    name: 'Экскаваторы',
+    icon: `<path d="M2 20h20"/><path d="M6 20V10l6-6 6 6v10"/><path d="M12 4v4"/><rect x="9" y="14" width="6" height="6"/>`,
+    brands: 'Komatsu, Hitachi, CAT, Hyundai, XCMG',
+  },
+  {
+    name: 'Бульдозеры',
+    icon: `<rect x="2" y="11" width="20" height="8" rx="2"/><path d="M6 11V7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4"/><circle cx="7" cy="19" r="2"/><circle cx="17" cy="19" r="2"/><path d="M2 15h3"/><path d="M19 15h3"/>`,
+    brands: 'Komatsu, CAT, Liebherr, ЧТЗ',
+  },
+  {
+    name: 'Погрузчики',
+    icon: `<path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v5"/><circle cx="18" cy="17" r="2"/><circle cx="7" cy="17" r="2"/><path d="M7 17H5"/><path d="M14 10h-4V5"/>`,
+    brands: 'Hyster, Toyota, Komatsu, Liebherr, XCMG',
+  },
+  {
+    name: 'Краны',
+    icon: `<line x1="12" y1="22" x2="12" y2="2"/><path d="M12 2l8 4-8 4-8-4z"/><line x1="4" y1="6" x2="20" y2="6"/><line x1="12" y1="10" x2="20" y2="22"/><line x1="20" y1="22" x2="4" y2="22"/>`,
+    brands: 'Liebherr, Tadano, Zoomlion, Ивановец',
+  },
+  {
+    name: 'Самосвалы',
+    icon: `<rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>`,
+    brands: 'КамАЗ, МАЗ, Урал, Volvo, SHACMAN',
+  },
+  {
+    name: 'Тракторы',
+    icon: `<path d="M3 17a3 3 0 1 0 6 0 3 3 0 0 0-6 0z"/><path d="M14 17a3 3 0 1 0 6 0 3 3 0 0 0-6 0z"/><path d="M6 17V5h9l3 5v7"/><path d="M6 9h8"/>`,
+    brands: 'ЧТЗ, Агромаш, John Deere, New Holland',
+  },
+  {
+    name: 'Автогрейдеры',
+    icon: `<rect x="2" y="13" width="20" height="5" rx="1"/><path d="M2 13l4-8h12l4 8"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/><line x1="2" y1="18" x2="5" y2="18"/><line x1="19" y1="18" x2="22" y2="18"/>`,
+    brands: 'Komatsu, CAT, ДЗ-98',
+  },
+  {
+    name: 'Вилочные погрузчики',
+    icon: `<path d="M12 12H4a2 2 0 0 0-2 2v6"/><path d="M14 6H4"/><path d="M14 3v9"/><path d="M18 3v9"/><circle cx="5" cy="20" r="2"/><circle cx="17" cy="20" r="2"/><path d="M14 20h-7"/><path d="M19 20h3"/>`,
+    brands: 'Toyota, Hyster, Linde, Komatsu',
+  },
 ]
 
 const WHY = [
@@ -193,7 +225,9 @@ export default function ServicePage() {
                 border: '1px solid rgba(255,255,255,0.1)',
                 display: 'flex', alignItems: 'flex-start', gap: 14,
               }}>
-                <span style={{ fontSize: 28, lineHeight: 1 }}>{eq.icon}</span>
+                <div style={{ width: 40, height: 40, background: 'rgba(255,107,0,0.15)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{ __html: eq.icon }} />
+                </div>
                 <div>
                   <div style={{ fontSize: 15, fontWeight: 700, color: 'white', marginBottom: 4 }}>{eq.name}</div>
                   <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', lineHeight: 1.5 }}>{eq.brands}</div>
