@@ -26,6 +26,7 @@ export default function CartPage() {
   const [sending, setSending] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
+  const [_hp, setHp] = useState('')  // honeypot — люди не трогают это поле
 
   useEffect(() => {
     setItems(getCart())
@@ -77,6 +78,7 @@ export default function CartPage() {
           customer_type: type,
           items,
           total_price: cartTotal(items),
+          _hp,
         }),
       })
       if (!res.ok) throw new Error()
@@ -165,6 +167,10 @@ export default function CartPage() {
             </div>
 
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {/* Honeypot — скрыто от людей, боты заполняют */}
+              <div style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }} aria-hidden="true">
+                <input tabIndex={-1} autoComplete="off" value={_hp} onChange={e => setHp(e.target.value)} />
+              </div>
 
               {type === 'individual' ? (
                 <>

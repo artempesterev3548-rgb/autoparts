@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { createServerClient } from '@supabase/ssr'
+import { rateLimit, getClientIp } from '@/lib/rateLimit'
 
 function generateOrderNumber() {
   const date = new Date()
@@ -90,12 +91,28 @@ async function getUserId(req: NextRequest): Promise<string | null> {
 }
 
 export async function POST(req: NextRequest) {
+  // Rate limiting: 5 заказов с одного IP за 10 минут
+  const ip = getClientIp(req)
+  if (!rateLimit(ip, 5, 10 * 60 * 1000)) {
+    return NextResponse.json({ error: 'Слишком много запросов. Попробуйте позже.' }, { status: 429 })
+  }
+
   try {
     const body = await req.json()
-    const { customer_name, customer_phone, customer_comment, customer_type, items, total_price } = body
+    const { customer_name, customer_phone, customer_comment, customer_type, items, total_price, _hp } = body
+
+    // Honeypot: боты заполняют скрытые поля
+    if (_hp) {
+      return NextResponse.json({ success: true, order_number: 'BOT' })
+    }
 
     if (!customer_name || !customer_phone || !items?.length) {
       return NextResponse.json({ error: 'Заполните обязательные поля' }, { status: 400 })
+    }
+
+    // Защита от аномально больших запросов
+    if (items.length > 100 || String(customer_name).length > 200 || String(customer_phone).length > 30) {
+      return NextResponse.json({ error: 'Недопустимые данные' }, { status: 400 })
     }
 
     const order_number = generateOrderNumber()
