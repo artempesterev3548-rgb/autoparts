@@ -89,11 +89,19 @@ export default async function HomePage() {
       href: '/cars', title: 'Легковые автомобили',
       desc: 'Toyota, Lada, Kia, Hyundai, Volkswagen, Renault, Nissan и другие марки',
       icon: `<path d="M19 17H5a2 2 0 0 1-2-2v-4l2.5-5h11L19 11v4a2 2 0 0 1-2 2z"/><circle cx="7.5" cy="17" r="2.5"/><circle cx="16.5" cy="17" r="2.5"/><line x1="3" y1="11" x2="21" y2="11"/>`,
+      cta: 'Перейти в каталог →',
     },
     {
       href: '/special', title: 'Спецтехника и грузовики',
       desc: 'КамАЗ, МАЗ, Урал, ЯМЗ, Komatsu, Hitachi, JCB, Volvo и другие',
       icon: `<rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>`,
+      cta: 'Перейти в каталог →',
+    },
+    {
+      href: '/service', title: 'Автосервис для спецтехники',
+      desc: 'ТО, диагностика, ремонт двигателя, гидравлики, КПП. Выезд на объект.',
+      icon: `<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>`,
+      cta: 'Записаться на сервис →',
     },
   ]
 
@@ -182,7 +190,7 @@ export default async function HomePage() {
         <div style={sLabel}>Разделы каталога</div>
         <h2 style={sH2}>Выберите тип техники</h2>
         <p style={sSub}>Широкий ассортимент для любой задачи</p>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 52 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16, marginBottom: 52 }}>
           {SECTION_CARDS.map(card => (
             <Link key={card.href} href={card.href} className="hover-section-card">
               <div style={{ width: 64, height: 64, background: '#FFF0E8', borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
@@ -190,7 +198,7 @@ export default async function HomePage() {
               </div>
               <h3 style={{ fontSize: 21, fontWeight: 700, color: '#0F2744', marginBottom: 8 }}>{card.title}</h3>
               <p style={{ color: '#6B7280', fontSize: 14, lineHeight: 1.6, marginBottom: 20 }}>{card.desc}</p>
-              <span style={{ color: '#FF6B00', fontSize: 13, fontWeight: 700 }}>Перейти в каталог →</span>
+              <span style={{ color: '#FF6B00', fontSize: 13, fontWeight: 700 }}>{card.cta}</span>
             </Link>
           ))}
         </div>
