@@ -59,43 +59,119 @@ const SERVICES = [
 const EQUIPMENT = [
   {
     name: 'Экскаваторы',
-    icon: `<path d="M2 20h20"/><path d="M6 20V10l6-6 6 6v10"/><path d="M12 4v4"/><rect x="9" y="14" width="6" height="6"/>`,
+    // гусеничная база + кабина + стрела + ковш
+    icon: `<rect x="1" y="14" width="11" height="4" rx="1"/>
+<rect x="2" y="10" width="5" height="4"/>
+<path d="M6 11 L14 5 L19 10 L15 14"/>
+<path d="M15 14 L20 17 L14 18 Z"/>
+<circle cx="3" cy="20" r="2"/>
+<circle cx="10" cy="20" r="2"/>`,
     brands: 'Komatsu, Hitachi, CAT, Hyundai, XCMG',
   },
   {
     name: 'Бульдозеры',
-    icon: `<rect x="2" y="11" width="20" height="8" rx="2"/><path d="M6 11V7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4"/><circle cx="7" cy="19" r="2"/><circle cx="17" cy="19" r="2"/><path d="M2 15h3"/><path d="M19 15h3"/>`,
+    // корпус + отвал (нож) спереди + гусеницы
+    icon: `<rect x="5" y="9" width="14" height="7" rx="1"/>
+<rect x="6" y="7" width="6" height="2"/>
+<rect x="2" y="8" width="3" height="8"/>
+<line x1="5" y1="16" x2="19" y2="16"/>
+<circle cx="7" cy="19" r="2"/>
+<circle cx="16" cy="19" r="2"/>`,
     brands: 'Komatsu, CAT, Liebherr, ЧТЗ',
   },
   {
     name: 'Погрузчики',
-    icon: `<path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v5"/><circle cx="18" cy="17" r="2"/><circle cx="7" cy="17" r="2"/><path d="M7 17H5"/><path d="M14 10h-4V5"/>`,
+    // колёсный погрузчик: корпус справа + стрелы + поднятый ковш
+    icon: `<rect x="10" y="9" width="11" height="8" rx="1"/>
+<path d="M10 11 L5 8"/>
+<path d="M10 15 L5 15"/>
+<path d="M5 8 L2 8 L2 15 L5 15"/>
+<circle cx="13" cy="19" r="2.5"/>
+<circle cx="20" cy="19" r="2.5"/>`,
     brands: 'Hyster, Toyota, Komatsu, Liebherr, XCMG',
   },
   {
     name: 'Краны',
-    icon: `<line x1="12" y1="22" x2="12" y2="2"/><path d="M12 2l8 4-8 4-8-4z"/><line x1="4" y1="6" x2="20" y2="6"/><line x1="12" y1="10" x2="20" y2="22"/><line x1="20" y1="22" x2="4" y2="22"/>`,
+    // башенный кран: мачта + стрела + контрстрела + груз
+    icon: `<rect x="9" y="20" width="6" height="2" rx="1"/>
+<line x1="12" y1="2" x2="12" y2="20"/>
+<line x1="12" y1="3" x2="22" y2="3"/>
+<line x1="12" y1="4" x2="5" y2="9"/>
+<line x1="20" y1="3" x2="18" y2="12"/>
+<rect x="16" y="12" width="4" height="3" rx="0.5"/>`,
     brands: 'Liebherr, Tadano, Zoomlion, Ивановец',
   },
   {
     name: 'Самосвалы',
-    icon: `<rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>`,
+    // кабина + поднятый (наклонённый) кузов + три колеса
+    icon: `<rect x="1" y="12" width="7" height="7" rx="1"/>
+<rect x="2" y="9" width="4" height="3"/>
+<path d="M8 14 L8 10 L20 6 L22 10 L22 14 Z"/>
+<line x1="8" y1="10" x2="6" y2="12"/>
+<circle cx="4" cy="21" r="2"/>
+<circle cx="13" cy="21" r="2"/>
+<circle cx="20" cy="21" r="2"/>`,
     brands: 'КамАЗ, МАЗ, Урал, Volvo, SHACMAN',
   },
   {
     name: 'Тракторы',
-    icon: `<path d="M3 17a3 3 0 1 0 6 0 3 3 0 0 0-6 0z"/><path d="M14 17a3 3 0 1 0 6 0 3 3 0 0 0-6 0z"/><path d="M6 17V5h9l3 5v7"/><path d="M6 9h8"/>`,
+    // большое заднее колесо + маленькое переднее + кабина
+    icon: `<circle cx="6" cy="16" r="5"/>
+<circle cx="18" cy="17" r="3"/>
+<rect x="8" y="9" width="7" height="7" rx="1"/>
+<rect x="9" y="6" width="5" height="3" rx="1"/>
+<line x1="8" y1="13" x2="6" y2="13"/>`,
     brands: 'ЧТЗ, Агромаш, John Deere, New Holland',
   },
   {
     name: 'Автогрейдеры',
-    icon: `<rect x="2" y="13" width="20" height="5" rx="1"/><path d="M2 13l4-8h12l4 8"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/><line x1="2" y1="18" x2="5" y2="18"/><line x1="19" y1="18" x2="22" y2="18"/>`,
+    // длинная рама + наклонный отвал посередине + кабина сзади + 3 оси
+    icon: `<rect x="1" y="11" width="22" height="4" rx="1"/>
+<rect x="15" y="6" width="7" height="5"/>
+<rect x="16" y="4" width="5" height="2"/>
+<path d="M7 11 L11 6 L15 6"/>
+<circle cx="4" cy="18" r="2"/>
+<circle cx="11" cy="18" r="2"/>
+<circle cx="18" cy="18" r="2"/>
+<circle cx="22" cy="18" r="2"/>`,
     brands: 'Komatsu, CAT, ДЗ-98',
   },
   {
     name: 'Вилочные погрузчики',
-    icon: `<path d="M12 12H4a2 2 0 0 0-2 2v6"/><path d="M14 6H4"/><path d="M14 3v9"/><path d="M18 3v9"/><circle cx="5" cy="20" r="2"/><circle cx="17" cy="20" r="2"/><path d="M14 20h-7"/><path d="M19 20h3"/>`,
+    // корпус + вертикальная мачта + горизонтальные вилы
+    icon: `<rect x="8" y="8" width="10" height="10" rx="1"/>
+<line x1="3" y1="2" x2="3" y2="18"/>
+<line x1="3" y1="13" x2="8" y2="13"/>
+<line x1="3" y1="8" x2="8" y2="8"/>
+<line x1="1" y1="18" x2="12" y2="18"/>
+<line x1="1" y1="21" x2="12" y2="21"/>
+<circle cx="11" cy="20" r="2"/>
+<circle cx="17" cy="20" r="2"/>`,
     brands: 'Toyota, Hyster, Linde, Komatsu',
+  },
+  {
+    name: 'Тягачи (седельные)',
+    // высокая кабина со спальником + сцепное устройство
+    icon: `<rect x="1" y="9" width="11" height="10" rx="1"/>
+<rect x="2" y="6" width="8" height="3"/>
+<rect x="3" y="4" width="6" height="2"/>
+<line x1="12" y1="14" x2="16" y2="14"/>
+<rect x="16" y="12" width="2" height="4" rx="1"/>
+<circle cx="4" cy="21" r="2"/>
+<circle cx="10" cy="21" r="2"/>`,
+    brands: 'Kenworth, Peterbilt (США) · Volvo, Scania, MAN, DAF (Европа) · КамАЗ, МАЗ (Россия)',
+  },
+  {
+    name: 'Грузовики',
+    // бортовой/фургон: кабина + кузов-фургон + 3 оси
+    icon: `<rect x="1" y="10" width="7" height="9" rx="1"/>
+<rect x="2" y="7" width="5" height="3"/>
+<rect x="8" y="8" width="14" height="11" rx="1"/>
+<line x1="8" y1="13" x2="22" y2="13"/>
+<circle cx="4" cy="21" r="2"/>
+<circle cx="13" cy="21" r="2"/>
+<circle cx="20" cy="21" r="2"/>`,
+    brands: 'КамАЗ, МАЗ, Урал, ГАЗ (Россия) · Mercedes, MAN, Iveco (Европа) · FAW, SHACMAN (Азия)',
   },
 ]
 
