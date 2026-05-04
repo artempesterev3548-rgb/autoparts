@@ -144,7 +144,7 @@ export default function ServicePage() {
           position: 'absolute', inset: 0,
           background: 'linear-gradient(105deg, rgba(11,30,53,0.97) 0%, rgba(15,39,68,0.90) 55%, rgba(15,39,68,0.65) 100%)',
         }} />
-        <div style={{ position: 'relative', zIndex: 2, maxWidth: 1280, margin: '0 auto', padding: '72px 24px 64px' }}>
+        <div style={{ position: 'relative', zIndex: 2, maxWidth: 1280, margin: '0 auto', padding: '72px 24px 136px' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,107,0,0.18)', border: '1px solid rgba(255,107,0,0.4)', color: '#FF8C38', padding: '5px 14px', borderRadius: 20, fontSize: 12, fontWeight: 600, letterSpacing: '0.5px', marginBottom: 22 }}>
             <span style={{ width: 6, height: 6, background: '#FF6B00', borderRadius: '50%', display: 'inline-block' }} />
             Сервисный центр QPart
