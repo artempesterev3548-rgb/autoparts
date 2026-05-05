@@ -40,7 +40,7 @@ function SupplierBadge({ supplier }: { supplier: Supplier | undefined }) {
       padding: '2px 8px', borderRadius: 6, fontSize: 11, fontWeight: 600,
       background: cfg.bg, color: cfg.color,
     }}>
-      {cfg.icon} {cfg.label}
+      {cfg.label}
     </span>
   )
 }
@@ -98,7 +98,7 @@ export default function OrderCard({ order, isSelected, supplierMap }: Props) {
   return (
     <div style={{
       background: 'white', borderRadius: 14,
-      border: `2px solid ${open ? '#93c5fd' : '#e5e7eb'}`,
+      border: `2px solid ${open ? 'rgba(255,107,0,0.4)' : '#e5e7eb'}`,
       transition: 'border-color .2s',
       overflow: 'hidden',
     }}>
@@ -109,7 +109,7 @@ export default function OrderCard({ order, isSelected, supplierMap }: Props) {
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
-            <span style={{ fontFamily: 'monospace', fontSize: 13, fontWeight: 800, color: '#1d4ed8', whiteSpace: 'nowrap' }}>
+            <span style={{ fontFamily: 'monospace', fontSize: 13, fontWeight: 800, color: '#FF6B00', whiteSpace: 'nowrap' }}>
               {order.order_number}
             </span>
             <span style={{ fontWeight: 600, color: '#111827', fontSize: 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -117,7 +117,7 @@ export default function OrderCard({ order, isSelected, supplierMap }: Props) {
             </span>
             {customer.type === 'юл' && customer.company && (
               <span style={{ fontSize: 11, background: '#f0f9ff', color: '#0369a1', padding: '1px 6px', borderRadius: 4, fontWeight: 600, whiteSpace: 'nowrap' }}>
-                🏢 {customer.company}
+                {customer.company}
               </span>
             )}
           </div>
@@ -129,10 +129,20 @@ export default function OrderCard({ order, isSelected, supplierMap }: Props) {
           </span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 6, fontSize: 13, color: '#6b7280', flexWrap: 'wrap' }}>
-          {customer.phone && <span>📞 {customer.phone}</span>}
-          {customer.email && <span>✉️ {customer.email}</span>}
+          {customer.phone && (
+            <span style={{display:'flex',alignItems:'center',gap:4}}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              {customer.phone}
+            </span>
+          )}
+          {customer.email && (
+            <span style={{display:'flex',alignItems:'center',gap:4}}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              {customer.email}
+            </span>
+          )}
           <span style={{ fontWeight: 700, color: '#111827' }}>
-            💰 {order.total_price?.toLocaleString('ru')} ₽
+            {order.total_price?.toLocaleString('ru')} ₽
           </span>
           <span>{new Date(order.created_at).toLocaleString('ru', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</span>
           <span style={{ color: '#9ca3af' }}>{items.length} поз.</span>
@@ -180,8 +190,9 @@ export default function OrderCard({ order, isSelected, supplierMap }: Props) {
 
           {/* Комментарий */}
           {customer.comment && (
-            <div style={{ marginBottom: 14, background: '#eff6ff', borderRadius: 8, padding: '8px 12px', fontSize: 13, color: '#1e40af' }}>
-              💬 {customer.comment}
+            <div style={{ marginBottom: 14, background: '#F8F9FA', borderRadius: 8, padding: '8px 12px', fontSize: 13, color: '#374151', borderLeft: '3px solid #FF6B00', display: 'flex', alignItems: 'flex-start', gap: 6 }}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 1 }}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              {customer.comment}
             </div>
           )}
 
@@ -229,7 +240,7 @@ export default function OrderCard({ order, isSelected, supplierMap }: Props) {
             style={{
               width: '100%', padding: '10px', borderRadius: 10, border: 'none', cursor: saving ? 'default' : 'pointer',
               fontSize: 14, fontWeight: 700, transition: 'all .2s',
-              background: saved ? '#16a34a' : '#1d4ed8',
+              background: saved ? '#16a34a' : '#0F2744',
               color: 'white', opacity: saving ? 0.7 : 1,
             }}
           >

@@ -16,73 +16,146 @@ async function getStats() {
   return { total, newOrders, processing, recent: recent ?? [] }
 }
 
-const STATUS_LABELS: Record<string, string> = {
-  new: '🔴 Новая',
-  processing: '🟡 В работе',
-  completed: '🟢 Выполнена',
-  cancelled: '⚫ Отменена',
+const STATUS_LABELS: Record<string, { label: string; color: string }> = {
+  new:        { label: 'Новая',      color: '#ef4444' },
+  processing: { label: 'В работе',   color: '#f97316' },
+  shipped:    { label: 'Отправлено', color: '#8b5cf6' },
+  delivered:  { label: 'Доставлено', color: '#22c55e' },
+  cancelled:  { label: 'Отменена',   color: '#9ca3af' },
 }
 
 export default async function AdminPage() {
   const { total, newOrders, processing, recent } = await getStats()
 
+  const today = recent.filter(
+    (o: any) => new Date(o.created_at).toDateString() === new Date().toDateString()
+  ).length
+
+  const stats = [
+    { label: 'Всего заявок', value: total ?? 0, color: '#0F2744' },
+    { label: 'Новые',        value: newOrders ?? 0, color: '#ef4444' },
+    { label: 'В работе',     value: processing ?? 0, color: '#f97316' },
+    { label: 'Сегодня',      value: today, color: '#FF6B00' },
+  ]
+
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Панель управления</h1>
-        <Link href="/" className="text-sm text-blue-600 hover:underline">← На сайт</Link>
-      </div>
+    <div style={{ background: '#F0F2F5', minHeight: '100vh', padding: '32px 24px' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        {[
-          { label: 'Всего заявок', value: total ?? 0, color: 'text-gray-800' },
-          { label: 'Новые', value: newOrders ?? 0, color: 'text-red-600' },
-          { label: 'В работе', value: processing ?? 0, color: 'text-yellow-600' },
-          { label: 'Сегодня', value: '-', color: 'text-blue-600' },
-        ].map(s => (
-          <div key={s.label} className="bg-white rounded-xl p-4 shadow-sm text-center">
-            <div className={`text-3xl font-bold ${s.color}`}>{s.value}</div>
-            <div className="text-sm text-gray-500 mt-1">{s.label}</div>
-          </div>
-        ))}
-      </div>
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 }}>
+          <h1 style={{ fontSize: 26, fontWeight: 800, color: '#0F2744', margin: 0 }}>Панель управления</h1>
+          <Link href="/" style={{ color: '#FF6B00', fontSize: 14, textDecoration: 'none', fontWeight: 600 }}>
+            ← На сайт
+          </Link>
+        </div>
 
-      <div className="grid md:grid-cols-2 gap-4 mb-8">
-        <Link href="/admin/orders" className="bg-blue-700 text-white rounded-xl p-5 hover:bg-blue-800 transition">
-          <div className="text-2xl mb-1">📋</div>
-          <div className="font-semibold">Все заявки</div>
-          <div className="text-blue-200 text-sm">Просмотр и управление заявками</div>
-        </Link>
-        <Link href="/catalog" className="bg-white border rounded-xl p-5 hover:shadow-md transition">
-          <div className="text-2xl mb-1">📦</div>
-          <div className="font-semibold text-gray-800">Каталог товаров</div>
-          <div className="text-gray-400 text-sm">Перейти в каталог</div>
-        </Link>
-      </div>
+        {/* Stats */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 24 }}>
+          {stats.map(s => (
+            <div key={s.label} style={{
+              background: 'white', borderRadius: 14, padding: '20px 16px',
+              boxShadow: '0 2px 10px rgba(0,0,0,0.06)', textAlign: 'center',
+            }}>
+              <div style={{ fontSize: 32, fontWeight: 800, color: s.color }}>{s.value}</div>
+              <div style={{ fontSize: 13, color: '#6B7280', marginTop: 4 }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
 
-      <div className="bg-white rounded-xl shadow-sm p-5">
-        <h2 className="font-semibold text-gray-800 mb-4">Последние заявки</h2>
-        {recent.length === 0 ? (
-          <div className="text-gray-400 text-sm text-center py-6">Заявок ещё нет</div>
-        ) : (
-          <div className="space-y-2">
-            {recent.map((order: any) => (
-              <Link key={order.id} href={`/admin/orders?id=${order.id}`}
-                className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition">
-                <div>
-                  <span className="font-mono text-sm font-semibold text-blue-700">{order.order_number}</span>
-                  <span className="text-gray-700 ml-3">{order.customer_name}</span>
-                  <span className="text-gray-400 ml-2 text-sm">{order.customer_phone}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-sm font-medium">{order.total_price?.toLocaleString('ru')} ₽</span>
-                  <span className="text-xs">{STATUS_LABELS[order.status]}</span>
-                  <span className="text-xs text-gray-400">{new Date(order.created_at).toLocaleDateString('ru')}</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
+        {/* Quick links */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}>
+          {/* All orders card */}
+          <Link href="/admin/orders" style={{ textDecoration: 'none' }}>
+            <div style={{
+              background: '#0F2744', borderRadius: 16, padding: '20px 24px',
+              boxShadow: '0 2px 10px rgba(0,0,0,0.10)', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', gap: 16,
+            }}>
+              <div style={{ background: '#FFF0E8', borderRadius: 10, width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/>
+                  <line x1="9" y1="12" x2="15" y2="12"/>
+                  <line x1="9" y1="16" x2="13" y2="16"/>
+                </svg>
+              </div>
+              <div>
+                <div style={{ fontWeight: 700, color: 'white', fontSize: 15 }}>Все заявки</div>
+                <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', marginTop: 2 }}>Просмотр и управление заявками</div>
+              </div>
+            </div>
+          </Link>
+
+          {/* Catalog card */}
+          <Link href="/catalog" style={{ textDecoration: 'none' }}>
+            <div style={{
+              background: 'white', borderRadius: 16, padding: '20px 24px',
+              boxShadow: '0 2px 10px rgba(0,0,0,0.06)', border: '1.5px solid #e5e7eb',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 16,
+            }}>
+              <div style={{ background: '#FFF0E8', borderRadius: 10, width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                  <line x1="12" y1="22.08" x2="12" y2="12"/>
+                </svg>
+              </div>
+              <div>
+                <div style={{ fontWeight: 700, color: '#0F2744', fontSize: 15 }}>Каталог товаров</div>
+                <div style={{ fontSize: 13, color: '#6B7280', marginTop: 2 }}>Перейти в каталог</div>
+              </div>
+            </div>
+          </Link>
+        </div>
+
+        {/* Recent orders */}
+        <div style={{ background: 'white', borderRadius: 16, boxShadow: '0 2px 10px rgba(0,0,0,0.06)', padding: '24px' }}>
+          <h2 style={{ fontSize: 16, fontWeight: 800, color: '#0F2744', margin: '0 0 16px 0' }}>Последние заявки</h2>
+          {recent.length === 0 ? (
+            <div style={{ textAlign: 'center', color: '#6B7280', fontSize: 14, padding: '24px 0' }}>Заявок ещё нет</div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              {recent.map((order: any) => {
+                const st = STATUS_LABELS[order.status]
+                return (
+                  <Link key={order.id} href={`/admin/orders?id=${order.id}`} style={{ textDecoration: 'none' }}>
+                    <div style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      padding: '10px 12px', borderRadius: 10,
+                      transition: 'background .15s',
+                    }}
+                      onMouseEnter={e => (e.currentTarget.style.background = '#F8F9FA')}
+                      onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <span style={{ fontFamily: 'monospace', fontSize: 13, fontWeight: 800, color: '#FF6B00' }}>
+                          {order.order_number}
+                        </span>
+                        <span style={{ color: '#0F2744', fontWeight: 600, fontSize: 14 }}>{order.customer_name}</span>
+                        <span style={{ color: '#6B7280', fontSize: 13 }}>{order.customer_phone}</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                        <span style={{ fontWeight: 700, fontSize: 13, color: '#0F2744' }}>
+                          {order.total_price?.toLocaleString('ru')} ₽
+                        </span>
+                        {st && (
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 13 }}>
+                            <span style={{ width: 7, height: 7, borderRadius: '50%', background: st.color, display: 'inline-block' }} />
+                            {st.label}
+                          </span>
+                        )}
+                        <span style={{ fontSize: 12, color: '#9ca3af' }}>
+                          {new Date(order.created_at).toLocaleDateString('ru')}
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
+          )}
+        </div>
+
       </div>
     </div>
   )
