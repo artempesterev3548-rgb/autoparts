@@ -4,10 +4,10 @@ export default function ContactsPage() {
       <h1 className="text-2xl font-bold text-gray-900 mb-6">Контакты</h1>
       <div className="bg-white rounded-2xl shadow-sm p-8 space-y-4 text-sm">
         {[
-          ['📞 Телефон', '+7 (000) 000-00-00'],
+          ['📞 Телефон', '+7 (923) 213-01-01'],
           ['📧 Email', 'info@example.ru'],
-          ['📍 Адрес', 'г. Москва, ул. Примерная, д. 1'],
-          ['🕐 Режим работы', 'Понедельник–Суббота, 9:00–18:00'],
+          ['📍 Адрес', '655017, Республика Хакасия, Усть-Абаканский р-н, ул. 70 лет БелАЗу, 51 стр1'],
+          ['🕐 Режим работы', 'Пн–Пт 8:00–19:00, Сб–Вс 9:00–17:00'],
         ].map(([label, value]) => (
           <div key={label} className="flex gap-4 py-2 border-b border-gray-100 last:border-0">
             <div className="text-gray-500 w-36 shrink-0">{label}</div>

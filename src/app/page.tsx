@@ -144,7 +144,7 @@ export default async function HomePage() {
                 Перейти в каталог
               </Link>
               <Link href="/search" style={{ background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid rgba(255,255,255,0.25)', padding: '14px 28px', borderRadius: 10, fontWeight: 600, fontSize: 15, textDecoration: 'none' }}>
-                Подобрать по VIN
+                Подобрать по VIN/ОЕМ
               </Link>
             </div>
             <form method="GET" action="/search" style={{ display: 'flex', background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 8px 40px rgba(0,0,0,0.3)' }}>
@@ -174,7 +174,7 @@ export default async function HomePage() {
           { val: `${productCount > 0 ? productCount.toLocaleString('ru') : '10 000'}+`, lbl: 'Товаров в каталоге' },
           { val: '70+', lbl: 'Марок техники' },
           { val: '1–7 дней', lbl: 'Доставка по РФ' },
-          { val: 'Пн–Сб 9–18', lbl: 'Режим работы' },
+          { val: 'Пн–Пт 8–19', lbl: 'Режим работы' },
         ].map((s, i) => (
           <div key={i} style={{ padding: '22px 16px', textAlign: 'center', borderRight: i < 3 ? '1px solid #F0F2F5' : 'none' }}>
             <div style={{ fontSize: 24, fontWeight: 900, color: '#0F2744', letterSpacing: -0.5 }}>{s.val}</div>
@@ -335,11 +335,11 @@ export default async function HomePage() {
               <div style={{ fontSize: 13, color: '#6B7280', marginTop: 3 }}>Позвоните — подберём по марке, модели и году выпуска</div>
             </div>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              <a href="tel:+70000000000" style={{ background: '#FF6B00', color: 'white', padding: '11px 22px', borderRadius: 10, fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>
-                📞 +7 (000) 000-00-00
+              <a href="tel:+79232130101" style={{ background: '#FF6B00', color: 'white', padding: '11px 22px', borderRadius: 10, fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>
+                📞 +7 (923) 213-01-01
               </a>
               <Link href="/vin" style={{ background: 'white', color: '#0F2744', border: '1.5px solid #e5e7eb', padding: '11px 22px', borderRadius: 10, fontWeight: 600, fontSize: 14, textDecoration: 'none' }}>
-                Подбор по VIN
+                Подбор по VIN/ОЕМ
               </Link>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Map2GIS from '@/components/Map2GIS'
 
 export const metadata = {
   title: 'Автосервис для тягачей и полуприцепов — QPart Абакан',
@@ -198,7 +199,7 @@ export default function ServicePage() {
         <div style={{ position: 'relative', zIndex: 2, maxWidth: 1280, margin: '0 auto', padding: '72px 24px 136px' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,107,0,0.18)', border: '1px solid rgba(255,107,0,0.4)', color: '#FF8C38', padding: '5px 14px', borderRadius: 20, fontSize: 12, fontWeight: 600, letterSpacing: '0.5px', marginBottom: 22 }}>
             <span style={{ width: 6, height: 6, background: '#FF6B00', borderRadius: '50%', display: 'inline-block' }} />
-            Автосервис QPart · Абакан
+            Автосервис QPart · Усть-Абакан
           </div>
           <h1 style={{ fontSize: 50, fontWeight: 900, color: 'white', lineHeight: 1.05, marginBottom: 18, letterSpacing: -2, maxWidth: 720 }}>
             Сервис тягачей<br />
@@ -211,7 +212,7 @@ export default function ServicePage() {
             Цены на запчасти — открыто в каталоге. Стоимость работ — до начала ремонта.
           </p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <a href="tel:+70000000000" style={{ background: '#FF6B00', color: 'white', padding: '14px 28px', borderRadius: 10, fontWeight: 700, fontSize: 15, textDecoration: 'none', boxShadow: '0 4px 20px rgba(255,107,0,0.4)', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <a href="tel:+79232130101" style={{ background: '#FF6B00', color: 'white', padding: '14px 28px', borderRadius: 10, fontWeight: 700, fontSize: 15, textDecoration: 'none', boxShadow: '0 4px 20px rgba(255,107,0,0.4)', display: 'flex', alignItems: 'center', gap: 8 }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
               Позвонить
             </a>
@@ -220,7 +221,7 @@ export default function ServicePage() {
             </a>
             <a href="#location" style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.15)', padding: '14px 28px', borderRadius: 10, fontWeight: 500, fontSize: 15, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              Абакан, адрес
+              Усть-Абакан, адрес
             </a>
           </div>
         </div>
@@ -388,8 +389,8 @@ export default function ServicePage() {
       <section id="location" style={{ background: 'white', padding: '56px 24px' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto' }}>
           <div style={{ fontSize: 11, color: '#FF6B00', fontWeight: 700, letterSpacing: '3px', textTransform: 'uppercase', marginBottom: 6 }}>Где мы находимся</div>
-          <h2 style={{ fontSize: 30, fontWeight: 800, color: '#0F2744', marginBottom: 6, letterSpacing: -0.5 }}>Наш адрес в Абакане</h2>
-          <p style={{ fontSize: 15, color: '#6B7280', marginBottom: 36 }}>Работаем только в своём сервисном помещении — без выездов</p>
+          <h2 style={{ fontSize: 30, fontWeight: 800, color: '#0F2744', marginBottom: 6, letterSpacing: -0.5 }}>Как нас найти</h2>
+          <p style={{ fontSize: 15, color: '#6B7280', marginBottom: 36 }}>Усть-Абаканский р-н, ул. 70 лет БелАЗу, 51 стр1 — работаем только в своём помещении, без выездов</p>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: 32, alignItems: 'start' }}>
             {/* Контактный блок */}
@@ -402,8 +403,8 @@ export default function ServicePage() {
                     </div>
                     <div>
                       <div style={{ fontSize: 12, color: '#9CA3AF', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 600 }}>Адрес</div>
-                      <div style={{ fontSize: 15, fontWeight: 700, color: '#0F2744' }}>г. Абакан</div>
-                      <div style={{ fontSize: 13, color: '#6B7280', marginTop: 2 }}>Уточните адрес по телефону</div>
+                      <div style={{ fontSize: 15, fontWeight: 700, color: '#0F2744' }}>ул. 70 лет БелАЗу, 51 стр1</div>
+                      <div style={{ fontSize: 13, color: '#6B7280', marginTop: 2 }}>655017, Усть-Абаканский р-н, Республика Хакасия</div>
                     </div>
                   </div>
                 </div>
@@ -415,7 +416,7 @@ export default function ServicePage() {
                     </div>
                     <div>
                       <div style={{ fontSize: 12, color: '#9CA3AF', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 600 }}>Телефон</div>
-                      <a href="tel:+70000000000" style={{ fontSize: 17, fontWeight: 700, color: '#0F2744', textDecoration: 'none' }}>+7 (000) 000-00-00</a>
+                      <a href="tel:+79232130101" style={{ fontSize: 17, fontWeight: 700, color: '#0F2744', textDecoration: 'none' }}>+7 (923) 213-01-01</a>
                     </div>
                   </div>
                 </div>
@@ -427,34 +428,32 @@ export default function ServicePage() {
                     </div>
                     <div>
                       <div style={{ fontSize: 12, color: '#9CA3AF', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 600 }}>Режим работы</div>
-                      <div style={{ fontSize: 15, fontWeight: 700, color: '#0F2744' }}>Пн–Сб, 9:00–18:00</div>
-                      <div style={{ fontSize: 13, color: '#6B7280', marginTop: 2 }}>Работаем в своём помещении</div>
+                      <div style={{ fontSize: 15, fontWeight: 700, color: '#0F2744' }}>Пн–Пт 8:00–19:00</div>
+                      <div style={{ fontSize: 13, color: '#6B7280', marginTop: 2 }}>Сб–Вс 9:00–17:00</div>
                     </div>
                   </div>
                 </div>
 
-                <a href="tel:+70000000000" style={{ background: '#FF6B00', color: 'white', padding: '14px 24px', borderRadius: 12, fontWeight: 700, fontSize: 15, textDecoration: 'none', textAlign: 'center', boxShadow: '0 4px 16px rgba(255,107,0,0.35)' }}>
-                  Позвонить и уточнить адрес
+                <a href="tel:+79232130101" style={{ background: '#FF6B00', color: 'white', padding: '14px 24px', borderRadius: 12, fontWeight: 700, fontSize: 15, textDecoration: 'none', textAlign: 'center', boxShadow: '0 4px 16px rgba(255,107,0,0.35)' }}>
+                  Позвонить нам
                 </a>
               </div>
             </div>
 
-            {/* Карта OpenStreetMap */}
+            {/* Карта 2ГИС */}
             <div style={{ borderRadius: 16, overflow: 'hidden', boxShadow: '0 4px 24px rgba(0,0,0,0.1)', border: '1.5px solid #e5e7eb' }}>
-              <iframe
-                src="https://www.openstreetmap.org/export/embed.html?bbox=91.306102%2C53.696169%2C91.356102%2C53.726169&layer=mapnik&marker=53.711169%2C91.331102"
-                style={{ width: '100%', height: 340, border: 0, display: 'block' }}
-                title="Автосервис QPart на карте Абакана"
-              />
+              <div style={{ width: '100%', height: 340, position: 'relative' }}>
+                <Map2GIS />
+              </div>
               <div style={{ padding: '12px 16px', background: '#F8F9FA', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: 12, color: '#9CA3AF' }}>г. Абакан · 53.711169, 91.331102</span>
+                <span style={{ fontSize: 12, color: '#9CA3AF' }}>Усть-Абакан · ул. 70 лет БелАЗу, 51 стр1</span>
                 <a
-                  href="https://www.openstreetmap.org/?mlat=53.711169&mlon=91.331102#map=15/53.711169/91.331102"
+                  href="https://2gis.ru/abakan/search/70%20%D0%BB%D0%B5%D1%82%20%D0%91%D0%B5%D0%BB%D0%B0%D0%97%D1%83%2051"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ fontSize: 12, color: '#FF6B00', fontWeight: 600, textDecoration: 'none' }}
                 >
-                  Открыть в картах →
+                  Открыть в 2ГИС →
                 </a>
               </div>
             </div>
@@ -499,7 +498,7 @@ function ServiceRequestForm() {
         Отправить заявку
       </button>
       <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', marginTop: 4 }}>
-        Или позвоните: <a href="tel:+70000000000" style={{ color: 'rgba(255,255,255,0.6)', fontWeight: 600 }}>+7 (000) 000-00-00</a>
+        Или позвоните: <a href="tel:+79232130101" style={{ color: 'rgba(255,255,255,0.6)', fontWeight: 600 }}>+7 (923) 213-01-01</a>
       </p>
     </form>
   )
