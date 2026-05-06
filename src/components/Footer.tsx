@@ -15,7 +15,7 @@ export default function Footer() {
           <div>
             <div style={{ marginBottom: 10 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.png" alt="QPart" style={{ display: 'block', height: 36, width: 'auto' }} />
+              <img src="/truckline-logo.png" alt="TruckLine" style={{ display: 'block', height: 36, width: 'auto' }} />
             </div>
             <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.35)', lineHeight: 1.6, marginBottom: 20 }}>
               Запчасти для грузовиков, спецтехники и легковых автомобилей. Более 10 000 позиций в наличии.
@@ -71,7 +71,7 @@ export default function Footer() {
 
         {/* Нижняя строка */}
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 20, display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, fontSize: 12, color: 'rgba(255,255,255,0.18)' }}>
-          <span>© 2024–2026 ООО «QPart»</span>
+          <span>© 2024–2026 ООО «TruckLine»</span>
           <span>ИНН: 0000000000 · ОГРН: 0000000000000</span>
           <span>Не является публичной офертой</span>
         </div>

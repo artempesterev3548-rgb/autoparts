@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Map2GIS from '@/components/Map2GIS'
 
 export const metadata = {
-  title: 'Автосервис для тягачей и полуприцепов — QPart Абакан',
+  title: 'Автосервис для тягачей и полуприцепов — TruckLine',
   description: 'Специализированный сервис для тягачей и полуприцепов в Абакане. ТО, ремонт двигателей, КПП, ходовой, тормозов. Грузовой и легковой эвакуатор. Цены на запчасти — открыто в каталоге.',
 }
 
@@ -184,6 +184,20 @@ const STEPS = [
 export default function ServicePage() {
   return (
     <div style={{ background: '#F0F2F5', minHeight: '100vh' }}>
+      <style>{`
+        @media (max-width: 640px) {
+          .svc-hero-content { padding: 40px 16px 110px !important; }
+          .svc-hero-title { font-size: 28px !important; letter-spacing: -1px !important; max-width: 100% !important; }
+          .svc-stats-bar { grid-template-columns: repeat(2,1fr) !important; }
+          .svc-location-grid { grid-template-columns: 1fr !important; }
+          .svc-cta-inner { padding: 24px 20px !important; flex-direction: column !important; align-items: flex-start !important; }
+          .svc-steps-grid { grid-template-columns: 1fr !important; gap: 8px !important; }
+          .svc-step { border-radius: 16px !important; border-right: none !important; }
+          .svc-form-grid { grid-template-columns: 1fr !important; }
+          .svc-utp-row { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; }
+          .svc-utp-row a { margin-left: 0 !important; }
+        }
+      `}</style>
 
       {/* ── HERO ──────────────────────────────────────────────── */}
       <section style={{ position: 'relative', overflow: 'hidden', minHeight: 460 }}>
@@ -196,12 +210,12 @@ export default function ServicePage() {
           position: 'absolute', inset: 0,
           background: 'linear-gradient(105deg, rgba(11,30,53,0.97) 0%, rgba(15,39,68,0.90) 55%, rgba(15,39,68,0.65) 100%)',
         }} />
-        <div style={{ position: 'relative', zIndex: 2, maxWidth: 1280, margin: '0 auto', padding: '72px 24px 136px' }}>
+        <div className="svc-hero-content" style={{ position: 'relative', zIndex: 2, maxWidth: 1280, margin: '0 auto', padding: '72px 24px 136px' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,107,0,0.18)', border: '1px solid rgba(255,107,0,0.4)', color: '#FF8C38', padding: '5px 14px', borderRadius: 20, fontSize: 12, fontWeight: 600, letterSpacing: '0.5px', marginBottom: 22 }}>
             <span style={{ width: 6, height: 6, background: '#FF6B00', borderRadius: '50%', display: 'inline-block' }} />
-            Автосервис QPart · Усть-Абакан
+            TruckLine Автосервис · Усть-Абакан
           </div>
-          <h1 style={{ fontSize: 50, fontWeight: 900, color: 'white', lineHeight: 1.05, marginBottom: 18, letterSpacing: -2, maxWidth: 720 }}>
+          <h1 className="svc-hero-title" style={{ fontSize: 50, fontWeight: 900, color: 'white', lineHeight: 1.05, marginBottom: 18, letterSpacing: -2, maxWidth: 720 }}>
             Сервис тягачей<br />
             <span style={{ color: '#FF6B00' }}>и полуприцепов</span>
           </h1>
@@ -226,7 +240,7 @@ export default function ServicePage() {
           </div>
         </div>
 
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(255,107,0,0.95)', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)' }}>
+        <div className="svc-stats-bar" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(255,107,0,0.95)', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)' }}>
           {[
             { val: 'Тягачи и п/п', lbl: 'специализация' },
             { val: 'Эвакуатор', lbl: 'грузовой и легковой' },
@@ -243,7 +257,7 @@ export default function ServicePage() {
 
       {/* ── ГЛАВНОЕ УТП ─────────────────────────────────────────── */}
       <section style={{ background: 'white', borderBottom: '1px solid #f0f2f5' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '28px 24px', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+        <div className="svc-utp-row" style={{ maxWidth: 1280, margin: '0 auto', padding: '28px 24px', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           <span style={{ fontSize: 15, fontWeight: 700, color: '#0F2744' }}>Прозрачные цены:</span>
           <span style={{ fontSize: 14, color: '#555' }}>стоимость запчастей видна в каталоге заранее,</span>
@@ -349,9 +363,9 @@ export default function ServicePage() {
         <div style={{ fontSize: 11, color: '#FF6B00', fontWeight: 700, letterSpacing: '3px', textTransform: 'uppercase', marginBottom: 6 }}>Процесс</div>
         <h2 style={{ fontSize: 30, fontWeight: 800, color: '#0F2744', marginBottom: 6, letterSpacing: -0.5 }}>Как мы работаем</h2>
         <p style={{ fontSize: 15, color: '#6B7280', marginBottom: 40 }}>Прозрачно и без сюрпризов — от звонка до выдачи</p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 0 }}>
+        <div className="svc-steps-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 0 }}>
           {STEPS.map((step, i) => (
-            <div key={step.num} style={{ padding: '32px 28px', background: 'white', borderRadius: i === 0 ? '16px 0 0 16px' : i === STEPS.length - 1 ? '0 16px 16px 0' : 0, borderRight: i < STEPS.length - 1 ? '1px solid #F0F2F5' : 'none' }}>
+            <div key={step.num} className="svc-step" style={{ padding: '32px 28px', background: 'white', borderRadius: i === 0 ? '16px 0 0 16px' : i === STEPS.length - 1 ? '0 16px 16px 0' : 0, borderRight: i < STEPS.length - 1 ? '1px solid #F0F2F5' : 'none' }}>
               <div style={{ fontSize: 40, fontWeight: 900, color: '#FF6B00', opacity: 0.25, lineHeight: 1, marginBottom: 16, letterSpacing: -2 }}>{step.num}</div>
               <h3 style={{ fontSize: 17, fontWeight: 700, color: '#0F2744', marginBottom: 8 }}>{step.title}</h3>
               <p style={{ fontSize: 13, color: '#6B7280', lineHeight: 1.65 }}>{step.text}</p>
@@ -362,7 +376,7 @@ export default function ServicePage() {
 
       {/* ── КАТАЛОГ ЗАПЧАСТЕЙ ───────────────────────────────────── */}
       <section style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px 56px' }}>
-        <div style={{
+        <div className="svc-cta-inner" style={{
           background: 'linear-gradient(135deg, #0F2744 0%, #1a3a6b 100%)',
           borderRadius: 20, padding: '40px 48px',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 32, flexWrap: 'wrap',
@@ -392,7 +406,7 @@ export default function ServicePage() {
           <h2 style={{ fontSize: 30, fontWeight: 800, color: '#0F2744', marginBottom: 6, letterSpacing: -0.5 }}>Как нас найти</h2>
           <p style={{ fontSize: 15, color: '#6B7280', marginBottom: 36 }}>Усть-Абаканский р-н, ул. 70 лет БелАЗу, 51 стр1 — работаем только в своём помещении, без выездов</p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: 32, alignItems: 'start' }}>
+          <div className="svc-location-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: 32, alignItems: 'start' }}>
             {/* Контактный блок */}
             <div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
@@ -478,12 +492,12 @@ export default function ServicePage() {
 function ServiceRequestForm() {
   return (
     <form
-      action="mailto:info@qpart.store"
+      action="mailto:info@truckline.store"
       method="get"
       encType="text/plain"
       style={{ display: 'flex', flexDirection: 'column', gap: 12 }}
     >
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+      <div className="svc-form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
         <input name="name" placeholder="Ваше имя" required
           style={{ background: 'rgba(255,255,255,0.08)', border: '1.5px solid rgba(255,255,255,0.15)', borderRadius: 10, padding: '13px 16px', fontSize: 14, color: 'white', outline: 'none' }} />
         <input name="phone" placeholder="Телефон" required type="tel"

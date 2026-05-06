@@ -5,9 +5,9 @@ import { usePathname } from 'next/navigation'
 import { getCart } from '@/lib/cart'
 import { getSupabaseBrowser } from '@/lib/auth'
 
-const QPartLogo = ({ height = 40 }: { height?: number }) => (
+const TruckLineLogo = ({ height = 54 }: { height?: number }) => (
   // eslint-disable-next-line @next/next/no-img-element
-  <img src="/logo.png" alt="QPart" style={{ display: 'block', height, width: 'auto' }} />
+  <img src="/truckline-logo.png" alt="TruckLine" style={{ display: 'block', height, width: 'auto' }} />
 )
 
 const IconCar = () => (
@@ -93,8 +93,21 @@ export default function Header() {
 
   return (
     <header style={{ position: 'sticky', top: 0, zIndex: 50 }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .hdr-topbar { display: none !important; }
+          .hdr-nav-label { display: none !important; }
+          .hdr-nav { gap: 0 !important; }
+          .hdr-nav a { padding: 8px 10px !important; }
+          .hdr-main-inner { padding: 0 12px !important; }
+          .hdr-login-label { display: none !important; }
+          .hdr-login { padding: 8px 10px !important; gap: 0 !important; }
+          .hdr-cart { padding: 10px 12px !important; gap: 0 !important; }
+        }
+      `}</style>
+
       {/* Верхняя полоска */}
-      <div style={{ background: '#0B1E35', padding: '7px 0' }}>
+      <div className="hdr-topbar" style={{ background: '#0B1E35', padding: '7px 0' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12, color: 'rgba(255,255,255,0.4)' }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -110,63 +123,63 @@ export default function Header() {
 
       {/* Основная шапка */}
       <div style={{ background: '#0F2744', boxShadow: '0 2px 20px rgba(0,0,0,0.35)' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 64 }}>
+        <div className="hdr-main-inner" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 64 }}>
           {/* Логотип */}
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', flexShrink: 0 }}>
-            <QPartLogo height={40} />
+            <TruckLineLogo height={54} />
           </Link>
 
           {/* Навигация */}
-          <nav style={{ display: 'flex', gap: 2 }}>
+          <nav className="hdr-nav" style={{ display: 'flex', gap: 2 }}>
             <Link href="/cars" style={navLink(isActive('/cars'))}>
-              <IconCar /> Легковые
+              <IconCar /> <span className="hdr-nav-label">Легковые</span>
             </Link>
             <Link href="/special" style={navLink(isActive('/special'))}>
-              <IconTruck /> Спецтехника
+              <IconTruck /> <span className="hdr-nav-label">Спецтехника</span>
             </Link>
             <Link href="/vin" style={navLink(isActive('/vin'))}>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="10" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="12.01"/></svg>
-              VIN/ОЕМ
+              <span className="hdr-nav-label">VIN/ОЕМ</span>
             </Link>
             <Link href="/service" style={navLink(isActive('/service'))}>
-              <IconWrench /> Сервис
+              <IconWrench /> <span className="hdr-nav-label">Сервис</span>
             </Link>
             <Link href="/search" style={navLink(false)}>
-              <IconSearch /> Поиск
+              <IconSearch /> <span className="hdr-nav-label">Поиск</span>
             </Link>
           </nav>
 
           {/* Войти / ЛК */}
           {userName ? (
-            <Link href="/lk" style={{
+            <Link href="/lk" className="hdr-login" style={{
               display: 'flex', alignItems: 'center', gap: 7,
               padding: '8px 16px', borderRadius: 10, fontSize: 14, fontWeight: 600,
               textDecoration: 'none', color: 'rgba(255,255,255,0.85)',
               background: 'rgba(255,255,255,0.08)', flexShrink: 0,
             }}>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              {userName.length > 14 ? userName.slice(0, 14) + '…' : userName}
+              <span className="hdr-login-label">{userName.length > 14 ? userName.slice(0, 14) + '…' : userName}</span>
             </Link>
           ) : (
-            <Link href="/auth/login" style={{
+            <Link href="/auth/login" className="hdr-login" style={{
               display: 'flex', alignItems: 'center', gap: 7,
               padding: '8px 16px', borderRadius: 10, fontSize: 14, fontWeight: 600,
               textDecoration: 'none', color: 'rgba(255,255,255,0.85)',
               background: 'rgba(255,255,255,0.08)', flexShrink: 0,
             }}>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-              Войти
+              <span className="hdr-login-label">Войти</span>
             </Link>
           )}
 
           {/* Корзина */}
-          <Link href="/cart" style={{
+          <Link href="/cart" className="hdr-cart" style={{
             display: 'flex', alignItems: 'center', gap: 8, position: 'relative',
             background: '#FF6B00', color: 'white', padding: '10px 20px',
             borderRadius: 10, fontWeight: 700, fontSize: 14, textDecoration: 'none',
             flexShrink: 0,
           }}>
-            <IconCart /> Корзина
+            <IconCart /> <span className="hdr-login-label">Корзина</span>
             {cartCount > 0 && (
               <span style={{
                 background: 'white', color: '#FF6B00', borderRadius: '50%',

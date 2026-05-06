@@ -4,8 +4,8 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
 export const metadata: Metadata = {
-  title: 'QPart — запчасти для легковых авто и спецтехники',
-  description: 'Запчасти для легковых автомобилей, грузовиков и спецтехники. КамАЗ, МАЗ, Урал, Toyota, Lada и другие.',
+  title: 'TruckLine — запчасти для тягачей и спецтехники',
+  description: 'Запчасти для тягачей, грузовиков и спецтехники. КамАЗ, МАЗ, Урал, Volvo, DAF, Scania и другие.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

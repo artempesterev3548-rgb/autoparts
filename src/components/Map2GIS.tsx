@@ -16,7 +16,7 @@ export default function Map2GIS() {
             })
             ;(window as any).DG.marker([53.711169, 91.331102])
               .addTo(map)
-              .bindPopup('<b>QPart Автосервис</b><br>ул. 70 лет БелАЗу, 51 стр1<br>Усть-Абакан')
+              .bindPopup('<b>TruckLine Автосервис</b><br>ул. 70 лет БелАЗу, 51 стр1<br>Усть-Абакан')
               .openPopup()
           })
         }}
