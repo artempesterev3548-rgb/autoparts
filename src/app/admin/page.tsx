@@ -69,7 +69,7 @@ export default async function AdminPage() {
         </div>
 
         {/* Quick links */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, marginBottom: 24 }}>
           {/* All orders card */}
           <Link href="/admin/orders" style={{ textDecoration: 'none' }}>
             <div style={{
@@ -87,6 +87,25 @@ export default async function AdminPage() {
               <div>
                 <div style={{ fontWeight: 700, color: 'white', fontSize: 15 }}>Все заявки</div>
                 <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', marginTop: 2 }}>Просмотр и управление заявками</div>
+              </div>
+            </div>
+          </Link>
+
+          {/* Service orders card */}
+          <Link href="/admin/service-orders" style={{ textDecoration: 'none' }}>
+            <div style={{
+              background: 'white', borderRadius: 16, padding: '20px 24px',
+              boxShadow: '0 2px 10px rgba(0,0,0,0.06)', border: '1.5px solid #e5e7eb',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 16,
+            }}>
+              <div style={{ background: '#FFF0E8', borderRadius: 10, width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                </svg>
+              </div>
+              <div>
+                <div style={{ fontWeight: 700, color: '#0F2744', fontSize: 15 }}>Карты сервиса</div>
+                <div style={{ fontSize: 13, color: '#6B7280', marginTop: 2 }}>Учёт клиентов и работ</div>
               </div>
             </div>
           </Link>

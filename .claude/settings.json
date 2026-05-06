@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_screenshot",
+      "mcp__Claude_Preview__preview_list",
+      "mcp__Claude_Preview__preview_logs",
+      "mcp__819a68c2-d0f7-45ed-8cda-95d34c63ac72__list_teams",
+      "mcp__819a68c2-d0f7-45ed-8cda-95d34c63ac72__list_projects",
+      "mcp__819a68c2-d0f7-45ed-8cda-95d34c63ac72__get_project",
+      "mcp__819a68c2-d0f7-45ed-8cda-95d34c63ac72__list_deployments",
+      "mcp__819a68c2-d0f7-45ed-8cda-95d34c63ac72__get_deployment",
+      "mcp__Claude_in_Chrome__list_connected_browsers",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "mcp__Claude_in_Chrome__read_page",
+      "mcp__Claude_in_Chrome__find",
+      "mcp__Claude_in_Chrome__navigate",
+      "mcp__Claude_in_Chrome__javascript_tool",
+      "mcp__Claude_in_Chrome__select_browser"
+    ]
+  }
+}

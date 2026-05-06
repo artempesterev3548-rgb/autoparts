@@ -80,6 +80,13 @@ export default async function CatalogPage({ searchParams }: Props) {
 
   return (
     <div style={{ background: '#F0F2F5', minHeight: '100vh' }}>
+      <style>{`
+        @media (max-width: 640px) {
+          .cat-header-row { flex-direction: column !important; align-items: stretch !important; gap: 12px !important; }
+          .cat-search-form { width: 100% !important; flex-shrink: 1 !important; }
+          .cat-search-input { width: auto !important; flex: 1 !important; min-width: 0 !important; }
+        }
+      `}</style>
 
       {/* ── ШАПКА СТРАНИЦЫ ─────────────────────────────────────── */}
       <div style={{ background: '#0F2744', padding: '28px 24px' }}>
@@ -97,7 +104,7 @@ export default async function CatalogPage({ searchParams }: Props) {
               <span style={{ color: 'rgba(255,255,255,0.75)' }}>Каталог</span>
             )}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
+          <div className="cat-header-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
             <h1 style={{ fontSize: 24, fontWeight: 800, color: 'white', letterSpacing: -0.5 }}>
               {activeCategory ? activeCategory.name : 'Все товары'}
               <span style={{ fontSize: 15, fontWeight: 400, color: 'rgba(255,255,255,0.4)', marginLeft: 12 }}>
@@ -105,10 +112,11 @@ export default async function CatalogPage({ searchParams }: Props) {
               </span>
             </h1>
             {/* Поиск */}
-            <form method="GET" action="/catalog" style={{ display: 'flex', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 10, overflow: 'hidden', flexShrink: 0 }}>
+            <form method="GET" action="/catalog" className="cat-search-form" style={{ display: 'flex', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 10, overflow: 'hidden', flexShrink: 0 }}>
               {params.category && <input type="hidden" name="category" value={params.category} />}
               {params.brand && <input type="hidden" name="brand" value={params.brand} />}
               <input name="q" defaultValue={params.q} placeholder="Артикул или название..."
+                className="cat-search-input"
                 style={{ border: 'none', background: 'transparent', padding: '10px 16px', fontSize: 14, color: 'white', outline: 'none', width: 240 }} />
               <button type="submit" style={{ background: '#FF6B00', border: 'none', padding: '10px 18px', color: 'white', fontWeight: 700, fontSize: 13, cursor: 'pointer', whiteSpace: 'nowrap' }}>
                 Найти
