@@ -1,6 +1,10 @@
 import { supabaseAdmin } from '@/lib/supabase'
 import Link from 'next/link'
 
+const styles = `
+  .admin-order-row:hover { background: #F8F9FA; }
+`
+
 async function getStats() {
   const [
     { count: total },
@@ -40,6 +44,7 @@ export default async function AdminPage() {
 
   return (
     <div style={{ background: '#F0F2F5', minHeight: '100vh', padding: '32px 24px' }}>
+      <style>{styles}</style>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
 
         {/* Header */}
@@ -119,14 +124,11 @@ export default async function AdminPage() {
                 const st = STATUS_LABELS[order.status]
                 return (
                   <Link key={order.id} href={`/admin/orders?id=${order.id}`} style={{ textDecoration: 'none' }}>
-                    <div style={{
+                    <div className="admin-order-row" style={{
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                       padding: '10px 12px', borderRadius: 10,
                       transition: 'background .15s',
-                    }}
-                      onMouseEnter={e => (e.currentTarget.style.background = '#F8F9FA')}
-                      onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-                    >
+                    }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                         <span style={{ fontFamily: 'monospace', fontSize: 13, fontWeight: 800, color: '#FF6B00' }}>
                           {order.order_number}
