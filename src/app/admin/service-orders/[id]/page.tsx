@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams, useSearchParams, useRouter } from 'next/navigation'
 
 interface Work { name: string; qty: number; price: number }
@@ -38,6 +38,8 @@ const EMPTY = {
   client_name: '', client_phone: '', client_email: '',
   vehicle_make: '', vehicle_model: '', vehicle_year: '', vehicle_vin: '', vehicle_plate: '',
   works: [] as Work[], parts: [] as Part[],
+  contractor_id: null as number | null,
+  vehicle_id: null as number | null,
   check_in_at: '', check_out_at: '',
   status: 'new', payment_status: 'unpaid', payment_amount: 0,
   manager_notes: '', linked_order_id: null as number | null, order_number: '',
@@ -50,6 +52,8 @@ export default function ServiceOrderPage() {
   const isNew = params.id === 'new'
 
   const [form, setForm] = useState({ ...EMPTY })
+  const [contractors, setContractors] = useState<any[]>([])
+  const [vehicles, setVehicles] = useState<any[]>([])
   const [loading, setLoading] = useState(!isNew)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -57,13 +61,21 @@ export default function ServiceOrderPage() {
   const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
+    fetch('/api/admin/contractors').then(r => r.json()).then(d => setContractors(Array.isArray(d) ? d : []))
+
     if (isNew) {
+      const contractorId = sp.get('contractor_id') ? Number(sp.get('contractor_id')) : null
       setForm(f => ({
         ...f,
         client_name: sp.get('name') ?? '',
         client_phone: sp.get('phone') ?? '',
         linked_order_id: sp.get('linked') ? Number(sp.get('linked')) : null,
+        contractor_id: contractorId,
       }))
+      if (contractorId) {
+        fetch(`/api/admin/vehicles?contractor_id=${contractorId}`)
+          .then(r => r.json()).then(d => setVehicles(Array.isArray(d) ? d : []))
+      }
     } else {
       fetch(`/api/admin/service-orders/${params.id}`)
         .then(r => r.json())
@@ -74,11 +86,36 @@ export default function ServiceOrderPage() {
             check_out_at: d.check_out_at ? d.check_out_at.slice(0, 16) : '',
             works: d.works ?? [],
             parts: d.parts ?? [],
+            contractor_id: d.contractor_id ?? null,
+            vehicle_id: d.vehicle_id ?? null,
           })
+          if (d.contractor_id) {
+            fetch(`/api/admin/vehicles?contractor_id=${d.contractor_id}`)
+              .then(r => r.json()).then(v => setVehicles(Array.isArray(v) ? v : []))
+          }
           setLoading(false)
         })
     }
   }, [])
+
+  const onContractorChange = (cid: number | null) => {
+    setForm(f => ({ ...f, contractor_id: cid, vehicle_id: null }))
+    setVehicles([])
+    if (cid) {
+      const c = contractors.find(x => x.id === cid)
+      if (c) setForm(f => ({ ...f, contractor_id: cid, vehicle_id: null, client_name: c.contact_person || c.name, client_phone: c.phone || f.client_phone }))
+      fetch(`/api/admin/vehicles?contractor_id=${cid}`)
+        .then(r => r.json()).then(d => setVehicles(Array.isArray(d) ? d : []))
+    }
+  }
+
+  const onVehicleChange = (vid: number | null) => {
+    setForm(f => ({ ...f, vehicle_id: vid }))
+    if (vid) {
+      const v = vehicles.find(x => x.id === vid)
+      if (v) setForm(f => ({ ...f, vehicle_id: vid, vehicle_make: v.make, vehicle_model: v.model, vehicle_year: v.year, vehicle_vin: v.vin, vehicle_plate: v.plate }))
+    }
+  }
 
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
     setForm(f => ({ ...f, [k]: e.target.value }))
@@ -177,6 +214,48 @@ export default function ServiceOrderPage() {
         </div>
 
         {error && <div style={{ background: '#fee2e2', color: '#b91c1c', borderRadius: 10, padding: '10px 16px', marginBottom: 16, fontSize: 14 }}>{error}</div>}
+
+        {/* Контрагент */}
+        <Section title="Контрагент">
+          <div style={{ display: 'grid', gridTemplateColumns: vehicles.length > 0 || form.contractor_id ? '1fr 1fr' : '1fr', gap: 12 }}>
+            <div>
+              <label style={{ fontSize: 12, color: '#6b7280', display: 'block', marginBottom: 4 }}>Компания / клиент</label>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <select
+                  style={{ ...inp(), flex: 1, cursor: 'pointer' }}
+                  value={form.contractor_id ?? ''}
+                  onChange={e => onContractorChange(e.target.value ? Number(e.target.value) : null)}
+                >
+                  <option value="">— Без контрагента —</option>
+                  {contractors.map(c => <option key={c.id} value={c.id}>{c.name}{c.inn ? ` (ИНН ${c.inn})` : ''}</option>)}
+                </select>
+                <a href="/admin/contractors/new" target="_blank" style={{ display: 'flex', alignItems: 'center', padding: '0 12px', background: '#f3f4f6', borderRadius: 8, fontSize: 13, fontWeight: 600, color: '#374151', textDecoration: 'none', whiteSpace: 'nowrap' }}>+ Новый</a>
+              </div>
+            </div>
+            {form.contractor_id && (
+              <div>
+                <label style={{ fontSize: 12, color: '#6b7280', display: 'block', marginBottom: 4 }}>Автомобиль контрагента</label>
+                <select
+                  style={{ ...inp(), cursor: 'pointer' }}
+                  value={form.vehicle_id ?? ''}
+                  onChange={e => onVehicleChange(e.target.value ? Number(e.target.value) : null)}
+                >
+                  <option value="">— Выбрать машину —</option>
+                  {vehicles.map(v => (
+                    <option key={v.id} value={v.id}>
+                      {[v.make, v.model, v.year].filter(Boolean).join(' ')}{v.plate ? ` · ${v.plate}` : ''}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </div>
+          {form.contractor_id && (
+            <a href={`/admin/contractors/${form.contractor_id}`} target="_blank" style={{ display: 'inline-block', marginTop: 8, fontSize: 12, color: '#FF6B00', textDecoration: 'none' }}>
+              Открыть карточку контрагента →
+            </a>
+          )}
+        </Section>
 
         {/* Клиент */}
         <Section title="Клиент">

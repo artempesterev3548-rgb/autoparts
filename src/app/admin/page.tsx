@@ -69,7 +69,7 @@ export default async function AdminPage() {
         </div>
 
         {/* Quick links */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, marginBottom: 24 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16, marginBottom: 24 }}>
           {/* All orders card */}
           <Link href="/admin/orders" style={{ textDecoration: 'none' }}>
             <div style={{
@@ -87,6 +87,28 @@ export default async function AdminPage() {
               <div>
                 <div style={{ fontWeight: 700, color: 'white', fontSize: 15 }}>Все заявки</div>
                 <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', marginTop: 2 }}>Просмотр и управление заявками</div>
+              </div>
+            </div>
+          </Link>
+
+          {/* Contractors card */}
+          <Link href="/admin/contractors" style={{ textDecoration: 'none' }}>
+            <div style={{
+              background: 'white', borderRadius: 16, padding: '20px 24px',
+              boxShadow: '0 2px 10px rgba(0,0,0,0.06)', border: '1.5px solid #e5e7eb',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 16,
+            }}>
+              <div style={{ background: '#FFF0E8', borderRadius: 10, width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+              </div>
+              <div>
+                <div style={{ fontWeight: 700, color: '#0F2744', fontSize: 15 }}>Контрагенты</div>
+                <div style={{ fontSize: 13, color: '#6B7280', marginTop: 2 }}>Клиенты, долги, оборот</div>
               </div>
             </div>
           </Link>
