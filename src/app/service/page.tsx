@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Map2GIS from '@/components/Map2GIS'
+import ServiceRequestForm from './ServiceRequestForm'
 
 export const metadata = {
   title: 'Автосервис для тягачей и полуприцепов — TruckLine',
@@ -489,31 +490,3 @@ export default function ServicePage() {
   )
 }
 
-function ServiceRequestForm() {
-  return (
-    <form
-      action="mailto:info@truckline.store"
-      method="get"
-      encType="text/plain"
-      style={{ display: 'flex', flexDirection: 'column', gap: 12 }}
-    >
-      <div className="svc-form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-        <input name="name" placeholder="Ваше имя" required
-          style={{ background: 'rgba(255,255,255,0.08)', border: '1.5px solid rgba(255,255,255,0.15)', borderRadius: 10, padding: '13px 16px', fontSize: 14, color: 'white', outline: 'none' }} />
-        <input name="phone" placeholder="Телефон" required type="tel"
-          style={{ background: 'rgba(255,255,255,0.08)', border: '1.5px solid rgba(255,255,255,0.15)', borderRadius: 10, padding: '13px 16px', fontSize: 14, color: 'white', outline: 'none' }} />
-      </div>
-      <input name="equipment" placeholder="Марка и модель тягача / полуприцепа"
-        style={{ background: 'rgba(255,255,255,0.08)', border: '1.5px solid rgba(255,255,255,0.15)', borderRadius: 10, padding: '13px 16px', fontSize: 14, color: 'white', outline: 'none' }} />
-      <textarea name="description" placeholder="Опишите проблему или нужные работы..." rows={4}
-        style={{ background: 'rgba(255,255,255,0.08)', border: '1.5px solid rgba(255,255,255,0.15)', borderRadius: 10, padding: '13px 16px', fontSize: 14, color: 'white', outline: 'none', resize: 'vertical', fontFamily: 'inherit' }} />
-      <button type="submit"
-        style={{ background: '#FF6B00', color: 'white', border: 'none', borderRadius: 10, padding: '14px', fontSize: 15, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 20px rgba(255,107,0,0.4)' }}>
-        Отправить заявку
-      </button>
-      <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', marginTop: 4 }}>
-        Или позвоните: <a href="tel:+79232130101" style={{ color: 'rgba(255,255,255,0.6)', fontWeight: 600 }}>+7 (923) 213-01-01</a>
-      </p>
-    </form>
-  )
-}

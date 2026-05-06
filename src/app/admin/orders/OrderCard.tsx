@@ -94,6 +94,7 @@ export default function OrderCard({ order, isSelected, supplierMap }: Props) {
   const s = STATUS_CFG[status] ?? STATUS_CFG.new
   const customer = parseCustomer(order)
   const items: any[] = order.items ?? []
+  const isService = (order.order_number as string)?.startsWith('SVC-')
 
   return (
     <div style={{
@@ -152,41 +153,70 @@ export default function OrderCard({ order, isSelected, supplierMap }: Props) {
       {/* Развёрнутое содержимое */}
       {open && (
         <div style={{ borderTop: '1px solid #f3f4f6', padding: '16px' }}>
-          {/* Товары с поставщиками */}
-          <div style={{ marginBottom: 16 }}>
-            <div style={{ fontSize: 11, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8, fontWeight: 600 }}>
-              Товары
+          {/* Содержимое заявки */}
+          {isService ? (
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontSize: 11, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8, fontWeight: 600 }}>
+                Заявка на сервис
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {customer.comment && (() => {
+                  try {
+                    const d = JSON.parse(order.customer_comment)
+                    return (
+                      <>
+                        {d.equipment && (
+                          <div style={{ background: '#fff7ed', borderRadius: 8, padding: '8px 12px', fontSize: 13, color: '#374151' }}>
+                            <span style={{ color: '#9ca3af', fontWeight: 600 }}>Техника: </span>{d.equipment}
+                          </div>
+                        )}
+                        {d.description && (
+                          <div style={{ background: '#f8f9fa', borderRadius: 8, padding: '8px 12px', fontSize: 13, color: '#374151', borderLeft: '3px solid #FF6B00' }}>
+                            <span style={{ color: '#9ca3af', fontWeight: 600 }}>Описание: </span>{d.description}
+                          </div>
+                        )}
+                      </>
+                    )
+                  } catch { return null }
+                })()}
+              </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {items.map((item: any, i: number) => {
-                const supplier = supplierMap[item.article]
-                const cfg = getSupplierCfg(supplier)
-                return (
-                  <div key={i} style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8,
-                    padding: '8px 10px', borderRadius: 8,
-                    background: cfg.bg, flexWrap: 'wrap',
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flex: 1 }}>
-                      <SupplierBadge supplier={supplier} />
-                      <span style={{ fontSize: 13, color: '#374151', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                        {item.name}
-                      </span>
-                      <span style={{ fontSize: 11, color: '#9ca3af', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>
-                        {item.article}
+          ) : (
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontSize: 11, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8, fontWeight: 600 }}>
+                Товары
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                {items.map((item: any, i: number) => {
+                  const supplier = supplierMap[item.article]
+                  const cfg = getSupplierCfg(supplier)
+                  return (
+                    <div key={i} style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8,
+                      padding: '8px 10px', borderRadius: 8,
+                      background: cfg.bg, flexWrap: 'wrap',
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flex: 1 }}>
+                        <SupplierBadge supplier={supplier} />
+                        <span style={{ fontSize: 13, color: '#374151', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {item.name}
+                        </span>
+                        <span style={{ fontSize: 11, color: '#9ca3af', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>
+                          {item.article}
+                        </span>
+                      </div>
+                      <span style={{ fontSize: 13, fontWeight: 700, color: '#111827', whiteSpace: 'nowrap' }}>
+                        {item.quantity} × {item.price?.toLocaleString('ru')} ₽
                       </span>
                     </div>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: '#111827', whiteSpace: 'nowrap' }}>
-                      {item.quantity} × {item.price?.toLocaleString('ru')} ₽
-                    </span>
-                  </div>
-                )
-              })}
+                  )
+                })}
+              </div>
+              <div style={{ textAlign: 'right', fontWeight: 800, fontSize: 15, color: '#111827', marginTop: 10 }}>
+                Итого: {order.total_price?.toLocaleString('ru')} ₽
+              </div>
             </div>
-            <div style={{ textAlign: 'right', fontWeight: 800, fontSize: 15, color: '#111827', marginTop: 10 }}>
-              Итого: {order.total_price?.toLocaleString('ru')} ₽
-            </div>
-          </div>
+          )}
 
           {/* Комментарий */}
           {customer.comment && (
