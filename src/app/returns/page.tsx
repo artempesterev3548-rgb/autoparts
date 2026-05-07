@@ -62,7 +62,7 @@ export default function ReturnsPage() {
           <p style={S.p}>Для оформления возврата или обмена свяжитесь с нами по телефону <a href="tel:+70000000000" style={{ color: '#FF6B00' }}>+7 (000) 000-00-00</a> или по электронной почте <a href="mailto:info@example.ru" style={{ color: '#FF6B00' }}>info@example.ru</a>. Менеджер согласует порядок и условия возврата.</p>
 
           <h2 style={S.h2}>Реквизиты Продавца</h2>
-          <p style={S.p}>ООО «TruckLine» · ОГРН 0000000000000 · ИНН 0000000000<br />
+          <p style={S.p}>ООО «ТК Саяны Плюс» · ИНН 2413007682 · КПП 241301001<br />
           Email: <a href="mailto:info@example.ru" style={{ color: '#FF6B00' }}>info@example.ru</a> · Тел.: <a href="tel:+70000000000" style={{ color: '#FF6B00' }}>+7 (000) 000-00-00</a></p>
 
         </div>

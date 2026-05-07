@@ -71,8 +71,8 @@ export default function Footer() {
 
         {/* Нижняя строка */}
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 20, display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, fontSize: 12, color: 'rgba(255,255,255,0.18)' }}>
-          <span>© 2024–2026 ООО «TruckLine»</span>
-          <span>ИНН: 0000000000 · ОГРН: 0000000000000</span>
+          <span>© 2024–2026 ООО «ТК Саяны Плюс»</span>
+          <span>ИНН: 2413007682 · КПП: 241301001</span>
           <span>Не является публичной офертой</span>
         </div>
       </div>
