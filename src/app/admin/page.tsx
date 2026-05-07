@@ -2,6 +2,8 @@ import { supabaseAdmin } from '@/lib/supabase'
 import Link from 'next/link'
 import { ServiceBoard } from './service/ServiceKanban'
 
+export const dynamic = 'force-dynamic'
+
 const styles = `
   .admin-order-row:hover { background: #F8F9FA; }
 `

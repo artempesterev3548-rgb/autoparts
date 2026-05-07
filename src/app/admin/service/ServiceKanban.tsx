@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 const SVC_STATUS: Record<string, { label: string; bg: string; color: string; col: string }> = {
   new:         { label: 'Новая',     bg: '#fee2e2', color: '#b91c1c', col: 'new' },
@@ -194,6 +194,18 @@ export function ServiceBoard({ orders: initial }: { orders: any[] }) {
   const handleUpdate = (id: number, patch: any) => {
     setOrders(prev => prev.map(o => o.id === id ? { ...o, ...patch } : o))
   }
+
+  const refresh = useCallback(async () => {
+    try {
+      const res = await fetch('/api/admin/svc-orders', { cache: 'no-store' })
+      if (res.ok) setOrders(await res.json())
+    } catch {}
+  }, [])
+
+  useEffect(() => {
+    const id = setInterval(refresh, 30_000)
+    return () => clearInterval(id)
+  }, [refresh])
 
   const byStatus = (key: string) => orders.filter(o => (o.status ?? 'new') === key)
 
