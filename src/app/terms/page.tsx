@@ -14,7 +14,7 @@ export default function TermsPage() {
         <div style={{ background: '#0F2744', borderRadius: '20px 20px 0 0', padding: '32px 40px 24px' }}>
           <div style={{ fontSize: 11, color: '#FF6B00', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 8 }}>Документы</div>
           <h1 style={{ fontSize: 26, fontWeight: 800, color: 'white', letterSpacing: -0.5 }}>Пользовательское соглашение</h1>
-          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', marginTop: 8 }}>Редакция № 01/2026 от 30.04.2026 · ООО «TruckLine»</p>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', marginTop: 8 }}>Редакция № 01/2026 от 30.04.2026 · ООО «ТК Саяны Плюс»</p>
         </div>
 
         <div style={{ background: 'white', borderRadius: '0 0 20px 20px', padding: '32px 40px 40px', boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
@@ -81,7 +81,7 @@ export default function TermsPage() {
 
           <h2 style={S.h2}>Реквизиты Продавца</h2>
           <p style={S.p}>ООО «ТК Саяны Плюс» · ИНН 2413007682 · КПП 241301001<br />
-          Email: <a href="mailto:info@example.ru" style={{ color: '#FF6B00' }}>info@example.ru</a> · Тел.: <a href="tel:+70000000000" style={{ color: '#FF6B00' }}>+7 (000) 000-00-00</a></p>
+          Email: <a href="mailto:info@example.ru" style={{ color: '#FF6B00' }}>info@example.ru</a> · Тел.: <a href="tel:+79232130101" style={{ color: '#FF6B00' }}>+7 (923) 213-01-01</a></p>
 
         </div>
       </div>

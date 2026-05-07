@@ -15,14 +15,14 @@ export default function PrivacyPage() {
         <div style={{ background: '#0F2744', borderRadius: '20px 20px 0 0', padding: '32px 40px 24px' }}>
           <div style={{ fontSize: 11, color: '#FF6B00', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 8 }}>Документы</div>
           <h1 style={{ fontSize: 26, fontWeight: 800, color: 'white', letterSpacing: -0.5 }}>Политика конфиденциальности</h1>
-          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', marginTop: 8 }}>Редакция № 01/2026 от 30.04.2026 · ООО «TruckLine»</p>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', marginTop: 8 }}>Редакция № 01/2026 от 30.04.2026 · ООО «ТК Саяны Плюс»</p>
         </div>
 
         {/* Содержимое */}
         <div style={{ background: 'white', borderRadius: '0 0 20px 20px', padding: '32px 40px 40px', boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
 
           <h2 style={S.h2}>1. Общие положения</h2>
-          <p style={S.p}>1.1. Настоящая Политика конфиденциальности (далее — «Политика») разработана в соответствии с Федеральным законом от 27.07.2006 № 152-ФЗ «О персональных данных» и определяет порядок обработки персональных данных (далее — «ПДн»), получаемых ООО «TruckLine» (далее — «Оператор») при использовании Сайта.</p>
+          <p style={S.p}>1.1. Настоящая Политика конфиденциальности (далее — «Политика») разработана в соответствии с Федеральным законом от 27.07.2006 № 152-ФЗ «О персональных данных» и определяет порядок обработки персональных данных (далее — «ПДн»), получаемых ООО «ТК Саяны Плюс» (далее — «Оператор») при использовании Сайта.</p>
           <p style={S.p}>1.2. Оператор — ООО «ТК Саяны Плюс», ИНН 2413007682, КПП 241301001.</p>
           <p style={S.p}>1.3. Политика применяется ко всем ПДн, получаемым через: формы регистрации и заказа, Личный кабинет, онлайн-чат, обратный звонок, CRM-системы, cookies и веб-аналитику.</p>
 
@@ -92,7 +92,7 @@ export default function PrivacyPage() {
 
           <h2 style={S.h2}>Реквизиты Оператора</h2>
           <p style={S.p}>ООО «ТК Саяны Плюс» · ИНН 2413007682 · КПП 241301001<br />
-          Email: <a href="mailto:info@example.ru" style={{ color: '#FF6B00' }}>info@example.ru</a> · Тел.: <a href="tel:+70000000000" style={{ color: '#FF6B00' }}>+7 (000) 000-00-00</a></p>
+          Email: <a href="mailto:info@example.ru" style={{ color: '#FF6B00' }}>info@example.ru</a> · Тел.: <a href="tel:+79232130101" style={{ color: '#FF6B00' }}>+7 (923) 213-01-01</a></p>
 
         </div>
       </div>
