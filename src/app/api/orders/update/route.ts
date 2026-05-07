@@ -19,7 +19,10 @@ async function getSessionUser(req: NextRequest) {
   return user
 }
 
-const VALID_STATUSES = ['new', 'processing', 'shipped', 'delivered', 'cancelled']
+const VALID_STATUSES = [
+  'new', 'processing', 'shipped', 'delivered', 'cancelled',
+  'scheduled', 'in_progress', 'ready', 'done',
+]
 
 export async function POST(req: NextRequest) {
   const user = await getSessionUser(req)
@@ -28,15 +31,21 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { id, status, manager_notes } = await req.json()
+    const { id, status, manager_notes, scheduled_at, ready_at } = await req.json()
     if (!id) return NextResponse.json({ error: 'Нет ID' }, { status: 400 })
     if (status && !VALID_STATUSES.includes(status)) {
       return NextResponse.json({ error: 'Недопустимый статус' }, { status: 400 })
     }
 
+    const patch: Record<string, any> = { updated_at: new Date().toISOString() }
+    if (status !== undefined) patch.status = status
+    if (manager_notes !== undefined) patch.manager_notes = manager_notes
+    if (scheduled_at !== undefined) patch.scheduled_at = scheduled_at
+    if (ready_at !== undefined) patch.ready_at = ready_at
+
     const { error } = await supabaseAdmin
       .from('orders')
-      .update({ status, manager_notes, updated_at: new Date().toISOString() })
+      .update(patch)
       .eq('id', id)
 
     if (error) throw error

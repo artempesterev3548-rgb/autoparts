@@ -1,5 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase'
 import Link from 'next/link'
+import { ServiceBoard } from './service/ServiceKanban'
 
 const styles = `
   .admin-order-row:hover { background: #F8F9FA; }
@@ -11,13 +12,15 @@ async function getStats() {
     { count: newOrders },
     { count: processing },
     { data: recent },
+    { data: svcOrders },
   ] = await Promise.all([
-    supabaseAdmin.from('orders').select('*', { count: 'exact', head: true }),
-    supabaseAdmin.from('orders').select('*', { count: 'exact', head: true }).eq('status', 'new'),
-    supabaseAdmin.from('orders').select('*', { count: 'exact', head: true }).eq('status', 'processing'),
-    supabaseAdmin.from('orders').select('*').order('created_at', { ascending: false }).limit(5),
+    supabaseAdmin.from('orders').select('*', { count: 'exact', head: true }).like('order_number', 'AP-%'),
+    supabaseAdmin.from('orders').select('*', { count: 'exact', head: true }).like('order_number', 'AP-%').eq('status', 'new'),
+    supabaseAdmin.from('orders').select('*', { count: 'exact', head: true }).like('order_number', 'AP-%').eq('status', 'processing'),
+    supabaseAdmin.from('orders').select('*').like('order_number', 'AP-%').order('created_at', { ascending: false }).limit(5),
+    supabaseAdmin.from('orders').select('*').like('order_number', 'SVC-%').in('status', ['new', 'scheduled', 'in_progress', 'ready']).order('created_at', { ascending: false }).limit(200),
   ])
-  return { total, newOrders, processing, recent: recent ?? [] }
+  return { total, newOrders, processing, recent: recent ?? [], svcOrders: svcOrders ?? [] }
 }
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
@@ -29,7 +32,7 @@ const STATUS_LABELS: Record<string, { label: string; color: string }> = {
 }
 
 export default async function AdminPage() {
-  const { total, newOrders, processing, recent } = await getStats()
+  const { total, newOrders, processing, recent, svcOrders } = await getStats()
 
   const today = recent.filter(
     (o: any) => new Date(o.created_at).toDateString() === new Date().toDateString()
@@ -113,8 +116,8 @@ export default async function AdminPage() {
             </div>
           </Link>
 
-          {/* Service orders card */}
-          <Link href="/admin/service-orders" style={{ textDecoration: 'none' }}>
+          {/* Service dashboard card */}
+          <Link href="/admin/service" style={{ textDecoration: 'none' }}>
             <div style={{
               background: 'white', borderRadius: 16, padding: '20px 24px',
               boxShadow: '0 2px 10px rgba(0,0,0,0.06)', border: '1.5px solid #e5e7eb',
@@ -126,8 +129,8 @@ export default async function AdminPage() {
                 </svg>
               </div>
               <div>
-                <div style={{ fontWeight: 700, color: '#0F2744', fontSize: 15 }}>Карты сервиса</div>
-                <div style={{ fontSize: 13, color: '#6B7280', marginTop: 2 }}>Учёт клиентов и работ</div>
+                <div style={{ fontWeight: 700, color: '#0F2744', fontSize: 15 }}>Автосервис</div>
+                <div style={{ fontSize: 13, color: '#6B7280', marginTop: 2 }}>Дашборд заявок сервиса</div>
               </div>
             </div>
           </Link>
@@ -152,6 +155,15 @@ export default async function AdminPage() {
               </div>
             </div>
           </Link>
+        </div>
+
+        {/* Service dashboard */}
+        <div style={{ background: 'white', borderRadius: 16, boxShadow: '0 2px 10px rgba(0,0,0,0.06)', padding: '24px', marginBottom: 24 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+            <h2 style={{ fontSize: 16, fontWeight: 800, color: '#0F2744', margin: 0 }}>🔧 Автосервис</h2>
+            <Link href="/admin/service" style={{ fontSize: 13, color: '#FF6B00', textDecoration: 'none', fontWeight: 600 }}>Открыть дашборд →</Link>
+          </div>
+          <ServiceBoard orders={svcOrders} />
         </div>
 
         {/* Recent orders */}

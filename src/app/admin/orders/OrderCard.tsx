@@ -14,12 +14,19 @@ interface Props {
 }
 
 const STATUS_CFG: Record<string, { label: string; bg: string; color: string }> = {
-  new:        { label: 'Новая',      bg: '#fee2e2', color: '#b91c1c' },
-  processing: { label: 'В работе',   bg: '#fef9c3', color: '#a16207' },
-  shipped:    { label: 'Отправлено', bg: '#dbeafe', color: '#1d4ed8' },
-  delivered:  { label: 'Доставлено', bg: '#dcfce7', color: '#15803d' },
-  cancelled:  { label: 'Отменена',   bg: '#f3f4f6', color: '#6b7280' },
+  new:         { label: 'Новая',      bg: '#fee2e2', color: '#b91c1c' },
+  processing:  { label: 'В работе',   bg: '#fef9c3', color: '#a16207' },
+  shipped:     { label: 'Отправлено', bg: '#dbeafe', color: '#1d4ed8' },
+  delivered:   { label: 'Доставлено', bg: '#dcfce7', color: '#15803d' },
+  cancelled:   { label: 'Отменена',   bg: '#f3f4f6', color: '#6b7280' },
+  scheduled:   { label: 'Запись',     bg: '#e0f2fe', color: '#0369a1' },
+  in_progress: { label: 'В работе',   bg: '#fef9c3', color: '#a16207' },
+  ready:       { label: 'Готово',     bg: '#dcfce7', color: '#15803d' },
+  done:        { label: 'Успешно',    bg: '#f0fdf4', color: '#166534' },
 }
+
+const SVC_STATUSES = ['new', 'scheduled', 'in_progress', 'ready', 'done', 'cancelled']
+const PARTS_STATUSES = ['new', 'processing', 'shipped', 'delivered', 'cancelled']
 
 function getSupplierCfg(supplier: Supplier | undefined) {
   if (!supplier) return { bg: '#f9fafb', color: '#6b7280', icon: '❓', label: 'Неизвестно' }
@@ -233,23 +240,6 @@ export default function OrderCard({ order, isSelected, supplierMap }: Props) {
             </div>
           )}
 
-          {/* Для SVC-заявок: кнопка создать карту сервиса */}
-          {isService && (
-            <div style={{ marginBottom: 14 }}>
-              <a
-                href={`/admin/service-orders/new?name=${encodeURIComponent(customer.name || '')}&phone=${encodeURIComponent(customer.phone || '')}&linked=${order.id}`}
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 6,
-                  background: '#0F2744', color: 'white', textDecoration: 'none',
-                  borderRadius: 10, padding: '9px 18px', fontSize: 13, fontWeight: 700,
-                }}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-                Создать карту сервиса →
-              </a>
-            </div>
-          )}
-
           {/* Управление */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
             <div>
@@ -261,8 +251,8 @@ export default function OrderCard({ order, isSelected, supplierMap }: Props) {
                 onChange={e => setStatus(e.target.value)}
                 style={{ width: '100%', border: '1.5px solid #e5e7eb', borderRadius: 8, padding: '6px 10px', fontSize: 13, outline: 'none', background: 'white' }}
               >
-                {Object.entries(STATUS_CFG).map(([val, { label }]) => (
-                  <option key={val} value={val}>{label}</option>
+                {(isService ? SVC_STATUSES : PARTS_STATUSES).map(val => (
+                  <option key={val} value={val}>{STATUS_CFG[val]?.label ?? val}</option>
                 ))}
               </select>
             </div>
