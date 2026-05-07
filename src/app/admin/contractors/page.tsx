@@ -1,6 +1,10 @@
 import { supabaseAdmin } from '@/lib/supabase'
 import Link from 'next/link'
 
+const styles = `
+  .contractor-row:hover { background: #f8f9fa; }
+`
+
 function calcTotal(works: any[], parts: any[]) {
   return (works ?? []).reduce((s, r) => s + (r.qty || 1) * (r.price || 0), 0)
     + (parts ?? []).reduce((s, r) => s + (r.qty || 1) * (r.price || 0), 0)
@@ -71,6 +75,7 @@ export default async function ContractorsPage() {
           </div>
         ) : (
           <div style={{ background: 'white', borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+            <style>{styles}</style>
             {/* Заголовок таблицы */}
             <div style={{
               display: 'grid', gridTemplateColumns: '1fr 140px 80px 80px 140px 140px 120px 36px',
@@ -86,15 +91,12 @@ export default async function ContractorsPage() {
               const debt = Math.max(0, st.invoiced - st.paid)
               return (
                 <Link key={c.id} href={`/admin/contractors/${c.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  <div style={{
+                  <div className="contractor-row" style={{
                     display: 'grid', gridTemplateColumns: '1fr 140px 80px 80px 140px 140px 120px 36px',
                     alignItems: 'center', gap: 12, padding: '14px 20px',
                     borderBottom: i < (contractors ?? []).length - 1 ? '1px solid #f3f4f6' : 'none',
                     transition: 'background .15s',
-                  }}
-                    onMouseEnter={e => (e.currentTarget.style.background = '#f8f9fa')}
-                    onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-                  >
+                  }}>
                     <div>
                       <div style={{ fontWeight: 700, fontSize: 14, color: '#0F2744' }}>{c.name}</div>
                       {c.inn && <div style={{ fontSize: 11, color: '#9ca3af', marginTop: 1 }}>ИНН {c.inn}</div>}

@@ -34,6 +34,15 @@ const inp = (extra?: object): React.CSSProperties => ({
   boxSizing: 'border-box', background: 'white', ...extra,
 })
 
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div style={{ background: 'white', borderRadius: 14, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', marginBottom: 16 }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 14 }}>{title}</div>
+      {children}
+    </div>
+  )
+}
+
 const EMPTY = {
   client_name: '', client_phone: '', client_email: '',
   vehicle_make: '', vehicle_model: '', vehicle_year: '', vehicle_vin: '', vehicle_plate: '',
@@ -164,13 +173,6 @@ export default function ServiceOrderPage() {
 
   if (loading) return (
     <div style={{ padding: 48, textAlign: 'center', color: '#6b7280' }}>Загрузка...</div>
-  )
-
-  const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
-    <div style={{ background: 'white', borderRadius: 14, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', marginBottom: 16 }}>
-      <div style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 14 }}>{title}</div>
-      {children}
-    </div>
   )
 
   const row2 = { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 } as React.CSSProperties

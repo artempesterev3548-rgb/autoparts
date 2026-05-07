@@ -31,6 +31,15 @@ const PAY_STATUS: Record<string, { label: string; color: string }> = {
   paid:    { label: 'Оплачено',    color: '#15803d' },
 }
 
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div style={{ background: 'white', borderRadius: 14, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', marginBottom: 16 }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 14 }}>{title}</div>
+      {children}
+    </div>
+  )
+}
+
 export default function ContractorPage() {
   const params = useParams()
   const router = useRouter()
@@ -119,13 +128,6 @@ export default function ContractorPage() {
   const debt = Math.max(0, invoiced - paid)
 
   if (loading) return <div style={{ padding: 48, textAlign: 'center', color: '#6b7280' }}>Загрузка...</div>
-
-  const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
-    <div style={{ background: 'white', borderRadius: 14, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', marginBottom: 16 }}>
-      <div style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 14 }}>{title}</div>
-      {children}
-    </div>
-  )
 
   return (
     <div style={{ background: '#F0F2F5', minHeight: '100vh', padding: '24px' }}>

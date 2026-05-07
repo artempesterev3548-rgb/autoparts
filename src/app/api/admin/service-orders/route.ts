@@ -6,6 +6,7 @@ export async function GET(req: NextRequest) {
   const status = searchParams.get('status')
   const payment = searchParams.get('payment')
   const search = searchParams.get('search')
+  const contractor_id = searchParams.get('contractor_id')
 
   let query = supabaseAdmin
     .from('service_orders')
@@ -13,6 +14,7 @@ export async function GET(req: NextRequest) {
     .order('created_at', { ascending: false })
     .limit(300)
 
+  if (contractor_id) query = query.eq('contractor_id', contractor_id)
   if (status) query = query.eq('status', status)
   if (payment) query = query.eq('payment_status', payment)
   if (search) {
