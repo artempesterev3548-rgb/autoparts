@@ -85,14 +85,14 @@ export default function PrivacyPage() {
 
           <h2 style={S.h2}>8. Права субъекта персональных данных</h2>
           <p style={S.p}>8.1. Вы вправе: запросить доступ к своим ПДн, потребовать их уточнения, блокировки или уничтожения, отозвать согласие на обработку.</p>
-          <p style={S.p}>8.2. Запросы направляйте на: <a href="mailto:info@example.ru" style={{ color: '#FF6B00' }}>info@example.ru</a>. Срок ответа — 30 дней.</p>
+          <p style={S.p}>8.2. Запросы направляйте на: <a href="mailto:info.truckline@mail.ru" style={{ color: '#FF6B00' }}>info.truckline@mail.ru</a>. Срок ответа — 30 дней.</p>
 
           <h2 style={S.h2}>9. Меры защиты</h2>
           <p style={S.p}>Оператор применяет шифрование, межсетевые экраны, ограничение доступа и регулярный аудит систем безопасности.</p>
 
           <h2 style={S.h2}>Реквизиты Оператора</h2>
-          <p style={S.p}>ООО «ТК Саяны Плюс» · ИНН 2413007682 · КПП 241301001<br />
-          Email: <a href="mailto:info@example.ru" style={{ color: '#FF6B00' }}>info@example.ru</a> · Тел.: <a href="tel:+79232130101" style={{ color: '#FF6B00' }}>+7 (923) 213-01-01</a></p>
+          <p style={S.p}>ООО «ТК Саяны Плюс» · ИНН 2413007682 · КПП 241301001<br />          Юридический адрес: 662840, Красноярский край, Ермаковский район, поселок Танзыбей, Береговая ул, д. 12, кв. 1<br />
+          Email: <a href="mailto:info.truckline@mail.ru" style={{ color: '#FF6B00' }}>info.truckline@mail.ru</a> · Тел.: <a href="tel:+79232130101" style={{ color: '#FF6B00' }}>+7 (923) 213-01-01</a></p>
 
         </div>
       </div>

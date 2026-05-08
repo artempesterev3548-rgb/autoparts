@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { createServerClient } from '@supabase/ssr'
 import { rateLimit, getClientIp } from '@/lib/rateLimit'
+import { sendOrderConfirmation } from '@/lib/email'
 
 function generateOrderNumber() {
   const date = new Date()
@@ -91,15 +92,14 @@ async function getUserId(req: NextRequest): Promise<string | null> {
 }
 
 export async function POST(req: NextRequest) {
-  // Rate limiting: 5 заказов с одного IP за 10 минут
   const ip = getClientIp(req)
-  if (!rateLimit(ip, 5, 10 * 60 * 1000)) {
+  if (!await rateLimit(ip, 5, 10 * 60 * 1000)) {
     return NextResponse.json({ error: 'Слишком много запросов. Попробуйте позже.' }, { status: 429 })
   }
 
   try {
     const body = await req.json()
-    const { customer_name, customer_phone, customer_comment, customer_type, items, total_price, _hp } = body
+    const { customer_name, customer_phone, customer_email, customer_comment, customer_type, items, total_price, _hp } = body
 
     // Honeypot: боты заполняют скрытые поля
     if (_hp) {
@@ -124,6 +124,7 @@ export async function POST(req: NextRequest) {
         order_number,
         customer_name,
         customer_phone,
+        customer_email: customer_email || null,
         customer_comment: customer_comment || null,
         items,
         total_price: total_price || 0,
@@ -140,6 +141,16 @@ export async function POST(req: NextRequest) {
 
     const tgText = buildTelegramText(order_number, customer_type || 'individual', parsedData, items, total_price)
     await sendTelegram(tgText)
+
+    if (customer_email) {
+      await sendOrderConfirmation({
+        to: customer_email,
+        order_number,
+        customer_name,
+        items,
+        total_price: total_price || 0,
+      })
+    }
 
     return NextResponse.json({ success: true, order_number })
   } catch (e) {

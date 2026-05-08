@@ -1,19 +1,33 @@
-const store = new Map<string, { count: number; resetAt: number }>()
+import { supabaseAdmin } from './supabase'
 
-// Возвращает true если запрос разрешён, false если лимит исчерпан
-export function rateLimit(key: string, maxRequests: number, windowMs: number): boolean {
-  const now = Date.now()
-  const entry = store.get(key)
+export async function rateLimit(key: string, max: number, windowMs: number): Promise<boolean> {
+  try {
+    const now = Date.now()
+    const resetAt = new Date(now + windowMs).toISOString()
 
-  if (!entry || now > entry.resetAt) {
-    store.set(key, { count: 1, resetAt: now + windowMs })
+    const { data } = await supabaseAdmin
+      .from('rate_limits')
+      .select('count, reset_at')
+      .eq('key', key)
+      .maybeSingle()
+
+    if (!data || new Date(data.reset_at).getTime() < now) {
+      await supabaseAdmin
+        .from('rate_limits')
+        .upsert({ key, count: 1, reset_at: resetAt }, { onConflict: 'key' })
+      return true
+    }
+
+    if (data.count >= max) return false
+
+    await supabaseAdmin
+      .from('rate_limits')
+      .update({ count: data.count + 1 })
+      .eq('key', key)
+    return true
+  } catch {
     return true
   }
-
-  if (entry.count >= maxRequests) return false
-
-  entry.count++
-  return true
 }
 
 export function getClientIp(req: Request): string {

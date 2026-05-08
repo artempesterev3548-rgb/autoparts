@@ -6,11 +6,11 @@ import { CartItem } from '@/lib/types'
 
 type CustomerType = 'individual' | 'company'
 
-const EMPTY_IND = { name: '', phone: '', address: '', comment: '' }
+const EMPTY_IND = { name: '', phone: '', email: '', address: '', comment: '' }
 const EMPTY_CO = {
   company_name: '', inn: '', kpp: '', ogrn: '', legal_address: '',
   bank: '', bik: '', account: '', corr_account: '', edo: '',
-  contact_name: '', contact_position: '', contact_phone: '',
+  contact_name: '', contact_position: '', contact_phone: '', contact_email: '',
   delivery_address: '', comment: '',
 }
 
@@ -64,8 +64,9 @@ export default function CartPage() {
     setSending(true)
     setError('')
     try {
+      const customer_email = isInd ? ind.email : co.contact_email
       const customer_data = isInd
-        ? { type: 'individual', name: ind.name, phone: ind.phone, address: ind.address, comment: ind.comment }
+        ? { type: 'individual', name: ind.name, phone: ind.phone, email: ind.email, address: ind.address, comment: ind.comment }
         : { type: 'company', ...co }
 
       const res = await fetch('/api/orders', {
@@ -74,6 +75,7 @@ export default function CartPage() {
         body: JSON.stringify({
           customer_name,
           customer_phone,
+          customer_email: customer_email || null,
           customer_comment: JSON.stringify(customer_data),
           customer_type: type,
           items,
@@ -118,13 +120,13 @@ export default function CartPage() {
           </Link>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 24, alignItems: 'start' }}>
+        <div className="cart-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 24, alignItems: 'start' }}>
 
           {/* Товары */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {items.map(item => (
-              <div key={item.product_id} style={{ background: 'white', borderRadius: 12, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 14, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-                <div style={{ width: 44, height: 44, background: '#f4f6f8', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0 }}>🔧</div>
+              <div key={item.product_id} className="cart-item" style={{ background: 'white', borderRadius: 12, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 10, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+                <div style={{ width: 40, height: 40, background: '#f4f6f8', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>🔧</div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 11, color: '#aaa', fontFamily: 'monospace' }}>{item.article}</div>
                   <div style={{ fontSize: 13, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</div>
@@ -132,16 +134,16 @@ export default function CartPage() {
                     {item.in_stock ? '✓ В наличии' : `⏱ ${item.delivery_days} дн.`}
                   </div>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+                <div className="cart-item-controls" style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
                   <button onClick={() => handleQty(item.product_id, item.quantity - 1)} style={{ width: 28, height: 28, border: '1px solid #e5e7eb', borderRadius: 8, background: 'white', cursor: 'pointer' }}>−</button>
-                  <span style={{ width: 28, textAlign: 'center', fontSize: 13, fontWeight: 600 }}>{item.quantity}</span>
+                  <span style={{ width: 24, textAlign: 'center', fontSize: 13, fontWeight: 600 }}>{item.quantity}</span>
                   <button onClick={() => handleQty(item.product_id, item.quantity + 1)} style={{ width: 28, height: 28, border: '1px solid #e5e7eb', borderRadius: 8, background: 'white', cursor: 'pointer' }}>+</button>
+                  <div style={{ textAlign: 'right', marginLeft: 8 }}>
+                    <div style={{ fontWeight: 700, fontSize: 13 }}>{(item.price * item.quantity).toLocaleString('ru')} ₽</div>
+                    <div style={{ fontSize: 10, color: '#aaa' }}>{item.price.toLocaleString('ru')} ₽/{item.unit}</div>
+                  </div>
+                  <button onClick={() => handleRemove(item.product_id)} style={{ color: '#ccc', background: 'none', border: 'none', cursor: 'pointer', fontSize: 18, lineHeight: 1 }}>✕</button>
                 </div>
-                <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                  <div style={{ fontWeight: 700 }}>{(item.price * item.quantity).toLocaleString('ru')} ₽</div>
-                  <div style={{ fontSize: 11, color: '#aaa' }}>{item.price.toLocaleString('ru')} ₽/{item.unit}</div>
-                </div>
-                <button onClick={() => handleRemove(item.product_id)} style={{ color: '#ccc', background: 'none', border: 'none', cursor: 'pointer', fontSize: 18, lineHeight: 1, flexShrink: 0 }}>✕</button>
               </div>
             ))}
             <div style={{ textAlign: 'right', fontSize: 17, fontWeight: 700, paddingRight: 4 }}>
@@ -150,7 +152,7 @@ export default function CartPage() {
           </div>
 
           {/* Форма */}
-          <div style={{ background: 'white', borderRadius: 16, padding: 20, boxShadow: '0 1px 8px rgba(0,0,0,0.07)', position: 'sticky', top: 80 }}>
+          <div className="cart-form" style={{ background: 'white', borderRadius: 16, padding: 20, boxShadow: '0 1px 8px rgba(0,0,0,0.07)', position: 'sticky', top: 80 }}>
             <h2 style={{ fontWeight: 700, fontSize: 15, marginBottom: 14 }}>Оформить заявку</h2>
 
             {/* Переключатель типа */}
@@ -181,6 +183,10 @@ export default function CartPage() {
                   <div>
                     <label className={lbl}>Телефон *</label>
                     <input className={inp} value={ind.phone} onChange={e => setInd(f => ({ ...f, phone: e.target.value }))} placeholder="+7 (999) 123-45-67" type="tel" required />
+                  </div>
+                  <div>
+                    <label className={lbl}>E-mail (для подтверждения заказа)</label>
+                    <input className={inp} value={ind.email} onChange={e => setInd(f => ({ ...f, email: e.target.value }))} placeholder="example@mail.ru" type="email" />
                   </div>
                   <div>
                     <label className={lbl}>Адрес СДЭК для доставки *</label>
@@ -253,6 +259,10 @@ export default function CartPage() {
                   <div>
                     <label className={lbl}>Телефон *</label>
                     <input className={inp} value={co.contact_phone} onChange={e => setCo(f => ({ ...f, contact_phone: e.target.value }))} placeholder="+7 (999) 123-45-67" type="tel" required />
+                  </div>
+                  <div>
+                    <label className={lbl}>E-mail (для подтверждения заказа)</label>
+                    <input className={inp} value={co.contact_email} onChange={e => setCo(f => ({ ...f, contact_email: e.target.value }))} placeholder="example@company.ru" type="email" />
                   </div>
                   <div>
                     <label className={lbl}>Адрес СДЭК для доставки *</label>

@@ -9,14 +9,15 @@ export default function RequisitesPage() {
             ['Краткое наименование', 'ООО «ТК Саяны Плюс»'],
             ['ИНН', '2413007682'],
             ['КПП', '241301001'],
+            ['Юридический адрес', '662840, Красноярский край, Ермаковский район, поселок Танзыбей, Береговая ул, д. 12, кв. 1'],
             ['Расчётный счёт', '40702810702500056039'],
             ['Банк', 'ООО «Банк Точка»'],
             ['БИК', '044525104'],
             ['Корр. счёт', '30101810745374525104'],
           ].map(([label, value]) => (
-            <div key={label} className="flex gap-4 py-2 border-b border-gray-100 last:border-0">
-              <div className="text-gray-400 w-44 shrink-0">{label}</div>
-              <div className="font-medium text-gray-800">{value}</div>
+            <div key={label} className="flex flex-col sm:flex-row sm:gap-4 py-2 border-b border-gray-100 last:border-0">
+              <div className="text-gray-400 text-xs sm:text-sm sm:w-44 shrink-0 mb-0.5 sm:mb-0">{label}</div>
+              <div className="font-medium text-gray-800 break-words">{value}</div>
             </div>
           ))}
         </div>

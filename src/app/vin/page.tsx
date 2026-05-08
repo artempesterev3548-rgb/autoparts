@@ -143,7 +143,7 @@ export default function VinPage() {
           </div>
 
           {/* Переключатель вкладок */}
-          <div style={{ display: 'flex', gap: 8, marginBottom: 28 }}>
+          <div className="vin-tab-row" style={{ display: 'flex', gap: 8, marginBottom: 28 }}>
             <button style={tabStyle(tab === 'vin')} onClick={() => { setTab('vin'); setError(''); }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="2" y="7" width="20" height="10" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
@@ -161,18 +161,18 @@ export default function VinPage() {
           {/* ── VIN вкладка ── */}
           {tab === 'vin' && (
             <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
-              <div style={{ width: 64, height: 64, background: 'rgba(255,107,0,0.15)', border: '1px solid rgba(255,107,0,0.3)', borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <div className="vin-hero-icon" style={{ width: 64, height: 64, background: 'rgba(255,107,0,0.15)', border: '1px solid rgba(255,107,0,0.3)', borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="2" y="7" width="20" height="10" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
                   <line x1="12" y1="12" x2="12" y2="12.01"/>
                 </svg>
               </div>
               <div style={{ flex: 1 }}>
-                <h1 style={{ fontSize: 26, fontWeight: 800, color: 'white', marginBottom: 6, letterSpacing: -0.5 }}>Поиск по VIN-номеру</h1>
+                <h1 className="vin-hero-h1" style={{ fontSize: 26, fontWeight: 800, color: 'white', marginBottom: 6, letterSpacing: -0.5 }}>Поиск по VIN-номеру</h1>
                 <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, marginBottom: 20 }}>
                   Введите 17-значный VIN — определим марку, модель, год и подберём запчасти
                 </p>
-                <div style={{ display: 'flex', gap: 10 }}>
+                <div className="vin-search-row" style={{ display: 'flex', gap: 10 }}>
                   <input ref={vinRef} value={vin} onChange={e => setVin(cleanVin(e.target.value))}
                     onKeyDown={e => e.key === 'Enter' && searchVin()}
                     placeholder="Введите VIN (17 символов)" maxLength={17}
@@ -199,17 +199,17 @@ export default function VinPage() {
           {/* ── OEM вкладка ── */}
           {tab === 'oem' && (
             <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
-              <div style={{ width: 64, height: 64, background: 'rgba(255,107,0,0.15)', border: '1px solid rgba(255,107,0,0.3)', borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <div className="vin-hero-icon" style={{ width: 64, height: 64, background: 'rgba(255,107,0,0.15)', border: '1px solid rgba(255,107,0,0.3)', borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
                 </svg>
               </div>
               <div style={{ flex: 1 }}>
-                <h1 style={{ fontSize: 26, fontWeight: 800, color: 'white', marginBottom: 6, letterSpacing: -0.5 }}>Поиск по OEM / артикулу</h1>
+                <h1 className="vin-hero-h1" style={{ fontSize: 26, fontWeight: 800, color: 'white', marginBottom: 6, letterSpacing: -0.5 }}>Поиск по OEM / артикулу</h1>
                 <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, marginBottom: 20 }}>
                   Введите оригинальный номер детали — найдём в нашем каталоге и у партнёров
                 </p>
-                <div style={{ display: 'flex', gap: 10 }}>
+                <div className="vin-search-row" style={{ display: 'flex', gap: 10 }}>
                   <input ref={oemRef} value={oem}
                     onChange={e => setOem(e.target.value.toUpperCase())}
                     onKeyDown={e => e.key === 'Enter' && searchOem()}

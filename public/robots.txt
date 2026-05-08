@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /lk/
+Disallow: /api/
+Disallow: /auth/
+
+Allow: /
+
+Sitemap: https://truckline.store/sitemap.xml

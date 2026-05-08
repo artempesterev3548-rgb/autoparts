@@ -57,15 +57,15 @@ export default function PersonalDataPage() {
           <p style={S.p}>До исполнения Заказа и истечения сроков исковой давности (3 года) или до отзыва согласия.</p>
 
           <h2 style={S.h2}>Отзыв согласия</h2>
-          <p style={S.p}>Письменным уведомлением на email: <a href="mailto:info@example.ru" style={{ color: '#FF6B00' }}>info@example.ru</a> или почтовым отправлением по адресу Оператора. Срок ответа — 30 дней.</p>
+          <p style={S.p}>Письменным уведомлением на email: <a href="mailto:info.truckline@mail.ru" style={{ color: '#FF6B00' }}>info.truckline@mail.ru</a> или почтовым отправлением по адресу Оператора. Срок ответа — 30 дней.</p>
 
           <p style={{ ...S.p, marginTop: 24, padding: '16px 20px', background: '#F0F2F5', borderRadius: 12, borderLeft: '4px solid #FF6B00' }}>
             Я ознакомлен(а) с <a href="/privacy" style={{ color: '#FF6B00' }}>Политикой конфиденциальности</a>. Дата акцепта фиксируется автоматически при нажатии соответствующей кнопки на Сайте.
           </p>
 
           <h2 style={S.h2}>Реквизиты Оператора</h2>
-          <p style={S.p}>ООО «ТК Саяны Плюс» · ИНН 2413007682 · КПП 241301001<br />
-          Email: <a href="mailto:info@example.ru" style={{ color: '#FF6B00' }}>info@example.ru</a> · Тел.: <a href="tel:+79232130101" style={{ color: '#FF6B00' }}>+7 (923) 213-01-01</a></p>
+          <p style={S.p}>ООО «ТК Саяны Плюс» · ИНН 2413007682 · КПП 241301001<br />          Юридический адрес: 662840, Красноярский край, Ермаковский район, поселок Танзыбей, Береговая ул, д. 12, кв. 1<br />
+          Email: <a href="mailto:info.truckline@mail.ru" style={{ color: '#FF6B00' }}>info.truckline@mail.ru</a> · Тел.: <a href="tel:+79232130101" style={{ color: '#FF6B00' }}>+7 (923) 213-01-01</a></p>
 
         </div>
       </div>

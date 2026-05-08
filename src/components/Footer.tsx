@@ -9,10 +9,10 @@ export default function Footer() {
   return (
     <footer style={{ background: '#0B1E35' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '52px 24px 24px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 40, marginBottom: 40 }}>
+        <div className="footer-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 40, marginBottom: 40 }}>
 
           {/* Бренд */}
-          <div>
+          <div className="footer-brand-col">
             <div style={{ marginBottom: 10 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/truckline-logo.png" alt="TruckLine" style={{ display: 'block', height: 36, width: 'auto' }} />
@@ -25,9 +25,9 @@ export default function Footer() {
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                 +7 (923) 213-01-01
               </a>
-              <a href="mailto:info@example.ru" style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'rgba(255,255,255,0.45)', fontSize: 13, textDecoration: 'none' }}>
+              <a href="mailto:info.truckline@mail.ru" style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'rgba(255,255,255,0.45)', fontSize: 13, textDecoration: 'none' }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                info@example.ru
+                info.truckline@mail.ru
               </a>
             </div>
           </div>
@@ -35,7 +35,7 @@ export default function Footer() {
           {/* Покупателям */}
           <div>
             <div style={col.heading}>Покупателям</div>
-            {[['Как заказать', '/about'], ['Доставка', '/delivery'], ['Возврат', '/returns'], ['Оплата', '/about']].map(([label, href]) => (
+            {[['Как заказать', '/how-to-order'], ['Доставка', '/delivery'], ['Возврат', '/returns'], ['Оплата', '/delivery']].map(([label, href]) => (
               <Link key={label} href={href} style={col.link}>{label}</Link>
             ))}
           </div>
@@ -70,10 +70,10 @@ export default function Footer() {
         </div>
 
         {/* Нижняя строка */}
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 20, display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, fontSize: 12, color: 'rgba(255,255,255,0.18)' }}>
+        <div className="footer-bottom" style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 20, display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, fontSize: 12, color: 'rgba(255,255,255,0.18)' }}>
           <span>© 2024–2026 ООО «ТК Саяны Плюс»</span>
           <span>ИНН: 2413007682 · КПП: 241301001</span>
-          <span>Не является публичной офертой</span>
+          <span>Цены и наличие могут быть изменены. Уточняйте у менеджера.</span>
         </div>
       </div>
     </footer>
