@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
+import { requireAdmin } from '@/lib/requireAdmin'
 
 export async function GET(req: NextRequest) {
+  const deny = await requireAdmin(req); if (deny) return deny
   const { searchParams } = new URL(req.url)
   const search = searchParams.get('search')
 
@@ -18,6 +20,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const deny = await requireAdmin(req); if (deny) return deny
   try {
     const body = await req.json()
     const { data, error } = await supabaseAdmin

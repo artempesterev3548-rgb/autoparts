@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
+import { requireAdmin } from '@/lib/requireAdmin'
 
-export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const deny = await requireAdmin(req); if (deny) return deny
   const { id } = await params
   const { data, error } = await supabaseAdmin
     .from('service_orders').select('*').eq('id', id).single()
@@ -10,15 +12,14 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
 }
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const deny = await requireAdmin(req); if (deny) return deny
   const { id } = await params
   try {
     const body = await req.json()
     const { data, error } = await supabaseAdmin
       .from('service_orders')
       .update({ ...body, updated_at: new Date().toISOString() })
-      .eq('id', id)
-      .select()
-      .single()
+      .eq('id', id).select().single()
     if (error) throw error
     return NextResponse.json(data)
   } catch (e: any) {
@@ -26,7 +27,8 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   }
 }
 
-export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const deny = await requireAdmin(req); if (deny) return deny
   const { id } = await params
   const { error } = await supabaseAdmin.from('service_orders').delete().eq('id', id)
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })

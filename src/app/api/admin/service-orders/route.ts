@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
+import { requireAdmin } from '@/lib/requireAdmin'
 
 export async function GET(req: NextRequest) {
+  const deny = await requireAdmin(req); if (deny) return deny
   const { searchParams } = new URL(req.url)
   const status = searchParams.get('status')
   const payment = searchParams.get('payment')
@@ -29,6 +31,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const deny = await requireAdmin(req); if (deny) return deny
   try {
     const body = await req.json()
     const d = new Date().toISOString().slice(0, 10).replace(/-/g, '')
