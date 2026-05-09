@@ -7,7 +7,7 @@ import { getSupabaseBrowser } from '@/lib/auth'
 
 const TruckLineLogo = ({ height = 62 }: { height?: number }) => (
   // eslint-disable-next-line @next/next/no-img-element
-  <img src="/truckline-logo.png" alt="TruckLine" style={{ display: 'block', height, width: 'auto' }} />
+  <img src="/truckline-logo-v2.png" alt="TruckLine" style={{ display: 'block', height, width: 'auto' }} />
 )
 
 const IconParts = () => (
