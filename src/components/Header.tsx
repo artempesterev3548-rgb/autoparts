@@ -33,7 +33,7 @@ const IconSearch = () => (
 )
 
 const IconCart = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="9" cy="21" r="1"/>
     <circle cx="20" cy="21" r="1"/>
     <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
@@ -92,9 +92,9 @@ export default function Header() {
           .hdr-nav a { padding: 8px 10px !important; }
           .hdr-main-inner { padding: 0 8px !important; gap: 4px !important; }
           .hdr-login-label { display: none !important; }
-          .hdr-login { padding: 8px 10px !important; gap: 0 !important; min-width: 0 !important; }
-          .hdr-cart { padding: 10px 12px !important; gap: 0 !important; }
-          .hdr-logo img { height: 32px !important; }
+          .hdr-login { padding: 6px 8px !important; gap: 0 !important; min-width: 0 !important; }
+          .hdr-cart { padding: 8px 9px !important; gap: 0 !important; }
+          .hdr-logo img { height: 27px !important; }
           .hdr-main-inner { height: 48px !important; }
         }
         header { overflow: hidden; }
@@ -120,7 +120,7 @@ export default function Header() {
         <div className="hdr-main-inner" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48 }}>
           {/* Логотип */}
           <Link href="/" className="hdr-logo" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', flexShrink: 0 }}>
-            <TruckLineLogo height={36} />
+            <TruckLineLogo height={30} />
           </Link>
 
           {/* Навигация */}
@@ -139,38 +139,38 @@ export default function Header() {
           {/* Войти / ЛК */}
           {userName ? (
             <Link href="/lk" className="hdr-login" style={{
-              display: 'flex', alignItems: 'center', gap: 7,
-              padding: '8px 16px', borderRadius: 10, fontSize: 14, fontWeight: 600,
+              display: 'flex', alignItems: 'center', gap: 5,
+              padding: '6px 12px', borderRadius: 8, fontSize: 11, fontWeight: 600,
               textDecoration: 'none', color: 'rgba(255,255,255,0.85)',
               background: 'rgba(255,255,255,0.08)', flexShrink: 0,
             }}>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
               <span className="hdr-login-label">{userName.length > 14 ? userName.slice(0, 14) + '…' : userName}</span>
             </Link>
           ) : (
             <Link href="/auth/login" className="hdr-login" style={{
-              display: 'flex', alignItems: 'center', gap: 7,
-              padding: '8px 16px', borderRadius: 10, fontSize: 14, fontWeight: 600,
+              display: 'flex', alignItems: 'center', gap: 5,
+              padding: '6px 12px', borderRadius: 8, fontSize: 11, fontWeight: 600,
               textDecoration: 'none', color: 'rgba(255,255,255,0.85)',
               background: 'rgba(255,255,255,0.08)', flexShrink: 0,
             }}>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
               <span className="hdr-login-label">Войти</span>
             </Link>
           )}
 
           {/* Корзина */}
           <Link href="/cart" className="hdr-cart" style={{
-            display: 'flex', alignItems: 'center', gap: 8, position: 'relative',
-            background: '#FF6B00', color: 'white', padding: '10px 20px',
-            borderRadius: 10, fontWeight: 700, fontSize: 14, textDecoration: 'none',
+            display: 'flex', alignItems: 'center', gap: 6, position: 'relative',
+            background: '#FF6B00', color: 'white', padding: '8px 15px',
+            borderRadius: 8, fontWeight: 700, fontSize: 11, textDecoration: 'none',
             flexShrink: 0,
           }}>
             <IconCart /> <span className="hdr-login-label">Корзина</span>
             {cartCount > 0 && (
               <span style={{
                 background: 'white', color: '#FF6B00', borderRadius: '50%',
-                width: 18, height: 18, fontSize: 11, fontWeight: 800,
+                width: 14, height: 14, fontSize: 9, fontWeight: 800,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
                 {cartCount}
