@@ -5,26 +5,17 @@ import { usePathname } from 'next/navigation'
 import { getCart } from '@/lib/cart'
 import { getSupabaseBrowser } from '@/lib/auth'
 
-const TruckLineLogo = ({ height = 54 }: { height?: number }) => (
+const TruckLineLogo = ({ height = 62 }: { height?: number }) => (
   // eslint-disable-next-line @next/next/no-img-element
   <img src="/truckline-logo.png" alt="TruckLine" style={{ display: 'block', height, width: 'auto' }} />
 )
 
-const IconCar = () => (
+const IconParts = () => (
   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M19 17H5a2 2 0 0 1-2-2v-4l2.5-5h11L19 11v4a2 2 0 0 1-2 2z"/>
-    <circle cx="7.5" cy="17" r="2.5"/>
-    <circle cx="16.5" cy="17" r="2.5"/>
-    <line x1="3" y1="11" x2="21" y2="11"/>
-  </svg>
-)
-
-const IconTruck = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="1" y="3" width="15" height="13" rx="1"/>
-    <path d="M16 8h4l3 3v5h-7V8z"/>
-    <circle cx="5.5" cy="18.5" r="2.5"/>
-    <circle cx="18.5" cy="18.5" r="2.5"/>
+    <rect x="2" y="3" width="8" height="8" rx="1"/>
+    <rect x="14" y="3" width="8" height="8" rx="1"/>
+    <rect x="2" y="13" width="8" height="8" rx="1"/>
+    <rect x="14" y="13" width="8" height="8" rx="1"/>
   </svg>
 )
 
@@ -99,11 +90,13 @@ export default function Header() {
           .hdr-nav-label { display: none !important; }
           .hdr-nav { gap: 0 !important; }
           .hdr-nav a { padding: 8px 10px !important; }
-          .hdr-main-inner { padding: 0 12px !important; }
+          .hdr-main-inner { padding: 0 8px !important; gap: 4px !important; }
           .hdr-login-label { display: none !important; }
-          .hdr-login { padding: 8px 10px !important; gap: 0 !important; }
+          .hdr-login { padding: 8px 10px !important; gap: 0 !important; min-width: 0 !important; }
           .hdr-cart { padding: 10px 12px !important; gap: 0 !important; }
+          .hdr-logo img { height: 44px !important; }
         }
+        header { overflow: hidden; }
       `}</style>
 
       {/* Верхняя полоска */}
@@ -125,26 +118,19 @@ export default function Header() {
       <div style={{ background: '#0F2744', boxShadow: '0 2px 20px rgba(0,0,0,0.35)' }}>
         <div className="hdr-main-inner" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 64 }}>
           {/* Логотип */}
-          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', flexShrink: 0 }}>
-            <TruckLineLogo height={54} />
+          <Link href="/" className="hdr-logo" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', flexShrink: 0 }}>
+            <TruckLineLogo height={62} />
           </Link>
 
           {/* Навигация */}
-          <nav className="hdr-nav" style={{ display: 'flex', gap: 2 }}>
-            <Link href="/cars" style={navLink(isActive('/cars'))}>
-              <IconCar /> <span className="hdr-nav-label">Легковые</span>
-            </Link>
-            <Link href="/special" style={navLink(isActive('/special'))}>
-              <IconTruck /> <span className="hdr-nav-label">Спецтехника</span>
-            </Link>
-            <Link href="/vin" style={navLink(isActive('/vin'))}>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="10" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="12.01"/></svg>
-              <span className="hdr-nav-label">VIN/ОЕМ</span>
+          <nav className="hdr-nav" style={{ display: 'flex', gap: 2, flex: 1, justifyContent: 'center' }}>
+            <Link href="/parts" style={navLink(isActive('/parts') || isActive('/cars') || isActive('/special') || isActive('/vin'))}>
+              <IconParts /> <span className="hdr-nav-label">Запчасти</span>
             </Link>
             <Link href="/service" style={navLink(isActive('/service'))}>
               <IconWrench /> <span className="hdr-nav-label">Сервис</span>
             </Link>
-            <Link href="/search" style={navLink(false)}>
+            <Link href="/search" style={navLink(pathname === '/search')}>
               <IconSearch /> <span className="hdr-nav-label">Поиск</span>
             </Link>
           </nav>

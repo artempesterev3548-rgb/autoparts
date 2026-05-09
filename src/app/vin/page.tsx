@@ -139,7 +139,9 @@ export default function VinPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 20, fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>
             <Link href="/" style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>Главная</Link>
             <span>/</span>
-            <span style={{ color: 'rgba(255,255,255,0.75)' }}>Поиск</span>
+            <Link href="/parts" style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>Запчасти</Link>
+            <span>/</span>
+            <span style={{ color: 'rgba(255,255,255,0.75)' }}>Поиск VIN/OEM</span>
           </div>
 
           {/* Переключатель вкладок */}
