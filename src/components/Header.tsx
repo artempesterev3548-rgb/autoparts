@@ -94,8 +94,8 @@ export default function Header() {
           .hdr-login-label { display: none !important; }
           .hdr-login { padding: 8px 10px !important; gap: 0 !important; min-width: 0 !important; }
           .hdr-cart { padding: 10px 12px !important; gap: 0 !important; }
-          .hdr-logo img { height: 72px !important; }
-          .hdr-main-inner { height: 80px !important; }
+          .hdr-logo img { height: 32px !important; }
+          .hdr-main-inner { height: 48px !important; }
         }
         header { overflow: hidden; }
       `}</style>
@@ -117,10 +117,10 @@ export default function Header() {
 
       {/* Основная шапка */}
       <div style={{ background: '#0F2744', boxShadow: '0 2px 20px rgba(0,0,0,0.35)' }}>
-        <div className="hdr-main-inner" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 96 }}>
+        <div className="hdr-main-inner" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48 }}>
           {/* Логотип */}
           <Link href="/" className="hdr-logo" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', flexShrink: 0 }}>
-            <TruckLineLogo height={120} />
+            <TruckLineLogo height={36} />
           </Link>
 
           {/* Навигация */}
