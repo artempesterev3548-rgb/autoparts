@@ -5,6 +5,25 @@ export const metadata = { title: 'Запчасти — TruckLine' }
 export default function PartsPage() {
   return (
     <div style={{ background: '#F0F2F5', minHeight: '100vh', padding: '40px 16px' }}>
+      <style>{`
+        .parts-card {
+          background: white;
+          border-radius: 20px;
+          padding: 32px 28px;
+          box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+          border: 2px solid transparent;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          text-decoration: none;
+          transition: transform .2s, box-shadow .2s, border-color .2s;
+        }
+        .parts-card:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 28px rgba(15,39,68,0.13);
+          border-color: #FF6B00;
+        }
+      `}</style>
       <div style={{ maxWidth: 900, margin: '0 auto' }}>
 
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
@@ -25,160 +44,91 @@ export default function PartsPage() {
         }}>
 
           {/* Легковые */}
-          <Link href="/cars" style={{ textDecoration: 'none' }}>
+          <Link href="/cars" className="parts-card">
             <div style={{
-              background: 'white',
-              borderRadius: 20,
-              padding: '32px 28px',
-              boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
-              cursor: 'pointer',
-              transition: 'transform .2s, box-shadow .2s',
-              border: '2px solid transparent',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 16,
-            }}
-            onMouseEnter={e => {
-              (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-3px)'
-              ;(e.currentTarget as HTMLDivElement).style.boxShadow = '0 8px 28px rgba(15,39,68,0.13)'
-              ;(e.currentTarget as HTMLDivElement).style.borderColor = '#FF6B00'
-            }}
-            onMouseLeave={e => {
-              (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'
-              ;(e.currentTarget as HTMLDivElement).style.boxShadow = '0 2px 12px rgba(0,0,0,0.07)'
-              ;(e.currentTarget as HTMLDivElement).style.borderColor = 'transparent'
+              width: 60, height: 60, borderRadius: 16,
+              background: '#FFF3E8',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <div style={{
-                width: 60, height: 60, borderRadius: 16,
-                background: '#FFF3E8',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M19 17H5a2 2 0 0 1-2-2v-4l2.5-5h11L19 11v4a2 2 0 0 1-2 2z"/>
-                  <circle cx="7.5" cy="17" r="2.5"/>
-                  <circle cx="16.5" cy="17" r="2.5"/>
-                  <line x1="3" y1="11" x2="21" y2="11"/>
-                </svg>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M19 17H5a2 2 0 0 1-2-2v-4l2.5-5h11L19 11v4a2 2 0 0 1-2 2z"/>
+                <circle cx="7.5" cy="17" r="2.5"/>
+                <circle cx="16.5" cy="17" r="2.5"/>
+                <line x1="3" y1="11" x2="21" y2="11"/>
+              </svg>
+            </div>
+            <div>
+              <div style={{ fontSize: 19, fontWeight: 800, color: '#0F2744', marginBottom: 6 }}>
+                Легковые авто
               </div>
-              <div>
-                <div style={{ fontSize: 19, fontWeight: 800, color: '#0F2744', marginBottom: 6 }}>
-                  Легковые авто
-                </div>
-                <div style={{ fontSize: 14, color: '#6B7280', lineHeight: 1.6 }}>
-                  Запчасти для легковых и среднетоннажных автомобилей: двигатель, трансмиссия, подвеска, кузов, электрика и расходники
-                </div>
+              <div style={{ fontSize: 14, color: '#6B7280', lineHeight: 1.6 }}>
+                Запчасти для легковых и среднетоннажных автомобилей: двигатель, трансмиссия, подвеска, кузов, электрика и расходники
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#FF6B00', fontWeight: 700, fontSize: 14 }}>
-                Перейти в каталог
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-                </svg>
-              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#FF6B00', fontWeight: 700, fontSize: 14 }}>
+              Перейти в каталог
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
             </div>
           </Link>
 
           {/* Спецтехника */}
-          <Link href="/special" style={{ textDecoration: 'none' }}>
+          <Link href="/special" className="parts-card">
             <div style={{
-              background: 'white',
-              borderRadius: 20,
-              padding: '32px 28px',
-              boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
-              cursor: 'pointer',
-              transition: 'transform .2s, box-shadow .2s',
-              border: '2px solid transparent',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 16,
-            }}
-            onMouseEnter={e => {
-              (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-3px)'
-              ;(e.currentTarget as HTMLDivElement).style.boxShadow = '0 8px 28px rgba(15,39,68,0.13)'
-              ;(e.currentTarget as HTMLDivElement).style.borderColor = '#FF6B00'
-            }}
-            onMouseLeave={e => {
-              (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'
-              ;(e.currentTarget as HTMLDivElement).style.boxShadow = '0 2px 12px rgba(0,0,0,0.07)'
-              ;(e.currentTarget as HTMLDivElement).style.borderColor = 'transparent'
+              width: 60, height: 60, borderRadius: 16,
+              background: '#EFF6FF',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <div style={{
-                width: 60, height: 60, borderRadius: 16,
-                background: '#EFF6FF',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="1" y="3" width="15" height="13" rx="1"/>
-                  <path d="M16 8h4l3 3v5h-7V8z"/>
-                  <circle cx="5.5" cy="18.5" r="2.5"/>
-                  <circle cx="18.5" cy="18.5" r="2.5"/>
-                </svg>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="1" y="3" width="15" height="13" rx="1"/>
+                <path d="M16 8h4l3 3v5h-7V8z"/>
+                <circle cx="5.5" cy="18.5" r="2.5"/>
+                <circle cx="18.5" cy="18.5" r="2.5"/>
+              </svg>
+            </div>
+            <div>
+              <div style={{ fontSize: 19, fontWeight: 800, color: '#0F2744', marginBottom: 6 }}>
+                Спецтехника и грузовики
               </div>
-              <div>
-                <div style={{ fontSize: 19, fontWeight: 800, color: '#0F2744', marginBottom: 6 }}>
-                  Спецтехника и грузовики
-                </div>
-                <div style={{ fontSize: 14, color: '#6B7280', lineHeight: 1.6 }}>
-                  Запчасти для грузовой и специальной техники: КАМАЗы, МАЗы, Урал, экскаваторы, бульдозеры, краны, тракторы
-                </div>
+              <div style={{ fontSize: 14, color: '#6B7280', lineHeight: 1.6 }}>
+                Запчасти для грузовой и специальной техники: КАМАЗы, МАЗы, Урал, экскаваторы, бульдозеры, краны, тракторы
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#2563EB', fontWeight: 700, fontSize: 14 }}>
-                Перейти в каталог
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-                </svg>
-              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#2563EB', fontWeight: 700, fontSize: 14 }}>
+              Перейти в каталог
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
             </div>
           </Link>
 
           {/* VIN/OEM */}
-          <Link href="/vin" style={{ textDecoration: 'none' }}>
+          <Link href="/vin" className="parts-card">
             <div style={{
-              background: 'white',
-              borderRadius: 20,
-              padding: '32px 28px',
-              boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
-              cursor: 'pointer',
-              transition: 'transform .2s, box-shadow .2s',
-              border: '2px solid transparent',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 16,
-            }}
-            onMouseEnter={e => {
-              (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-3px)'
-              ;(e.currentTarget as HTMLDivElement).style.boxShadow = '0 8px 28px rgba(15,39,68,0.13)'
-              ;(e.currentTarget as HTMLDivElement).style.borderColor = '#FF6B00'
-            }}
-            onMouseLeave={e => {
-              (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'
-              ;(e.currentTarget as HTMLDivElement).style.boxShadow = '0 2px 12px rgba(0,0,0,0.07)'
-              ;(e.currentTarget as HTMLDivElement).style.borderColor = 'transparent'
+              width: 60, height: 60, borderRadius: 16,
+              background: '#F0FDF4',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <div style={{
-                width: 60, height: 60, borderRadius: 16,
-                background: '#F0FDF4',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#16A34A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="7" width="20" height="10" rx="2"/>
-                  <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
-                  <line x1="12" y1="12" x2="12" y2="12.01"/>
-                </svg>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#16A34A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="7" width="20" height="10" rx="2"/>
+                <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+                <line x1="12" y1="12" x2="12" y2="12.01"/>
+              </svg>
+            </div>
+            <div>
+              <div style={{ fontSize: 19, fontWeight: 800, color: '#0F2744', marginBottom: 6 }}>
+                Поиск по VIN / OEM
               </div>
-              <div>
-                <div style={{ fontSize: 19, fontWeight: 800, color: '#0F2744', marginBottom: 6 }}>
-                  Поиск по VIN / OEM
-                </div>
-                <div style={{ fontSize: 14, color: '#6B7280', lineHeight: 1.6 }}>
-                  Введите VIN номер автомобиля или артикул детали — подберём точный аналог по вашему автомобилю
-                </div>
+              <div style={{ fontSize: 14, color: '#6B7280', lineHeight: 1.6 }}>
+                Введите VIN номер автомобиля или артикул детали — подберём точный аналог по вашему автомобилю
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#16A34A', fontWeight: 700, fontSize: 14 }}>
-                Найти запчасть
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-                </svg>
-              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#16A34A', fontWeight: 700, fontSize: 14 }}>
+              Найти запчасть
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
             </div>
           </Link>
 
