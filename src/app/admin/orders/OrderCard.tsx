@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 
 interface Supplier {
   id: number
@@ -80,11 +80,14 @@ function parseCustomer(order: any) {
 }
 
 export default function OrderCard({ order, isSelected, supplierMap }: Props) {
-  const [status, setStatus] = useState(order.status)
-  const [notes, setNotes] = useState(order.manager_notes ?? '')
-  const [open, setOpen] = useState(isSelected)
-  const [saving, setSaving] = useState(false)
-  const [saved, setSaved] = useState(false)
+  const [status, setStatus]               = useState(order.status)
+  const [notes, setNotes]                 = useState(order.manager_notes ?? '')
+  const [open, setOpen]                   = useState(isSelected)
+  const [saving, setSaving]               = useState(false)
+  const [saved, setSaved]                 = useState(false)
+  const [invoiceLoading, setInvoiceLoading] = useState(false)
+  const [invoiceUrl, setInvoiceUrl]       = useState<string | null>(order.invoice_pdf_url ?? null)
+  const [invoiceMsg, setInvoiceMsg]       = useState<string | null>(null)
 
   const save = async () => {
     setSaving(true)
@@ -97,6 +100,34 @@ export default function OrderCard({ order, isSelected, supplierMap }: Props) {
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)
   }
+
+  // ── Скачать PDF напрямую ─────────────────────────────────────
+  const downloadInvoice = useCallback(async () => {
+    window.open(`/api/admin/orders/${order.id}/invoice`, '_blank')
+  }, [order.id])
+
+  // ── Сгенерировать PDF + отправить в Telegram ─────────────────
+  const generateAndSend = useCallback(async () => {
+    setInvoiceLoading(true)
+    setInvoiceMsg(null)
+    try {
+      const res = await fetch(`/api/admin/orders/${order.id}/invoice`, { method: 'POST' })
+      const json = await res.json()
+      if (json.success) {
+        if (json.pdf_url) setInvoiceUrl(json.pdf_url)
+        setInvoiceMsg(json.tg_sent
+          ? '✅ Счёт сгенерирован и отправлен в Telegram'
+          : '✅ Счёт сгенерирован (Telegram не настроен)')
+      } else {
+        setInvoiceMsg('❌ Ошибка: ' + (json.error ?? 'неизвестная'))
+      }
+    } catch {
+      setInvoiceMsg('❌ Сетевая ошибка')
+    } finally {
+      setInvoiceLoading(false)
+      setTimeout(() => setInvoiceMsg(null), 5000)
+    }
+  }, [order.id])
 
   const s = STATUS_CFG[status] ?? STATUS_CFG.new
   const customer = parseCustomer(order)
@@ -270,6 +301,109 @@ export default function OrderCard({ order, isSelected, supplierMap }: Props) {
               style={{ width: '100%', border: '1.5px solid #e5e7eb', borderRadius: 8, padding: '8px 10px', fontSize: 13, outline: 'none', resize: 'none', fontFamily: 'inherit', boxSizing: 'border-box' }}
             />
           </div>
+
+          {/* ── Блок счёта ────────────────────────────────────────── */}
+          {!isService && (
+            <div style={{
+              background: 'linear-gradient(135deg, #fff7ed 0%, #fff3e0 100%)',
+              border: '1.5px solid #fed7aa',
+              borderRadius: 12,
+              padding: '12px 14px',
+              marginBottom: 12,
+            }}>
+              <div style={{ fontSize: 11, color: '#9ca3af', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 10 }}>
+                📄 Счёт на оплату
+              </div>
+
+              {invoiceUrl && (
+                <div style={{ marginBottom: 10, fontSize: 12, color: '#15803d', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  Счёт сформирован
+                  <a href={invoiceUrl} target="_blank" rel="noreferrer" style={{ color: '#FF6B00', textDecoration: 'underline', marginLeft: 4 }}>
+                    Открыть PDF
+                  </a>
+                </div>
+              )}
+
+              {invoiceMsg && (
+                <div style={{
+                  marginBottom: 10, fontSize: 12, padding: '6px 10px', borderRadius: 7,
+                  background: invoiceMsg.startsWith('✅') ? '#f0fdf4' : '#fef2f2',
+                  color:      invoiceMsg.startsWith('✅') ? '#15803d' : '#b91c1c',
+                }}>
+                  {invoiceMsg}
+                </div>
+              )}
+
+              <div style={{ display: 'flex', gap: 8 }}>
+                {/* Скачать PDF напрямую */}
+                <button
+                  onClick={downloadInvoice}
+                  style={{
+                    flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                    padding: '9px 0', borderRadius: 9, border: '1.5px solid #FF6B00',
+                    background: 'white', color: '#FF6B00', fontWeight: 700, fontSize: 13,
+                    cursor: 'pointer',
+                  }}
+                >
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  Скачать PDF
+                </button>
+
+                {/* Сгенерировать + отправить в TG */}
+                <button
+                  onClick={generateAndSend}
+                  disabled={invoiceLoading}
+                  style={{
+                    flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                    padding: '9px 0', borderRadius: 9, border: 'none',
+                    background: invoiceLoading ? '#ccc' : '#FF6B00',
+                    color: 'white', fontWeight: 700, fontSize: 13,
+                    cursor: invoiceLoading ? 'default' : 'pointer',
+                    transition: 'background .2s',
+                  }}
+                >
+                  {invoiceLoading ? (
+                    '⏳ Генерация...'
+                  ) : (
+                    <>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                      {invoiceUrl ? 'Переотправить' : 'Выставить счёт'}
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {/* Быстрые кнопки: позвонить / WhatsApp */}
+              <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                {order.customer_phone && (
+                  <>
+                    <a
+                      href={`tel:${order.customer_phone}`}
+                      style={{
+                        flex: 1, textAlign: 'center', padding: '7px 0', borderRadius: 8,
+                        background: '#f0f9ff', color: '#0369a1', fontWeight: 600, fontSize: 12,
+                        textDecoration: 'none', border: '1px solid #bae6fd',
+                      }}
+                    >
+                      📞 Позвонить
+                    </a>
+                    <a
+                      href={`https://wa.me/${order.customer_phone.replace(/\D/g, '')}?text=${encodeURIComponent(`Здравствуйте! По вашей заявке ${order.order_number} счёт готов к оплате.`)}`}
+                      target="_blank" rel="noreferrer"
+                      style={{
+                        flex: 1, textAlign: 'center', padding: '7px 0', borderRadius: 8,
+                        background: '#f0fdf4', color: '#15803d', fontWeight: 600, fontSize: 12,
+                        textDecoration: 'none', border: '1px solid #86efac',
+                      }}
+                    >
+                      💬 WhatsApp
+                    </a>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
 
           <button
             onClick={save}

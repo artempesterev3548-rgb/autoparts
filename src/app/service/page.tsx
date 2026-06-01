@@ -4,7 +4,7 @@ import ServiceRequestForm from './ServiceRequestForm'
 
 export const metadata = {
   title: 'Автосервис для тягачей и полуприцепов — TruckLine',
-  description: 'Специализированный сервис для тягачей и полуприцепов в Абакане. ТО, ремонт двигателей, КПП, ходовой, тормозов. Грузовой и легковой эвакуатор. Цены на запчасти — открыто в каталоге.',
+  description: 'Специализированный сервис для тягачей, полуприцепов, самосвалов и спецтехники в Абакане. ТО, ремонт двигателей, КПП, ходовой, тормозов. Цены на запчасти — открыто в каталоге.',
 }
 
 const SERVICES = [
@@ -17,7 +17,7 @@ const SERVICES = [
   {
     icon: `<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>`,
     title: 'Ремонт двигателя',
-    desc: 'Капитальный и текущий ремонт дизельных двигателей Volvo, Scania, MAN, DAF, КамАЗ, ЯМЗ. Турбины, топливная аппаратура, ГБЦ, поршневая группа.',
+    desc: 'Капитальный и текущий ремонт дизельных двигателей Volvo, Scania, DAF, Mercedes, КамАЗ и другие. Турбины, топливная аппаратура, ГБЦ, поршневая группа.',
     price: 'от 30 000 ₽',
   },
   {
@@ -50,26 +50,20 @@ const SERVICES = [
     desc: 'Компьютерная диагностика Euro Truck, считывание и сброс ошибок. Ремонт генераторов, стартеров, блоков управления тягачей.',
     price: 'от 3 000 ₽',
   },
-  {
-    icon: `<rect x="1" y="12" width="7" height="7" rx="1"/><rect x="2" y="9" width="4" height="3"/><path d="M8 10 L22 8 L22 15 L8 15"/><line x1="8" y1="10" x2="6" y2="12"/><circle cx="4" cy="21" r="2"/><circle cx="13" cy="21" r="2"/><circle cx="20" cy="21" r="2"/>`,
-    title: 'Эвакуатор',
-    desc: 'Грузовой эвакуатор для тягачей и полуприцепов. Легковой эвакуатор для автомобилей. Доставка неисправной техники к нам в сервис по Абакану и региону.',
-    price: 'по запросу',
-  },
 ]
 
 // Основная специализация
 const EQUIPMENT_PRIMARY = [
   {
     name: 'Седельные тягачи',
-    icon: `<rect x="1" y="9" width="11" height="10" rx="1"/>
-<rect x="2" y="6" width="8" height="3"/>
-<rect x="3" y="4" width="6" height="2"/>
-<line x1="12" y1="14" x2="16" y2="14"/>
-<rect x="16" y="12" width="2" height="4" rx="1"/>
-<circle cx="4" cy="21" r="2"/>
-<circle cx="10" cy="21" r="2"/>`,
-    brands: 'Volvo, Scania, MAN, DAF, Mercedes-Benz · КамАЗ, МАЗ',
+    icon: `<path d="M3 17V11l2-3h4l2 2v7"/>
+<line x1="5" y1="8" x2="5" y2="11"/>
+<line x1="11" y1="17" x2="21" y2="17"/>
+<line x1="15" y1="15" x2="20" y2="15"/>
+<circle cx="6" cy="19" r="2"/>
+<circle cx="14" cy="19" r="1.7"/>
+<circle cx="18" cy="19" r="1.7"/>`,
+    brands: 'Volvo, Scania, DAF, Mercedes, КамАЗ и другие',
     primary: true,
   },
   {
@@ -97,58 +91,27 @@ const EQUIPMENT_SECONDARY = [
 <circle cx="4" cy="21" r="2"/>
 <circle cx="13" cy="21" r="2"/>
 <circle cx="20" cy="21" r="2"/>`,
-    brands: 'КамАЗ, МАЗ, Урал, Mercedes, MAN, Volvo, Iveco',
+    brands: 'Volvo, Scania, DAF, Mercedes, КамАЗ и другие',
   },
   {
     name: 'Самосвалы',
-    icon: `<rect x="1" y="12" width="7" height="7" rx="1"/>
-<rect x="2" y="9" width="4" height="3"/>
-<path d="M8 14 L8 10 L20 6 L22 10 L22 14 Z"/>
-<line x1="8" y1="10" x2="6" y2="12"/>
+    icon: `<path d="M2 17V12l2-2h3l1 1v6"/>
+<line x1="3" y1="11" x2="7" y2="11"/>
+<path d="M9 17V9l13-3v8"/>
+<line x1="9" y1="11" x2="22" y2="11"/>
+<circle cx="5" cy="19" r="2"/>
+<circle cx="14" cy="19" r="1.7"/>
+<circle cx="18" cy="19" r="1.7"/>`,
+    brands: 'КамАЗ, Volvo, SHACMAN, FAW и другие',
+  },
+  {
+    name: 'Спецтехника',
+    icon: `<rect x="1" y="13" width="8" height="6" rx="1"/>
+<rect x="2" y="10" width="5" height="3"/>
+<path d="M9 11 L16 7 L21 9 L19 15 L9 15"/>
 <circle cx="4" cy="21" r="2"/>
-<circle cx="13" cy="21" r="2"/>
-<circle cx="20" cy="21" r="2"/>`,
-    brands: 'КамАЗ, МАЗ, Volvo, SHACMAN, FAW',
-  },
-  {
-    name: 'Тракторы',
-    icon: `<circle cx="6" cy="16" r="5"/>
-<circle cx="18" cy="17" r="3"/>
-<rect x="8" y="9" width="7" height="7" rx="1"/>
-<rect x="9" y="6" width="5" height="3" rx="1"/>
-<line x1="8" y1="13" x2="6" y2="13"/>`,
-    brands: 'ЧТЗ, Агромаш, John Deere, New Holland',
-  },
-  {
-    name: 'Вилочные погрузчики',
-    icon: `<rect x="8" y="8" width="10" height="10" rx="1"/>
-<line x1="3" y1="2" x2="3" y2="18"/>
-<line x1="3" y1="13" x2="8" y2="13"/>
-<line x1="3" y1="8" x2="8" y2="8"/>
-<line x1="1" y1="18" x2="12" y2="18"/>
-<line x1="1" y1="21" x2="12" y2="21"/>
-<circle cx="11" cy="20" r="2"/>
-<circle cx="17" cy="20" r="2"/>`,
-    brands: 'Toyota, Hyster, Linde, Komatsu',
-  },
-  {
-    name: 'Легковые автомобили',
-    icon: `<path d="M19 17H5a2 2 0 0 1-2-2v-4l2.5-5h11L19 11v4a2 2 0 0 1-2 2z"/>
-<circle cx="7.5" cy="17" r="2.5"/>
-<circle cx="16.5" cy="17" r="2.5"/>
-<line x1="3" y1="11" x2="21" y2="11"/>`,
-    brands: 'Все марки',
-  },
-  {
-    name: 'Автобусы и микроавтобусы',
-    icon: `<rect x="2" y="7" width="20" height="12" rx="2"/>
-<line x1="2" y1="12" x2="22" y2="12"/>
-<circle cx="7" cy="21" r="2"/>
-<circle cx="17" cy="21" r="2"/>
-<rect x="4" y="8" width="4" height="3" rx="0.5"/>
-<rect x="10" y="8" width="4" height="3" rx="0.5"/>
-<rect x="16" y="8" width="4" height="3" rx="0.5"/>`,
-    brands: 'ПАЗ, ГАЗель, Mersedes Sprinter, Ford Transit',
+<circle cx="14" cy="21" r="2"/>`,
+    brands: 'Крупные мировые и российские производители',
   },
 ]
 
@@ -164,20 +127,15 @@ const WHY = [
     text: 'После диагностики менеджер называет ориентировочную стоимость работ. Подтверждаете — начинаем. Без скрытых доплат и согласований постфактум.',
   },
   {
-    icon: `<rect x="1" y="9" width="11" height="10" rx="1"/><rect x="2" y="6" width="8" height="3"/><line x1="12" y1="14" x2="16" y2="14"/><rect x="16" y="12" width="2" height="4" rx="1"/><circle cx="4" cy="21" r="2"/><circle cx="10" cy="21" r="2"/>`,
+    icon: `<path d="M3 17V11l2-3h4l2 2v7"/><line x1="5" y1="8" x2="5" y2="11"/><line x1="11" y1="17" x2="21" y2="17"/><line x1="15" y1="15" x2="20" y2="15"/><circle cx="6" cy="19" r="2"/><circle cx="14" cy="19" r="1.7"/><circle cx="18" cy="19" r="1.7"/>`,
     title: 'Специализация — тягачи и п/п',
-    text: 'Знаем конструкцию Volvo, Scania, MAN и КамАЗ досконально. Не берёмся за то, в чём неуверены — лучше честно скажем.',
-  },
-  {
-    icon: `<rect x="1" y="12" width="7" height="7" rx="1"/><rect x="2" y="9" width="4" height="3"/><path d="M8 10 L22 8 L22 15 L8 15"/><circle cx="4" cy="21" r="2"/><circle cx="20" cy="21" r="2"/>`,
-    title: 'Эвакуатор грузовой и легковой',
-    text: 'Если техника не на ходу — привезём. Грузовой эвакуатор для тягачей и п/п, легковой для автомобилей. Работаем по Абакану и республике.',
+    text: 'Знаем конструкцию Volvo, Scania, DAF, Mercedes и КамАЗ досконально. Не берёмся за то, в чём неуверены — лучше честно скажем.',
   },
 ]
 
 const STEPS = [
   { num: '01', title: 'Звонок или заявка', text: 'Позвоните или заполните форму. Менеджер уточнит симптомы и запишет на удобное время.' },
-  { num: '02', title: 'Диагностика', text: 'Бесплатная компьютерная и визуальная диагностика. Определяем точную причину неисправности.' },
+  { num: '02', title: 'Диагностика', text: 'Компьютерная и визуальная диагностика. Определяем точную причину неисправности и стоимость работ.' },
   { num: '03', title: 'Смета и согласование', text: 'Называем стоимость запчастей (цены в каталоге) и работ. Начинаем только после вашего «Да».' },
   { num: '04', title: 'Ремонт и выдача', text: 'Выполняем работы в срок. Гарантия на запчасти и работы. Выдаём технику с документами.' },
 ]
@@ -221,7 +179,7 @@ export default function ServicePage() {
             <span style={{ color: '#FF6B00' }}>и полуприцепов</span>
           </h1>
           <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 17, lineHeight: 1.7, marginBottom: 12, maxWidth: 580 }}>
-            Специализируемся на тягачах и полуприцепах. Дополнительно — грузовые автомобили, самосвалы, тракторы и легковые.
+            Специализируемся на тягачах, полуприцепах, самосвалах и спецтехнике.
           </p>
           <p style={{ color: 'rgba(255,107,0,0.85)', fontSize: 15, fontWeight: 600, marginBottom: 36 }}>
             Цены на запчасти — открыто в каталоге. Стоимость работ — до начала ремонта.
@@ -241,14 +199,13 @@ export default function ServicePage() {
           </div>
         </div>
 
-        <div className="svc-stats-bar" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(255,107,0,0.95)', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)' }}>
+        <div className="svc-stats-bar" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(255,107,0,0.95)', display: 'grid', gridTemplateColumns: 'repeat(3,1fr)' }}>
           {[
             { val: 'Тягачи и п/п', lbl: 'специализация' },
-            { val: 'Эвакуатор', lbl: 'грузовой и легковой' },
-            { val: 'Бесплатно', lbl: 'диагностика' },
-            { val: '1 год', lbl: 'гарантия на работы' },
+            { val: 'Открытые цены', lbl: 'на запчасти и работы' },
+            { val: 'До 6 месяцев', lbl: 'гарантия на работы' },
           ].map((s, i) => (
-            <div key={i} style={{ padding: '16px', textAlign: 'center', borderRight: i < 3 ? '1px solid rgba(255,255,255,0.25)' : 'none' }}>
+            <div key={i} style={{ padding: '16px', textAlign: 'center', borderRight: i < 2 ? '1px solid rgba(255,255,255,0.25)' : 'none' }}>
               <div style={{ fontSize: 18, fontWeight: 900, color: 'white', letterSpacing: -0.3 }}>{s.val}</div>
               <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.85)', marginTop: 2, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{s.lbl}</div>
             </div>
@@ -273,7 +230,7 @@ export default function ServicePage() {
       <section style={{ maxWidth: 1280, margin: '0 auto', padding: '64px 24px 0' }}>
         <div style={{ fontSize: 11, color: '#FF6B00', fontWeight: 700, letterSpacing: '3px', textTransform: 'uppercase', marginBottom: 6 }}>Что мы делаем</div>
         <h2 style={{ fontSize: 30, fontWeight: 800, color: '#0F2744', marginBottom: 6, letterSpacing: -0.5 }}>Виды работ</h2>
-        <p style={{ fontSize: 15, color: '#6B7280', marginBottom: 36 }}>Специализация — тягачи и полуприцепы. Дополнительно принимаем грузовые и легковые автомобили.</p>
+        <p style={{ fontSize: 15, color: '#6B7280', marginBottom: 36 }}>Специализация — тягачи, полуприцепы, самосвалы и спецтехника.</p>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16, marginBottom: 64 }}>
           {SERVICES.map(svc => (
@@ -394,7 +351,7 @@ export default function ServicePage() {
               Каталог для тягачей →
             </Link>
             <Link href="/search" style={{ background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid rgba(255,255,255,0.2)', padding: '13px 24px', borderRadius: 10, fontWeight: 600, fontSize: 14, textDecoration: 'none', whiteSpace: 'nowrap' }}>
-              Поиск по артикулу
+              Поиск по ОЕМ
             </Link>
           </div>
         </div>

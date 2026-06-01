@@ -15,10 +15,10 @@ export default function Footer() {
           <div className="footer-brand-col">
             <div style={{ marginBottom: 10 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/truckline-logo.png" alt="TruckLine" style={{ display: 'block', height: 36, width: 'auto' }} />
+              <img src="/truckline-logo-v2.png" alt="TruckLine" style={{ display: 'block', height: 36, width: 'auto' }} />
             </div>
             <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.35)', lineHeight: 1.6, marginBottom: 20 }}>
-              Запчасти для грузовиков, спецтехники и легковых автомобилей. Более 10 000 позиций в наличии.
+              Запчасти и ремонт тягачей, полуприцепов, самосвалов и спецтехники в Хакасии. Свой автосервис в Усть-Абакане.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <a href="tel:+79232130101" style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'rgba(255,255,255,0.55)', fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>
@@ -44,11 +44,10 @@ export default function Footer() {
           <div>
             <div style={col.heading}>Каталог</div>
             {[
-              ['Легковые авто', '/cars'],
-              ['Спецтехника', '/special'],
-              ['Двигатель', '/catalog?category=dvigatel'],
-              ['Трансмиссия', '/catalog?category=transmissiya'],
-              ['Подвеска', '/catalog?category=podveska-rulevoe'],
+              ['Тягачи и полуприцепы', '/special'],
+              ['Самосвалы и спецтехника', '/special'],
+              ['Поиск по ОЕМ', '/search'],
+              ['Автосервис', '/service'],
             ].map(([label, href]) => (
               <Link key={label} href={href} style={col.link}>{label}</Link>
             ))}

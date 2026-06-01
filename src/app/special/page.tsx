@@ -65,7 +65,7 @@ export default async function SpecialPage() {
                 Запчасти для спецтехники и грузовиков
               </h1>
               <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 15 }}>
-                КамАЗ, МАЗ, Урал, ЯМЗ, Komatsu, Hitachi, JCB, Scania, Volvo и другие
+                Volvo, Scania, DAF, Mercedes, КамАЗ и другие
               </p>
             </div>
           </div>

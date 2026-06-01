@@ -5,8 +5,8 @@ import Footer from '@/components/Footer'
 import CookieConsent from '@/components/CookieConsent'
 
 export const metadata: Metadata = {
-  title: 'TruckLine — запчасти для тягачей и спецтехники',
-  description: 'Запчасти для тягачей, грузовиков и спецтехники. КамАЗ, МАЗ, Урал, Volvo, DAF, Scania и другие.',
+  title: 'TruckLine — запчасти и ремонт тягачей в Хакасии',
+  description: 'Запчасти и сервис для тягачей, полуприцепов, самосвалов и спецтехники. Volvo, Scania, DAF, Mercedes, КамАЗ. Свой автосервис в Усть-Абакане. Открытые цены, гарантия до 6 месяцев.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

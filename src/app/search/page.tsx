@@ -43,13 +43,13 @@ export default async function SearchPage({ searchParams }: Props) {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">Поиск запчастей</h1>
+      <h1 className="text-2xl font-bold text-gray-800 mb-6">Поиск запчастей по ОЕМ номеру</h1>
 
       <form method="GET" className="flex gap-2 mb-8">
         <input
           name="q"
           defaultValue={q}
-          placeholder="Введите артикул, название или кросс-номер..."
+          placeholder="Введите ОЕМ номер..."
           className="flex-1 border border-gray-300 rounded-xl px-4 py-3 text-base focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           autoFocus
         />
@@ -59,7 +59,7 @@ export default async function SearchPage({ searchParams }: Props) {
       </form>
 
       <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6 text-sm text-blue-700">
-        <strong>Поиск работает по:</strong> артикулу, названию, кросс-номерам и аналогам
+        <strong>Поиск работает по:</strong> ОЕМ номеру и кросс-номерам (аналогам). Если не знаете ОЕМ — позвоните, менеджер подберёт деталь.
       </div>
 
       {q.length >= 2 && (
@@ -99,7 +99,7 @@ export default async function SearchPage({ searchParams }: Props) {
             <div className="bg-white rounded-xl p-8 text-center">
               <div className="text-4xl mb-3">🔍</div>
               <div className="font-medium text-gray-700">По запросу «{q}» ничего не найдено</div>
-              <div className="text-sm text-gray-400 mt-1">Проверьте правильность артикула или обратитесь к менеджеру</div>
+              <div className="text-sm text-gray-400 mt-1">Проверьте правильность ОЕМ номера или обратитесь к менеджеру</div>
               <Link href="/cart" className="inline-block mt-4 bg-blue-700 text-white px-5 py-2 rounded-lg text-sm hover:bg-blue-800">
                 Оставить заявку
               </Link>
@@ -111,7 +111,7 @@ export default async function SearchPage({ searchParams }: Props) {
       {!q && (
         <div className="text-center text-gray-400 py-12">
           <div className="text-5xl mb-4">🔩</div>
-          <div>Введите артикул или название запчасти</div>
+          <div>Введите ОЕМ номер запчасти</div>
         </div>
       )}
     </div>

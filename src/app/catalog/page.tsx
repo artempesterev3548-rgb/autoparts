@@ -115,7 +115,7 @@ export default async function CatalogPage({ searchParams }: Props) {
             <form method="GET" action="/catalog" className="cat-search-form" style={{ display: 'flex', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 10, overflow: 'hidden', flexShrink: 0 }}>
               {params.category && <input type="hidden" name="category" value={params.category} />}
               {params.brand && <input type="hidden" name="brand" value={params.brand} />}
-              <input name="q" defaultValue={params.q} placeholder="Артикул или название..."
+              <input name="q" defaultValue={params.q} placeholder="ОЕМ номер..."
                 className="cat-search-input"
                 style={{ border: 'none', background: 'transparent', padding: '10px 16px', fontSize: 14, color: 'white', outline: 'none', width: 240 }} />
               <button type="submit" style={{ background: '#FF6B00', border: 'none', padding: '10px 18px', color: 'white', fontWeight: 700, fontSize: 13, cursor: 'pointer', whiteSpace: 'nowrap' }}>

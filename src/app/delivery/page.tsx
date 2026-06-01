@@ -1,5 +1,24 @@
 export const metadata = { title: 'Доставка и оплата — TruckLine' }
 
+function IconBox({ children }: { children: React.ReactNode }) {
+  return (
+    <div style={{
+      width: 44, height: 44, background: '#FFF0E8', borderRadius: 11,
+      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+    }}>
+      {children}
+    </div>
+  )
+}
+
+function SvgIcon({ children }: { children: React.ReactNode }) {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      {children}
+    </svg>
+  )
+}
+
 export default function DeliveryPage() {
   return (
     <div style={{ background: '#F0F2F5', minHeight: '100vh', padding: '40px 24px' }}>
@@ -18,7 +37,15 @@ export default function DeliveryPage() {
 
           <div style={{ background: 'white', borderRadius: 16, padding: '20px 24px', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
             <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-              <div style={{ fontSize: 26, flexShrink: 0 }}>🚚</div>
+              <IconBox>
+                <SvgIcon>
+                  <path d="M2 17h20"/>
+                  <path d="M3 17v-6a1 1 0 0 1 1-1h6v7"/>
+                  <path d="M10 11h6l3 3v3"/>
+                  <circle cx="6.5" cy="19" r="2"/>
+                  <circle cx="16.5" cy="19" r="2"/>
+                </SvgIcon>
+              </IconBox>
               <div>
                 <div style={{ fontSize: 15, fontWeight: 700, color: '#0F2744', marginBottom: 4 }}>СДЭК</div>
                 <div style={{ fontSize: 14, color: '#4B5563', lineHeight: 1.65 }}>
@@ -32,7 +59,13 @@ export default function DeliveryPage() {
 
           <div style={{ background: 'white', borderRadius: 16, padding: '20px 24px', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
             <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-              <div style={{ fontSize: 26, flexShrink: 0 }}>📦</div>
+              <IconBox>
+                <SvgIcon>
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                  <line x1="12" y1="22.08" x2="12" y2="12"/>
+                </SvgIcon>
+              </IconBox>
               <div>
                 <div style={{ fontSize: 15, fontWeight: 700, color: '#0F2744', marginBottom: 4 }}>Почта России</div>
                 <div style={{ fontSize: 14, color: '#4B5563', lineHeight: 1.65 }}>
@@ -45,7 +78,17 @@ export default function DeliveryPage() {
 
           <div style={{ background: 'white', borderRadius: 16, padding: '20px 24px', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
             <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-              <div style={{ fontSize: 26, flexShrink: 0 }}>🚛</div>
+              <IconBox>
+                <SvgIcon>
+                  <path d="M2 17h20"/>
+                  <path d="M3 17V9a1 1 0 0 1 1-1h6v9"/>
+                  <rect x="4" y="9" width="5" height="3" rx="0.3"/>
+                  <line x1="13" y1="14" x2="20" y2="14"/>
+                  <circle cx="6.5" cy="19" r="2"/>
+                  <circle cx="14.5" cy="19" r="2"/>
+                  <circle cx="18.5" cy="19" r="2"/>
+                </SvgIcon>
+              </IconBox>
               <div>
                 <div style={{ fontSize: 15, fontWeight: 700, color: '#0F2744', marginBottom: 4 }}>Деловые линии</div>
                 <div style={{ fontSize: 14, color: '#4B5563', lineHeight: 1.65 }}>
@@ -59,7 +102,12 @@ export default function DeliveryPage() {
 
           <div style={{ background: 'white', borderRadius: 16, padding: '20px 24px', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
             <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-              <div style={{ fontSize: 26, flexShrink: 0 }}>🏪</div>
+              <IconBox>
+                <SvgIcon>
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </SvgIcon>
+              </IconBox>
               <div>
                 <div style={{ fontSize: 15, fontWeight: 700, color: '#0F2744', marginBottom: 4 }}>Самовывоз</div>
                 <div style={{ fontSize: 14, color: '#4B5563', lineHeight: 1.65 }}>
@@ -76,7 +124,11 @@ export default function DeliveryPage() {
 
         {/* Важно при получении */}
         <div style={{ background: '#FFF7ED', border: '1px solid #FED7AA', borderRadius: 14, padding: '16px 20px', marginBottom: 40, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-          <span style={{ fontSize: 20, flexShrink: 0 }}>⚠️</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 1 }}>
+            <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
           <div style={{ fontSize: 13, color: '#92400E', lineHeight: 1.65 }}>
             <strong>При получении обязательно проверьте</strong> целостность упаковки и соответствие
             количества мест документам. При обнаружении повреждений составьте акт
@@ -96,7 +148,13 @@ export default function DeliveryPage() {
 
           <div style={{ background: 'white', borderRadius: 16, padding: '20px 24px', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
             <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-              <div style={{ fontSize: 26, flexShrink: 0 }}>🏦</div>
+              <IconBox>
+                <SvgIcon>
+                  <rect x="2" y="5" width="20" height="14" rx="2"/>
+                  <line x1="2" y1="10" x2="22" y2="10"/>
+                  <line x1="6" y1="15" x2="9" y2="15"/>
+                </SvgIcon>
+              </IconBox>
               <div>
                 <div style={{ fontSize: 15, fontWeight: 700, color: '#0F2744', marginBottom: 4 }}>Банковский перевод</div>
                 <div style={{ fontSize: 14, color: '#4B5563', lineHeight: 1.65 }}>
@@ -109,7 +167,13 @@ export default function DeliveryPage() {
 
           <div style={{ background: 'white', borderRadius: 16, padding: '20px 24px', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
             <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-              <div style={{ fontSize: 26, flexShrink: 0 }}>💵</div>
+              <IconBox>
+                <SvgIcon>
+                  <path d="M8 4v16"/>
+                  <path d="M8 4h5a4 4 0 0 1 0 8H8"/>
+                  <line x1="5" y1="15" x2="14" y2="15"/>
+                </SvgIcon>
+              </IconBox>
               <div>
                 <div style={{ fontSize: 15, fontWeight: 700, color: '#0F2744', marginBottom: 4 }}>Наличные</div>
                 <div style={{ fontSize: 14, color: '#4B5563', lineHeight: 1.65 }}>
@@ -121,7 +185,17 @@ export default function DeliveryPage() {
 
           <div style={{ background: 'white', borderRadius: 16, padding: '20px 24px', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
             <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-              <div style={{ fontSize: 26, flexShrink: 0 }}>🏢</div>
+              <IconBox>
+                <SvgIcon>
+                  <path d="M3 21h18"/>
+                  <path d="M5 21V7l8-4v18"/>
+                  <path d="M19 21V11l-6-4"/>
+                  <line x1="9" y1="9" x2="9" y2="9.01"/>
+                  <line x1="9" y1="12" x2="9" y2="12.01"/>
+                  <line x1="9" y1="15" x2="9" y2="15.01"/>
+                  <line x1="9" y1="18" x2="9" y2="18.01"/>
+                </SvgIcon>
+              </IconBox>
               <div>
                 <div style={{ fontSize: 15, fontWeight: 700, color: '#0F2744', marginBottom: 4 }}>Счёт для юридических лиц и ИП</div>
                 <div style={{ fontSize: 14, color: '#4B5563', lineHeight: 1.65 }}>
@@ -140,15 +214,17 @@ export default function DeliveryPage() {
           <div style={{ fontSize: 15, fontWeight: 700, color: '#0F2744', marginBottom: 14 }}>Документы, которые мы предоставляем</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10 }}>
             {[
-              ['📄', 'Счёт на оплату'],
-              ['📄', 'Универсальный передаточный документ (УПД)'],
-              ['📄', 'Счёт-фактура (при НДС)'],
-              ['📄', 'Товарная накладная (ТОРГ-12)'],
-              ['📄', 'Товарно-транспортная накладная (ТТН)'],
-              ['📄', 'Кассовый чек (при наличной оплате)'],
-            ].map(([icon, name]) => (
+              'Счёт на оплату',
+              'Универсальный передаточный документ (УПД)',
+              'Счёт-фактура (при НДС)',
+              'Товарная накладная (ТОРГ-12)',
+              'Товарно-транспортная накладная (ТТН)',
+              'Кассовый чек (при наличной оплате)',
+            ].map(name => (
               <div key={name} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#374151' }}>
-                <span style={{ color: '#FF6B00', fontSize: 11, fontWeight: 700 }}>✓</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
                 <span>{name}</span>
               </div>
             ))}

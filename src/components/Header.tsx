@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import { getCart } from '@/lib/cart'
 import { getSupabaseBrowser } from '@/lib/auth'
 
-const TruckLineLogo = ({ height = 62 }: { height?: number }) => (
+const TruckLineLogo = ({ height = 30 }: { height?: number }) => (
   // eslint-disable-next-line @next/next/no-img-element
   <img src="/truckline-logo-v2.png" alt="TruckLine" style={{ display: 'block', height, width: 'auto' }} />
 )
@@ -108,7 +108,7 @@ export default function Header() {
             +7 (923) 213-01-01 · Пн–Пт 8:00–19:00, Сб–Вс 9:00–17:00
           </span>
           <div style={{ display: 'flex', gap: 20 }}>
-            {[['О компании', '/about'], ['Доставка', '/delivery'], ['Контакты', '/contacts']].map(([label, href]) => (
+            {[['Доставка', '/delivery'], ['Сервис', '/service'], ['Контакты', '/contacts']].map(([label, href]) => (
               <Link key={href} href={href} style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>{label}</Link>
             ))}
           </div>
@@ -125,7 +125,7 @@ export default function Header() {
 
           {/* Навигация */}
           <nav className="hdr-nav" style={{ display: 'flex', gap: 2, flex: 1, justifyContent: 'center' }}>
-            <Link href="/parts" style={navLink(isActive('/parts') || isActive('/cars') || isActive('/special') || isActive('/vin'))}>
+            <Link href="/parts" style={navLink(isActive('/parts') || isActive('/special') || isActive('/catalog'))}>
               <IconParts /> <span className="hdr-nav-label">Запчасти</span>
             </Link>
             <Link href="/service" style={navLink(isActive('/service'))}>

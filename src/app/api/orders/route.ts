@@ -3,6 +3,7 @@ import { supabaseAdmin } from '@/lib/supabase'
 import { createServerClient } from '@supabase/ssr'
 import { rateLimit, getClientIp } from '@/lib/rateLimit'
 import { sendOrderConfirmation } from '@/lib/email'
+import { generateInvoicePDF, InvoiceData, InvoiceItem } from '@/lib/invoice-pdf'
 
 function generateOrderNumber() {
   const date = new Date()
@@ -22,6 +23,101 @@ async function sendTelegram(text: string) {
       body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML' }),
     })
   } catch {}
+}
+
+// Отправка PDF-документа в Telegram
+async function sendTelegramInvoice(
+  pdfBytes: Uint8Array,
+  filename: string,
+  caption: string
+): Promise<void> {
+  const token  = process.env.TELEGRAM_BOT_TOKEN
+  const chatId = process.env.TELEGRAM_CHAT_ID
+  if (!token || !chatId) return
+  try {
+    const buf = Buffer.from(pdfBytes)
+    const form = new FormData()
+    form.append('chat_id', chatId)
+    form.append('caption', caption)
+    form.append('parse_mode', 'HTML')
+    form.append('document', new Blob([buf], { type: 'application/pdf' }), filename)
+    await fetch(`https://api.telegram.org/bot${token}/sendDocument`, {
+      method: 'POST',
+      body: form,
+    })
+  } catch {}
+}
+
+// Сохранение PDF в Supabase Storage
+async function uploadInvoice(pdfBytes: Uint8Array, order_number: string): Promise<string | null> {
+  try {
+    const filename = `invoice_${order_number}.pdf`
+    const buf = Buffer.from(pdfBytes)
+    const { error } = await supabaseAdmin.storage
+      .from('invoices')
+      .upload(filename, buf, { contentType: 'application/pdf', upsert: true })
+    if (error) return null
+    const { data } = supabaseAdmin.storage.from('invoices').getPublicUrl(filename)
+    return data?.publicUrl ?? null
+  } catch {
+    return null
+  }
+}
+
+// Строим InvoiceData из данных заказа
+function buildInvoiceData(
+  order_number: string,
+  customer_type: string,
+  parsedData: any,
+  items: any[],
+  total_price: number,
+  created_at: string,
+  customer_name: string,
+  customer_phone: string,
+  customer_email?: string
+): InvoiceData {
+  const isCompany = customer_type === 'company'
+  const invoiceItems: InvoiceItem[] = items.map((i: any) => ({
+    article:  i.article ?? i.oem ?? '',
+    name:     i.name    ?? i.title ?? 'Запчасть',
+    quantity: i.quantity ?? 1,
+    price:    i.price    ?? 0,
+    unit:     i.unit     ?? 'шт',
+  }))
+  return {
+    order_number,
+    created_at,
+    customer_type: isCompany ? 'company' : 'individual',
+    customer_name,
+    customer_phone,
+    customer_email,
+    company_name:      parsedData.company_name,
+    inn:               parsedData.inn,
+    kpp:               parsedData.kpp,
+    ogrn:              parsedData.ogrn,
+    legal_address:     parsedData.legal_address,
+    delivery_address:  parsedData.delivery_address ?? parsedData.address,
+    items:             invoiceItems,
+    total_price,
+  }
+}
+
+// Краткая подпись к PDF-документу
+function buildTelegramCaption(order_number: string, customer_type: string, data: any, items: any[], total_price: number): string {
+  const typeLabel = customer_type === 'company' ? '🏢' : '👤'
+  const buyer = customer_type === 'company'
+    ? `${data.company_name ?? ''} (${data.contact_name ?? ''})`
+    : data.name ?? ''
+  const phone = customer_type === 'company' ? data.contact_phone : data.phone
+  const itemCount = items.length
+  return [
+    `📄 <b>СЧЁТ ${order_number}</b>`,
+    `${typeLabel} ${buyer}`,
+    `📞 ${phone ?? '—'}`,
+    `🛒 ${itemCount} позиц. на <b>${(total_price ?? 0).toLocaleString('ru')} ₽</b>`,
+    ``,
+    `👆 Откройте PDF — счёт готов к отправке клиенту`,
+  ].join('\n')
 }
 
 function buildTelegramText(order_number: string, customer_type: string, data: any, items: any[], total_price: number) {
@@ -139,8 +235,47 @@ export async function POST(req: NextRequest) {
     let parsedData: any = {}
     try { parsedData = JSON.parse(customer_comment || '{}') } catch {}
 
-    const tgText = buildTelegramText(order_number, customer_type || 'individual', parsedData, items, total_price)
-    await sendTelegram(tgText)
+    // ── Генерация PDF-счёта ─────────────────────────────────────
+    let pdfUrl: string | null = null
+    try {
+      const invoiceData = buildInvoiceData(
+        order_number,
+        customer_type || 'individual',
+        parsedData,
+        items,
+        total_price || 0,
+        data.created_at,
+        customer_name,
+        customer_phone,
+        customer_email || undefined
+      )
+      const pdfBytes = await generateInvoicePDF(invoiceData)
+
+      // Загружаем в Storage (параллельно с Telegram)
+      const [uploadedUrl] = await Promise.all([
+        uploadInvoice(pdfBytes, order_number),
+        // Отправляем PDF-документ в Telegram вместо текста
+        sendTelegramInvoice(
+          pdfBytes,
+          `Счёт_${order_number}.pdf`,
+          buildTelegramCaption(order_number, customer_type || 'individual', parsedData, items, total_price)
+        ),
+      ])
+      pdfUrl = uploadedUrl
+
+      // Сохраняем ссылку на PDF в заказе
+      if (pdfUrl) {
+        await supabaseAdmin
+          .from('orders')
+          .update({ invoice_pdf_url: pdfUrl, invoice_sent_at: new Date().toISOString() })
+          .eq('id', data.id)
+      }
+    } catch (pdfErr) {
+      // PDF не критичен — если не вышло, шлём обычный текст
+      console.error('PDF generation failed:', pdfErr)
+      const tgText = buildTelegramText(order_number, customer_type || 'individual', parsedData, items, total_price)
+      await sendTelegram(tgText)
+    }
 
     if (customer_email) {
       await sendOrderConfirmation({
@@ -152,7 +287,7 @@ export async function POST(req: NextRequest) {
       })
     }
 
-    return NextResponse.json({ success: true, order_number })
+    return NextResponse.json({ success: true, order_number, invoice_url: pdfUrl })
   } catch (e) {
     console.error(e)
     return NextResponse.json({ error: 'Ошибка сервера' }, { status: 500 })

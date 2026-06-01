@@ -31,11 +31,11 @@ export default function PartsPage() {
             Запчасти
           </h1>
           <p style={{ fontSize: 15, color: '#6B7280', lineHeight: 1.6 }}>
-            Выберите тип техники или воспользуйтесь поиском по VIN/OEM номеру
+            Выберите тип техники или воспользуйтесь поиском по ОЕМ номеру
           </p>
         </div>
 
-        {/* Три карточки */}
+        {/* Карточки */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
@@ -43,26 +43,29 @@ export default function PartsPage() {
           marginBottom: 40,
         }}>
 
-          {/* Легковые */}
-          <Link href="/cars" className="parts-card">
+          {/* Тягачи и полуприцепы */}
+          <Link href="/special" className="parts-card">
             <div style={{
               width: 60, height: 60, borderRadius: 16,
               background: '#FFF3E8',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M19 17H5a2 2 0 0 1-2-2v-4l2.5-5h11L19 11v4a2 2 0 0 1-2 2z"/>
-                <circle cx="7.5" cy="17" r="2.5"/>
-                <circle cx="16.5" cy="17" r="2.5"/>
-                <line x1="3" y1="11" x2="21" y2="11"/>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 17V11l2-3h4l2 2v7"/>
+                <line x1="5" y1="8" x2="5" y2="11"/>
+                <line x1="11" y1="17" x2="21" y2="17"/>
+                <line x1="15" y1="15" x2="20" y2="15"/>
+                <circle cx="6" cy="19" r="2"/>
+                <circle cx="14" cy="19" r="1.7"/>
+                <circle cx="18" cy="19" r="1.7"/>
               </svg>
             </div>
             <div>
               <div style={{ fontSize: 19, fontWeight: 800, color: '#0F2744', marginBottom: 6 }}>
-                Легковые авто
+                Тягачи и полуприцепы
               </div>
               <div style={{ fontSize: 14, color: '#6B7280', lineHeight: 1.6 }}>
-                Запчасти для легковых и среднетоннажных автомобилей: двигатель, трансмиссия, подвеска, кузов, электрика и расходники
+                Volvo, Scania, DAF, Mercedes, КамАЗ. Седельные тягачи и полуприцепы — наша основная специализация
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#FF6B00', fontWeight: 700, fontSize: 14 }}>
@@ -73,26 +76,29 @@ export default function PartsPage() {
             </div>
           </Link>
 
-          {/* Спецтехника */}
+          {/* Самосвалы и спецтехника */}
           <Link href="/special" className="parts-card">
             <div style={{
               width: 60, height: 60, borderRadius: 16,
               background: '#EFF6FF',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="1" y="3" width="15" height="13" rx="1"/>
-                <path d="M16 8h4l3 3v5h-7V8z"/>
-                <circle cx="5.5" cy="18.5" r="2.5"/>
-                <circle cx="18.5" cy="18.5" r="2.5"/>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 17V12l2-2h3l1 1v6"/>
+                <line x1="3" y1="11" x2="7" y2="11"/>
+                <path d="M9 17V9l13-3v8"/>
+                <line x1="9" y1="11" x2="22" y2="11"/>
+                <circle cx="5" cy="19" r="2"/>
+                <circle cx="14" cy="19" r="1.7"/>
+                <circle cx="18" cy="19" r="1.7"/>
               </svg>
             </div>
             <div>
               <div style={{ fontSize: 19, fontWeight: 800, color: '#0F2744', marginBottom: 6 }}>
-                Спецтехника и грузовики
+                Самосвалы и спецтехника
               </div>
               <div style={{ fontSize: 14, color: '#6B7280', lineHeight: 1.6 }}>
-                Запчасти для грузовой и специальной техники: КАМАЗы, МАЗы, Урал, экскаваторы, бульдозеры, краны, тракторы
+                КамАЗ, МАЗ, SHACMAN, FAW, Volvo. Запчасти для самосвалов и спецтехники
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#2563EB', fontWeight: 700, fontSize: 14 }}>
@@ -103,25 +109,24 @@ export default function PartsPage() {
             </div>
           </Link>
 
-          {/* VIN/OEM */}
-          <Link href="/vin" className="parts-card">
+          {/* Поиск по ОЕМ */}
+          <Link href="/search" className="parts-card">
             <div style={{
               width: 60, height: 60, borderRadius: 16,
               background: '#F0FDF4',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#16A34A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="7" width="20" height="10" rx="2"/>
-                <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
-                <line x1="12" y1="12" x2="12" y2="12.01"/>
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
               </svg>
             </div>
             <div>
               <div style={{ fontSize: 19, fontWeight: 800, color: '#0F2744', marginBottom: 6 }}>
-                Поиск по VIN / OEM
+                Поиск по ОЕМ номеру
               </div>
               <div style={{ fontSize: 14, color: '#6B7280', lineHeight: 1.6 }}>
-                Введите VIN номер автомобиля или артикул детали — подберём точный аналог по вашему автомобилю
+                Введите ОЕМ номер запчасти — найдём оригинал или подберём аналог по кросс-номерам
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#16A34A', fontWeight: 700, fontSize: 14 }}>
@@ -146,10 +151,10 @@ export default function PartsPage() {
           </div>
           <div>
             <div style={{ fontSize: 14, fontWeight: 700, color: 'white', marginBottom: 4 }}>
-              Не знаете, что выбрать?
+              Не знаете ОЕМ номер?
             </div>
             <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', lineHeight: 1.65, marginBottom: 14 }}>
-              Позвоните нам — менеджер подберёт нужную деталь по номеру кузова, марке и модели автомобиля или фотографии.
+              Позвоните — менеджер подберёт нужную деталь по марке, модели, году выпуска или фотографии.
             </div>
             <a href="tel:+79232130101" style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
