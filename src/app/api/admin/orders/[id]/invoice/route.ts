@@ -118,15 +118,25 @@ export async function POST(
       // Storage недоступен — продолжаем без сохранения
     }
 
-    // Обновляем заказ в БД
-    await supabaseAdmin
-      .from('orders')
-      .update({
-        invoice_pdf_url:  pdfUrl,
-        invoice_sent_at:  new Date().toISOString(),
-        status:           order.status === 'new' ? 'processing' : order.status,
-      })
-      .eq('id', id)
+    // Обновляем статус заказа (только безопасные поля)
+    // Колонки invoice_pdf_url / invoice_sent_at добавятся после миграции
+    const updatePayload: Record<string, unknown> = {
+      status: order.status === 'new' ? 'processing' : order.status,
+    }
+    // Пробуем сохранить URL — если колонки нет, ошибка поймается
+    if (pdfUrl) {
+      try {
+        await supabaseAdmin
+          .from('orders')
+          .update({ ...updatePayload, invoice_pdf_url: pdfUrl, invoice_sent_at: new Date().toISOString() })
+          .eq('id', id)
+      } catch {
+        // Колонка ещё не создана — обновляем только статус
+        await supabaseAdmin.from('orders').update(updatePayload).eq('id', id)
+      }
+    } else {
+      await supabaseAdmin.from('orders').update(updatePayload).eq('id', id)
+    }
 
     // Отправляем в Telegram
     const isCompany = order.customer_name && order.customer_comment?.includes('company_name')

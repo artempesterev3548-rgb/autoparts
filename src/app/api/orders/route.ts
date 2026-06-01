@@ -263,12 +263,13 @@ export async function POST(req: NextRequest) {
       ])
       pdfUrl = uploadedUrl
 
-      // Сохраняем ссылку на PDF в заказе
+      // Сохраняем ссылку на PDF в заказе (graceful — если колонок нет, ошибка тихая)
       if (pdfUrl) {
         await supabaseAdmin
           .from('orders')
           .update({ invoice_pdf_url: pdfUrl, invoice_sent_at: new Date().toISOString() })
           .eq('id', data.id)
+          // Ошибка "column not found" не критична — PDF уже в Storage и Telegram
       }
     } catch (pdfErr) {
       // PDF не критичен — если не вышло, шлём обычный текст

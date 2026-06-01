@@ -86,7 +86,15 @@ export default function OrderCard({ order, isSelected, supplierMap }: Props) {
   const [saving, setSaving]               = useState(false)
   const [saved, setSaved]                 = useState(false)
   const [invoiceLoading, setInvoiceLoading] = useState(false)
-  const [invoiceUrl, setInvoiceUrl]       = useState<string | null>(order.invoice_pdf_url ?? null)
+  // URL вычисляется детерминированно из order_number → миграция БД не нужна
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
+  const derivedInvoiceUrl = order.order_number
+    ? `${supabaseUrl}/storage/v1/object/public/invoices/invoice_${order.order_number}.pdf`
+    : null
+  const [invoiceUrl, setInvoiceUrl]       = useState<string | null>(
+    (order as any).invoice_pdf_url ?? null
+  )
+  const [invoiceExists, setInvoiceExists]  = useState<boolean>(false)
   const [invoiceMsg, setInvoiceMsg]       = useState<string | null>(null)
 
   const save = async () => {
@@ -100,6 +108,25 @@ export default function OrderCard({ order, isSelected, supplierMap }: Props) {
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)
   }
+
+  // ── Проверяем существует ли PDF в Storage при открытии ────────
+  const checkInvoiceExists = useCallback(async () => {
+    if (!derivedInvoiceUrl) return
+    try {
+      const r = await fetch(derivedInvoiceUrl, { method: 'HEAD' })
+      if (r.ok) {
+        setInvoiceExists(true)
+        setInvoiceUrl(derivedInvoiceUrl)
+      }
+    } catch {}
+  }, [derivedInvoiceUrl])
+
+  // Проверяем при открытии карточки
+  const handleToggle = useCallback(() => {
+    const next = !open
+    setOpen(next)
+    if (next && !invoiceExists) checkInvoiceExists()
+  }, [open, invoiceExists, checkInvoiceExists])
 
   // ── Скачать PDF напрямую ─────────────────────────────────────
   const downloadInvoice = useCallback(async () => {
@@ -143,7 +170,7 @@ export default function OrderCard({ order, isSelected, supplierMap }: Props) {
     }}>
       {/* Шапка карточки */}
       <button
-        onClick={() => setOpen(!open)}
+        onClick={handleToggle}
         style={{ width: '100%', textAlign: 'left', padding: '14px 16px', background: 'none', border: 'none', cursor: 'pointer' }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
