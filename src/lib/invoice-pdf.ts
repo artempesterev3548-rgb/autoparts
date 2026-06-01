@@ -47,14 +47,14 @@ export interface InvoiceData {
 function getSeller() {
   return {
     name:         process.env.SELLER_NAME         ?? 'ИП Пестерев Артём Александрович',
-    inn:          process.env.SELLER_INN           ?? '000000000000',
-    ogrnip:       process.env.SELLER_OGRNIP        ?? '000000000000000',
-    address:      process.env.SELLER_ADDRESS       ?? 'г. Москва',
+    inn:          process.env.SELLER_INN           ?? '272400349812',
+    ogrnip:       process.env.SELLER_OGRNIP        ?? '325272400007350',
+    address:      process.env.SELLER_ADDRESS       ?? '680000, г. Хабаровск, ул. Карла Маркса, 176/5',
     bank:         process.env.SELLER_BANK          ?? 'ПАО Сбербанк',
-    bik:          process.env.SELLER_BIK           ?? '044525225',
-    account:      process.env.SELLER_ACCOUNT       ?? '40802810000000000000',
-    corr_account: process.env.SELLER_CORR_ACCOUNT  ?? '30101810400000000225',
-    phone:        process.env.SELLER_PHONE         ?? '+7 (999) 000-00-00',
+    bik:          process.env.SELLER_BIK           ?? '040813608',
+    account:      process.env.SELLER_ACCOUNT       ?? '40802810200000017398',
+    corr_account: process.env.SELLER_CORR_ACCOUNT  ?? '30101810200000000608',
+    phone:        process.env.SELLER_PHONE         ?? '+7 (4212) 98-88-23',
   }
 }
 
